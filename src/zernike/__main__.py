@@ -1,11 +1,18 @@
 import argparse
 
+from operations import pipeline
+
 
 def main() -> None:
     """
     Pipeline entry point.
     """
     args = parse_args()
+
+    pipeline.run(
+        j=args.j, rho=args.max_radius, rho_step=args.radius_step, 
+        num_theta=args.num_angle_steps
+    )
 
 
 def parse_args() -> argparse.Namespace:
