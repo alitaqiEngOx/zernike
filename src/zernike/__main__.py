@@ -59,7 +59,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--num_angle_steps",
         type=int,
-        default=100,
+        default=500,
         help="number of angles to be computed between 0 deg and 360 deg",
     )
     parser.add_argument(
