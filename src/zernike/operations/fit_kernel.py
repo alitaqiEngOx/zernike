@@ -1,2 +1,8 @@
 class FitKernel:
-    pass
+    """
+    """
+
+    def __init__(self, j_requests: list[int]):
+        """
+        """
+        raise NotImplementedError
