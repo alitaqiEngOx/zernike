@@ -17,13 +17,16 @@ class Zernike:
     j: int
     """ """
 
-    radius_array: NDArray
+    dim_0_array: NDArray
     """ """
 
-    angle_array: NDArray
+    dim_1_array: NDArray
     """ """
 
-    z: Optional[NDArray] = None
+    data: Optional[NDArray] = None
+    """ """
+
+    coords_type: str = "polar"
     """ """
 
 
@@ -86,14 +89,14 @@ class Zernike:
     def meshed_arrays(self) -> tuple[NDArray, NDArray]:
         """
         """
-        radius_array_meshed, angle_array_meshed = np.meshgrid(
-            self.radius_array, self.angle_array
+        dim_0_array_meshed, dim_1_array_meshed = np.meshgrid(
+            self.dim_0_array, self.dim_1_array
         )
 
-        return radius_array_meshed, angle_array_meshed
+        return dim_0_array_meshed, dim_1_array_meshed
 
 
-    def R(self, radius: NDArray) -> NDArray:
+    def R(self, radius: float) -> float:
         """
         Computes `R` at a given radius value.
 
@@ -121,29 +124,53 @@ class Zernike:
     def compute(self) -> None:
         """
         """
-        radius_array_meshed, angle_array_meshed = self.meshed_arrays
+        # polar frame
+        if self.coords_type.lower() == "polar":
+            radius_array_meshed, angle_array_meshed = self.meshed_arrays
 
-        r = self.R(radius_array_meshed)
+            r = self.R(radius_array_meshed)
 
-        if self.m == 0:
-            self.z = np.sqrt(self.n + 1.) * r
+            if self.m == 0:
+                self.data = np.sqrt(self.n + 1.) * r
 
-        if self.j % 2 == 0:
-            self.z = np.sqrt(2. * (self.n + 1.)) * r * np.cos(self.m * angle_array_meshed)
+            if self.j % 2 == 0:
+                self.data = np.sqrt(2. * (self.n + 1.)) * r * np.cos(self.m * angle_array_meshed)
 
-        self.z = np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
+            self.data = np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
+
+        # cartesian frame
+        elif self.coords_type.lower() == "cartesian":
+            raise NotImplementedError
+
+        # unsupported frames
+        else:
+            raise ValueError(f"unsupported coordinate type '{self.coords_type}'")
 
 
     def show(self, coordinates: str="polar") -> None:
         """
         """
-        if self.z is None:
+        if self.data is None:
             self.compute()
 
         radius_array_meshed, angle_array_meshed = self.meshed_arrays
 
         plt.figure(figsize=(15, 15))
-        if coordinates.lower() == "cartesian":
+
+        # polar frame
+        if coordinates.lower() == "polar":
+            plt.subplot(projection="polar")
+
+            c = plt.pcolormesh(
+                angle_array_meshed, radius_array_meshed, self.data, 
+                shading="auto", cmap="hot_r"
+            )
+
+            plt.title(f"j = {self.j}")
+
+
+        # cartesian frame
+        elif coordinates.lower() == "cartesian":
             ax = plt.subplot()
             ax.set_aspect("equal")
 
@@ -152,22 +179,13 @@ class Zernike:
             )
 
             c = plt.pcolormesh(
-                x_array_meshed, y_array_meshed, self.z,
+                x_array_meshed, y_array_meshed, self.data,
                 shading="auto", cmap="hot_r"
             )
 
             plt.title(f"j = {self.j} - Cartesian")
 
-        elif coordinates.lower() == "polar":
-            plt.subplot(projection="polar")
-
-            c = plt.pcolormesh(
-                angle_array_meshed, radius_array_meshed, self.z, 
-                shading="auto", cmap="hot_r"
-            )
-
-            plt.title(f"j = {self.j}")
-
+        # unsupported frames
         else:
             raise ValueError(f"unsupported coordinate type '{coordinates}'")
 
