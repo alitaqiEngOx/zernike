@@ -2,6 +2,7 @@ import math
 from dataclasses import dataclass
 from typing import Optional
 
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
@@ -77,6 +78,16 @@ class Zernike:
 
         return int(n)
     
+    @property
+    def meshed_arrays(self) -> tuple[NDArray]:
+        """
+        """
+        radius_array_meshed, angle_array_meshed = np.meshgrid(
+            self.radius_array, self.angle_array
+        )
+
+        return radius_array_meshed, angle_array_meshed
+    
 
     def R(self, radius: NDArray) -> NDArray:
         """
@@ -103,19 +114,36 @@ class Zernike:
         return output
 
 
-    def compute(self) -> NDArray:
+    def compute(self) -> None:
         """
         """
-        radius_array_meshed, angle_array_meshed = np.meshgrid(
-            self.radius_array, self.angle_array
-        )
+        radius_array_meshed, angle_array_meshed = self.meshed_arrays()
 
         r = self.R(radius_array_meshed)
 
         if self.m == 0:
-            return np.sqrt(self.n + 1.) * r
+            self.z = np.sqrt(self.n + 1.) * r
 
         if self.j % 2 == 0:
-            return np.sqrt(2. * (self.n + 1.)) * r * np.cos(self.m * angle_array_meshed)
+            self.z = np.sqrt(2. * (self.n + 1.)) * r * np.cos(self.m * angle_array_meshed)
 
-        return np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
+        self.z = np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
+
+
+    def show(self) -> None:
+        """
+        """
+        if self.z is None:
+            self.compute()
+
+        radius_array_meshed, angle_array_meshed = self.meshed_arrays()
+
+        plt.figure(figsize=(15, 15))
+        plt.subplot(projection="polar")
+        c = plt.pcolormesh(
+            angle_array_meshed, radius_array_meshed, self.z, 
+            shading="auto", cmap="hot_r"
+        )
+        plt.colorbar(c)
+        plt.title(f"j = {self.j}")
+        plt.show()

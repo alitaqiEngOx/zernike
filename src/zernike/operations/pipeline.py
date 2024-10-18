@@ -29,11 +29,4 @@ def run(
 
     z = Zernike(j, radius_array, angle_array)
 
-    Rho, Theta = np.meshgrid(radius_array, angle_array)
-
-    plt.figure(figsize=(15, 15))
-    plt.subplot(projection="polar")
-    c = plt.pcolormesh(Theta, Rho, z.compute(), shading="auto", cmap="hot_r")
-    plt.colorbar(c)
-    plt.title(f"j = {j}")
-    plt.show()
+    z.show()
