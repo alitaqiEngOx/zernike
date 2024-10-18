@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
+from utils.conversions import polar_to_cartesian
+
 
 @dataclass
 class Zernike:
@@ -23,6 +25,7 @@ class Zernike:
 
     z: Optional[NDArray] = None
     """ """
+
 
     @property
     def m(self) -> int:
@@ -77,9 +80,10 @@ class Zernike:
             raise ValueError("`n` cannot be negative")
 
         return int(n)
-    
+
+
     @property
-    def meshed_arrays(self) -> tuple[NDArray]:
+    def meshed_arrays(self) -> tuple[NDArray, NDArray]:
         """
         """
         radius_array_meshed, angle_array_meshed = np.meshgrid(
@@ -87,7 +91,7 @@ class Zernike:
         )
 
         return radius_array_meshed, angle_array_meshed
-    
+
 
     def R(self, radius: NDArray) -> NDArray:
         """
@@ -130,7 +134,7 @@ class Zernike:
         self.z = np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
 
 
-    def show(self) -> None:
+    def show(self, coordinates: str="polar") -> None:
         """
         """
         if self.z is None:
@@ -139,11 +143,33 @@ class Zernike:
         radius_array_meshed, angle_array_meshed = self.meshed_arrays
 
         plt.figure(figsize=(15, 15))
-        plt.subplot(projection="polar")
-        c = plt.pcolormesh(
-            angle_array_meshed, radius_array_meshed, self.z, 
-            shading="auto", cmap="hot_r"
-        )
+        if coordinates.lower() == "cartesian":
+            ax = plt.subplot()
+            ax.set_aspect("equal")
+
+            x_array_meshed, y_array_meshed = polar_to_cartesian(
+                radius_array_meshed, angle_array_meshed
+            )
+
+            c = plt.pcolormesh(
+                x_array_meshed, y_array_meshed, self.z,
+                shading="auto", cmap="hot_r"
+            )
+
+            plt.title(f"j = {self.j} - Cartesian")
+
+        elif coordinates.lower() == "polar":
+            plt.subplot(projection="polar")
+
+            c = plt.pcolormesh(
+                angle_array_meshed, radius_array_meshed, self.z, 
+                shading="auto", cmap="hot_r"
+            )
+
+            plt.title(f"j = {self.j}")
+
+        else:
+            raise ValueError(f"unsupported coordinate type '{coordinates}'")
+
         plt.colorbar(c)
-        plt.title(f"j = {self.j}")
         plt.show()

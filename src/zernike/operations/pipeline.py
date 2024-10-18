@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 from operations.zernike import Zernike
@@ -28,5 +27,5 @@ def run(
     angle_array = np.linspace(0., 2.*np.pi, num_angles)
 
     z = Zernike(j, radius_array, angle_array)
-
     z.show()
+    z.show("cartesian")
