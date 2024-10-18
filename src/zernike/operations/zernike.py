@@ -117,7 +117,7 @@ class Zernike:
     def compute(self) -> None:
         """
         """
-        radius_array_meshed, angle_array_meshed = self.meshed_arrays()
+        radius_array_meshed, angle_array_meshed = self.meshed_arrays
 
         r = self.R(radius_array_meshed)
 
@@ -136,7 +136,7 @@ class Zernike:
         if self.z is None:
             self.compute()
 
-        radius_array_meshed, angle_array_meshed = self.meshed_arrays()
+        radius_array_meshed, angle_array_meshed = self.meshed_arrays
 
         plt.figure(figsize=(15, 15))
         plt.subplot(projection="polar")
