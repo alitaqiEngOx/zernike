@@ -10,8 +10,8 @@ def main() -> None:
     args = parse_args()
 
     pipeline.run(
-        j=args.j, rho=args.max_radius, rho_step=args.radius_step, 
-        num_theta=args.num_angle_steps
+        j=args.j, radius_max=args.max_radius, radius_step=args.radius_step, 
+        num_angles=args.num_angles
     )
 
 
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
         maximum radius to be included in the plot
         (defaults to 1.0).
 
-    --num_angle_steps (optional): int
+    --num_angles (optional): int
         number of angles to be computed between 0 deg and 360 deg
         (defaults to 100).
 
@@ -57,7 +57,7 @@ def parse_args() -> argparse.Namespace:
         help="maximum radius to be included in the plot",
     )
     parser.add_argument(
-        "--num_angle_steps",
+        "--num_angles",
         type=int,
         default=500,
         help="number of angles to be computed between 0 deg and 360 deg",
