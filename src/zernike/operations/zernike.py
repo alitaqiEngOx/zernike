@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from utils.conversions import polar_to_cartesian
+from utils.conversions import cartesian_to_polar
 
 
 @dataclass
@@ -126,70 +126,65 @@ class Zernike:
         if self.coords_type.lower() == "polar":
             r_meshed, theta_meshed = self.meshed_arrays
 
-            if self.m == 0:
-                self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
-
-            else:
-                if self.j % 2 == 0:
-                    self.data = np.sqrt(2. * (self.n + 1.)) *\
-                        self.R(r_meshed) *\
-                            np.cos(self.m * theta_meshed)
-
-                else:
-                    self.data = np.sqrt(2. * (self.n + 1.)) *\
-                        self.R(r_meshed) *\
-                            np.sin(self.m * theta_meshed)
-
         # cartesian frame
         elif self.coords_type.lower() == "cartesian":
-            raise NotImplementedError
+            x_meshed, y_meshed = self.meshed_arrays
+            r_meshed, theta_meshed = cartesian_to_polar(
+                x_meshed, y_meshed
+            )
 
         # unsupported frames
         else:
-            raise ValueError(f"unsupported coordinate type '{self.coords_type}'")
+            raise ValueError(
+                f"unsupported coordinate type '{self.coords_type}'"
+            )
+
+        if self.m == 0:
+            self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
+
+        else:
+            if self.j % 2 == 0:
+                self.data = np.sqrt(2. * (self.n + 1.)) *\
+                    self.R(r_meshed) *\
+                        np.cos(self.m * theta_meshed)
+
+            else:
+                self.data = np.sqrt(2. * (self.n + 1.)) *\
+                    self.R(r_meshed) *\
+                        np.sin(self.m * theta_meshed)
 
 
-    def show(self, coordinates: str="polar") -> None:
+    def show(self) -> None:
         """
         """
         if self.data is None:
             self.compute()
 
-        radius_array_meshed, angle_array_meshed = self.meshed_arrays
-
         plt.figure(figsize=(15, 15))
 
+        dim_0_meshed, dim_1_meshed = self.meshed_arrays
+
         # polar frame
-        if coordinates.lower() == "polar":
+        if self.coords_type.lower() == "polar":
             plt.subplot(projection="polar")
-
-            c = plt.pcolormesh(
-                angle_array_meshed, radius_array_meshed, self.data, 
-                shading="auto", cmap="hot_r"
-            )
-
             plt.title(f"j = {self.j}")
 
-
         # cartesian frame
-        elif coordinates.lower() == "cartesian":
+        elif self.coords_type.lower() == "cartesian":
             ax = plt.subplot()
             ax.set_aspect("equal")
-
-            x_array_meshed, y_array_meshed = polar_to_cartesian(
-                radius_array_meshed, angle_array_meshed
-            )
-
-            c = plt.pcolormesh(
-                x_array_meshed, y_array_meshed, self.data,
-                shading="auto", cmap="hot_r"
-            )
-
             plt.title(f"j = {self.j} - Cartesian")
 
         # unsupported frames
         else:
-            raise ValueError(f"unsupported coordinate type '{coordinates}'")
+            raise ValueError(
+                f"unsupported coordinate type '{self.coords_type}'"
+            )
+
+        c = plt.pcolormesh(
+                dim_1_meshed, dim_0_meshed, self.data, 
+                shading="auto", cmap="hot_r"
+            )
 
         plt.colorbar(c)
         plt.show()

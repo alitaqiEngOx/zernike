@@ -28,4 +28,9 @@ def run(
 
     z = Zernike(j, radius_array, angle_array)
     z.show()
-    z.show("cartesian")
+
+    x_array = np.arange(-1., 1.01, 0.01)
+    y_array = x_array
+
+    z = Zernike(j, x_array, y_array, coords_type="cartesian")
+    z.show()
