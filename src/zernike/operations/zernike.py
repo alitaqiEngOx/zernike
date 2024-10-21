@@ -6,9 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from utils.conversions import (
-    cartesian_to_polar, polar_to_cartesian
-)
+from utils.conversions import cartesian_to_polar
 
 
 @dataclass
@@ -96,19 +94,6 @@ class Zernike:
         )
 
 
-    @property
-    def gridded_array(self) -> NDArray:
-        """
-        """
-        dim_0, dim_1 = self.meshed_arrays()
-
-        return np.stack(
-            (dim_0.ravel(), dim_1.ravel())
-        ).T.reshape(
-            self.dim_1_array[0], self.dim_0_array[0], 2
-        )
-
-
     def R(self, radius: float) -> float:
         """
         Computes `R` at a given radius value.
@@ -141,27 +126,19 @@ class Zernike:
         if self.coords_type.lower() == "polar":
             r_meshed, theta_meshed = self.meshed_arrays
 
-            if self.m == 0:
-                self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
-
-            else:
-                if self.j % 2 == 0:
-                    self.data = np.sqrt(2. * (self.n + 1.)) *\
-                        self.R(r_meshed) *\
-                            np.cos(self.m * theta_meshed)
-
-                else:
-                    self.data = np.sqrt(2. * (self.n + 1.)) *\
-                        self.R(r_meshed) *\
-                            np.sin(self.m * theta_meshed)
-
         # cartesian frame
-        #elif self.coords_type.lower() == "cartesian":
-        #    gridded_polar = cartesian_to_polar(self.gridded_array)
-        #    x_meshed, y_meshed = self.meshed_arrays
-        #    r_meshed, theta_meshed = cartesian_to_polar(
-        #        x_meshed, y_meshed
-        #    )
+        elif self.coords_type.lower() == "cartesian":
+            x_meshed, y_meshed = self.meshed_arrays
+            r_meshed_ravelled, theta_meshed_ravelled = cartesian_to_polar(
+                x_meshed.ravel(), y_meshed.ravel()
+            )
+
+            r_meshed = r_meshed_ravelled.reshape(
+                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+            )
+            theta_meshed = theta_meshed_ravelled.reshape(
+                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+            )
 
         # unsupported frames
         else:
@@ -170,7 +147,7 @@ class Zernike:
             )
 
         if self.m == 0:
-            self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
+                self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
 
         else:
             if self.j % 2 == 0:
@@ -190,9 +167,8 @@ class Zernike:
         if self.data is None:
             self.compute()
 
-        plt.figure(figsize=(15, 15))
-
         dim_0_meshed, dim_1_meshed = self.meshed_arrays
+        plt.figure(figsize=(15, 15))
 
         # polar frame
         if self.coords_type.lower() == "polar":
@@ -215,6 +191,6 @@ class Zernike:
                 dim_1_meshed, dim_0_meshed, self.data, 
                 shading="auto", cmap="hot_r"
             )
-
         plt.colorbar(c)
+
         plt.show()
