@@ -23,10 +23,10 @@ class Zernike:
     dim_1_array: NDArray
     """ """
 
-    data: Optional[NDArray] = None
+    coords_type: str = "polar"
     """ """
 
-    coords_type: str = "polar"
+    data: Optional[NDArray] = None
     """ """
 
 
@@ -89,11 +89,9 @@ class Zernike:
     def meshed_arrays(self) -> tuple[NDArray, NDArray]:
         """
         """
-        dim_0_array_meshed, dim_1_array_meshed = np.meshgrid(
+        return np.meshgrid(
             self.dim_0_array, self.dim_1_array
         )
-
-        return dim_0_array_meshed, dim_1_array_meshed
 
 
     def R(self, radius: float) -> float:
