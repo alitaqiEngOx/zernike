@@ -14,13 +14,13 @@ def run(
     j: int
         order of the Zernike polynomial.
 
-    rho: float
+    radius_max: float
         maximum radius to be included in the plot.
 
-    rho_step: float
+    radius_step: float
         numerical step in the radius domain.
 
-    num_theta: int
+    num_angles: int
         number of angles to be computed between 0 deg and 360 deg.
     """
     radius_array = np.arange(0., radius_max + radius_step, radius_step)
