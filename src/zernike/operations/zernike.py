@@ -124,17 +124,21 @@ class Zernike:
         """
         # polar frame
         if self.coords_type.lower() == "polar":
-            radius_array_meshed, angle_array_meshed = self.meshed_arrays
-
-            r = self.R(radius_array_meshed)
+            r_meshed, theta_meshed = self.meshed_arrays
 
             if self.m == 0:
-                self.data = np.sqrt(self.n + 1.) * r
+                self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
 
-            if self.j % 2 == 0:
-                self.data = np.sqrt(2. * (self.n + 1.)) * r * np.cos(self.m * angle_array_meshed)
+            else:
+                if self.j % 2 == 0:
+                    self.data = np.sqrt(2. * (self.n + 1.)) *\
+                        self.R(r_meshed) *\
+                            np.cos(self.m * theta_meshed)
 
-            self.data = np.sqrt(2. * (self.n + 1.)) * r * np.sin(self.m * angle_array_meshed)
+                else:
+                    self.data = np.sqrt(2. * (self.n + 1.)) *\
+                        self.R(r_meshed) *\
+                            np.sin(self.m * theta_meshed)
 
         # cartesian frame
         elif self.coords_type.lower() == "cartesian":
