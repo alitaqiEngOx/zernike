@@ -29,7 +29,7 @@ def run(
     z = Zernike(j, radius_array, angle_array)
     z.show()
 
-    x_array = np.arange(-0.7, 0.71, 0.01)
+    x_array = np.linspace(-0.5*np.sqrt(2), 0.5*np.sqrt(2.)+0.01, 200)
     y_array = x_array
 
     z = Zernike(j, x_array, y_array, coords_type="cartesian")
