@@ -9,7 +9,7 @@ def read_data(dir: Path) -> NDArray:
     """
     with open(f"{dir}", 'r') as file:
         data = file.readlines()
-
+    print(data[0].strip()[0])
     return np.asarray([
         item.strip().replace(', ', ' ')\
             .replace(' ,', ' ').replace(',', ' ')\
