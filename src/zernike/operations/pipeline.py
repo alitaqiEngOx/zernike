@@ -35,10 +35,11 @@ def run(
     z = Zernike(j, x_array, y_array, coords_type="cartesian")
     z.show()
 
-    from pathlib import Path
-    dir = Path(__file__)
-    dir = dir.parents[3].joinpath("data", "sampled_beam.txt")
+    # experimental code...
+    #from pathlib import Path
+    #dir = Path(__file__)
+    #dir = dir.parents[3].joinpath("data", "sampled_beam.txt")
 
-    from utils.txt import read_data
+    #from utils.txt import read_data
 
-    exp_data = read_data(dir)
+    #exp_data = read_data(dir)
