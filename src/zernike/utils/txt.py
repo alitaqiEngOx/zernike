@@ -9,11 +9,19 @@ def read_data(dir: Path) -> NDArray:
     """
     with open(f"{dir}", 'r') as file:
         data = file.readlines()
-    print(data[0].strip()[0])
-    return np.asarray([
+    
+    data = [
         item.strip().replace(', ', ' ')\
             .replace(' ,', ' ').replace(',', ' ')\
                 .replace(' , ', ' ').split()
         for item in data
-        if item.strip()[0] != '#'
-    ])
+        if len(item.strip()) > 0
+    ]
+    data = [
+        [float(entry) for entry in item]
+        for item in data
+        if item[0] != '#'
+
+    ]
+
+    return np.asarray(data)
