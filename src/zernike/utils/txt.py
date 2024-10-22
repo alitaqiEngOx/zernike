@@ -11,7 +11,9 @@ def read_data(dir: Path) -> NDArray:
         data = file.readlines()
 
     return np.asarray([
-        item.strip().split()
+        item.strip().replace(', ', ' ')\
+            .replace(' ,', ' ').replace(',', ' ')\
+                .replace(' , ', ' ').split()
         for item in data
         if item.strip()[0] != '#'
     ])
