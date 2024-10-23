@@ -6,7 +6,7 @@ from zernike.operations.pipeline import (
 )
 
 
-def main() -> None:
+def main() -> int:
     """
     Pipeline entry point.
     """
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
     -------------
     j: int
         order of the Zernike polynomial.
-    
+
     --max_radius (optional): float
         maximum radius to be included in the plot
         (defaults to 1.0).
@@ -47,11 +47,11 @@ def parse_args() -> argparse.Namespace:
     cmd arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Zernike plots",
+        description="Zernike aberration plots",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
-        "j",
+        'j',
         type=int,
         help="order of the Zernike polynomial",
     )
