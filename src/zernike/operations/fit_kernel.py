@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
+from numpy.typing import NDArray
 
 from zernike.operations.zernike import Zernike
 
@@ -11,6 +13,9 @@ class FitKernel:
     """
 
     j_list: list[int]
+    """ """
+
+    data_list: Optional[list[NDArray]] = None
     """ """
 
 
@@ -28,15 +33,23 @@ class FitKernel:
             Zernike(j, dim, dim, "cartesian")
             for j in self.j_list
         ]
-    
-    def compute_sum(self) -> None:
+
+
+    def compute(self) -> None:
         """
         """
         for item in self.aberration_object_list:
             item.compute()
         
-        return [
+        self.data_list = [
             item.data 
             for item in self.aberration_object_list
         ]
+
+
+    def show_sum(self) -> None:
+        """
+        """
+
+
             
