@@ -1,0 +1,20 @@
+[tool.poetry]
+authors = ["A. Taqi"]
+description = "Zernike polynomials"
+license = "BSD-3-Clause"
+name = "zernike"
+readme = "README.md"
+repository = "https://github.com/alitaqiEngOx/zernike"
+version = "0.1.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+[tool.poetry.scripts]
+plot-aberration = "zernike.apps.plot_aberration:main"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.12"
+numpy = "^2.1.2"
+matplotlib = "^3.9.2"

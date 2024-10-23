@@ -1,6 +1,7 @@
 import argparse
+import sys
 
-from operations import pipeline
+from zernike.operations import pipeline
 
 
 def main() -> None:
@@ -9,10 +10,12 @@ def main() -> None:
     """
     args = parse_args()
 
-    pipeline.run(
+    pipeline.plot_aberration(
         j=args.j, radius_max=args.max_radius, radius_step=args.radius_step, 
         num_angles=args.num_angles
     )
+
+    return 0
 
 
 def parse_args() -> argparse.Namespace:
@@ -73,4 +76,4 @@ def parse_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from utils.conversions import cartesian_to_polar
+from zernike.utils.conversions import cartesian_to_polar
 
 
 @dataclass

@@ -1,9 +1,9 @@
 import numpy as np
 
-from operations.zernike import Zernike
+from zernike.operations.zernike import Zernike
 
 
-def run(
+def plot_aberration(
         *, j: int, radius_max: float, radius_step: float, num_angles: int
 ) -> None:
     """
@@ -36,11 +36,11 @@ def run(
     z.show()
 
     # experimental code...
-    from pathlib import Path
-    dir = Path(__file__).parents[3].joinpath(
-        "data", "sampled_beam.txt"
-    )
+    #from pathlib import Path
+    #dir = Path(__file__).parents[3].joinpath(
+    #    "data", "sampled_beam.txt"
+    #)
 
-    from utils.txt import read_data
+    #from utils.txt import read_data
 
-    exp_data = read_data(dir)
+    #exp_data = read_data(dir)
