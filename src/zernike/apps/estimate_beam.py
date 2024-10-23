@@ -2,12 +2,16 @@ import argparse
 import sys
 from pathlib import Path
 
+from zernike.operations.pipeline import estimate_beam
+
 
 def main() -> int:
     """
     Pipeline entry point.
     """
     args = parse_args()
+
+    estimate_beam(j=args.j, data_path=args.sampled_data_path)
 
     print(args.j)
 

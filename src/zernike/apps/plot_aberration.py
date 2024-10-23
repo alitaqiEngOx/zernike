@@ -1,9 +1,7 @@
 import argparse
 import sys
 
-from zernike.operations.pipeline import (
-    plot_aberration
-)
+from zernike.operations.pipeline import plot_aberration
 
 
 def main() -> int:
