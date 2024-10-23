@@ -35,7 +35,7 @@ def parse_args() -> argparse.Namespace:
         'j',
         type=int,
         nargs='*',
-        help="Zernike polynomials (as many as desired)",
+        help="Zernike polynomials (as many as desired)"
     )
     parser.add_argument(
         "--sampled_data_path",
