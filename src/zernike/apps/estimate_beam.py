@@ -39,8 +39,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--sampled_data_path",
-        type=int,
-        default=f"{Path(__file__).parents[3].joinpath('data', 'sampled_beam.txt')}"
+        type=str,
+        default=f"{Path(__file__).parents[3].joinpath('data', 'sampled_beam.txt')}",
+        help="`.txt` file bearing the sampled data"
     )
 
     return parser.parse_args()
