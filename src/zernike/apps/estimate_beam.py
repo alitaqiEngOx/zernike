@@ -13,8 +13,6 @@ def main() -> int:
 
     estimate_beam(j=args.j, data_path=args.sampled_data_path)
 
-    print(args.j)
-
     return 0
 
 
