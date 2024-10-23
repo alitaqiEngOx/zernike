@@ -1,7 +1,9 @@
 import argparse
 import sys
 
-from zernike.operations import pipeline
+from zernike.operations.pipeline import (
+    plot_aberration
+)
 
 
 def main() -> None:
@@ -10,7 +12,7 @@ def main() -> None:
     """
     args = parse_args()
 
-    pipeline.plot_aberration(
+    plot_aberration(
         j=args.j, radius_max=args.max_radius, radius_step=args.radius_step, 
         num_angles=args.num_angles
     )
