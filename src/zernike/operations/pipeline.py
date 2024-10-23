@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 
 from zernike.operations.zernike import Zernike
 
@@ -44,3 +45,8 @@ def plot_aberration(
     #from utils.txt import read_data
 
     #exp_data = read_data(dir)
+
+
+def estimate_beam(*, j: list[int], data_path: Path) -> None:
+    """
+    """

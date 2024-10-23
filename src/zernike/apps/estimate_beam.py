@@ -9,6 +9,8 @@ def main() -> int:
     """
     args = parse_args()
 
+    print(args.j)
+
     return 0
 
 
