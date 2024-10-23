@@ -2,6 +2,7 @@ import numpy as np
 from pathlib import Path
 
 from zernike.operations.zernike import Zernike
+from zernike.operations.fit_kernel import FitKernel
 
 
 def plot_aberration(
@@ -30,23 +31,9 @@ def plot_aberration(
     z = Zernike(j, radius_array, angle_array)
     z.show()
 
-    x_array = np.linspace(-0.5*np.sqrt(2), 0.5*np.sqrt(2.)+0.01, 200)
-    y_array = x_array
 
-    z = Zernike(j, x_array, y_array, coords_type="cartesian")
-    z.show()
-
-    # experimental code...
-    #from pathlib import Path
-    #dir = Path(__file__).parents[3].joinpath(
-    #    "data", "sampled_beam.txt"
-    #)
-
-    #from utils.txt import read_data
-
-    #exp_data = read_data(dir)
-
-
-def estimate_beam(*, j: list[int], data_path: Path) -> None:
+def estimate_beam(*, j_list: list[int], data_path: Path) -> None:
     """
     """
+    f = FitKernel(j_list)
+    f.compute_sum()
