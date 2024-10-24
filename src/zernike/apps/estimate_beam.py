@@ -24,7 +24,7 @@ def parse_args() -> argparse.Namespace:
         orders of Zernike polynomials (as many as desired).
 
     --sampled_data_path (optional): str
-        `.txt` file bearing the sampled data.
+        `.txt` file or `.npy` binary bearing the sampled data.
 
     cmd Arguments
     -------------
@@ -43,7 +43,7 @@ def parse_args() -> argparse.Namespace:
         "--sampled_data_path",
         type=str,
         default=f"{Path(__file__).parents[3].joinpath('data', 'sampled_beam.txt')}",
-        help="`.txt` file bearing the sampled data"
+        help="`.txt` file or `.npy` binary bearing the sampled data."
     )
 
     return parser.parse_args()

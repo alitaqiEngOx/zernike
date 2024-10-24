@@ -15,7 +15,12 @@ class FitKernel:
         """
         """
         self.j_list = j_list
-        self.kernel = read_data(kernel_path)
+
+        if kernel_path.suffix == ".txt":
+            self.kernel = read_data(kernel_path)
+        
+        else:
+            self.kernel = np.load(kernel_path)
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),

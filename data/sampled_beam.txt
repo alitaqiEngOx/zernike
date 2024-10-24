@@ -2,6 +2,8 @@
 #
 # This is a blank file where you can add sampled data for your beam.
 #
+# Alternatively, pass your own `.txt` file or `.npy` binary bearing the data.
+#
 # Horizontal data, left -> right, are to be written on a single line (row).
 # Vertical data, up -> down, are to be written on multiple lines (column).
 #
