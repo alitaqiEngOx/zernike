@@ -63,3 +63,24 @@ class FitKernel:
         )
         plt.colorbar(c)
         plt.show()
+
+
+    def show_averaged_sum(self) -> None:
+        """
+        """
+        if self.data_list is None:
+            self.compute()
+
+        plt.figure(figsize=(15, 15))
+        ax = plt.subplot()
+        ax.set_aspect("equal")
+        plt.title(f"summation of j={self.j_list} aberrations")
+
+        c = plt.pcolormesh(
+            self.aberration_object_list[0].meshed_arrays[0],
+            self.aberration_object_list[0].meshed_arrays[1],
+            np.sum(self.data_list, axis=0) / len(self.data_list),
+            shading="auto", cmap="hot_r"
+        )
+        plt.colorbar(c)
+        plt.show()
