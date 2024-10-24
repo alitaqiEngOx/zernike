@@ -26,7 +26,7 @@ class FitKernel:
             200
         )
 
-        self.aberration_object_list = [
+        self.aberration_list = [
             Aberration(j, dim, dim, "cartesian")
             for j in j_list
         ]
@@ -35,12 +35,12 @@ class FitKernel:
     def compute(self) -> None:
         """
         """
-        for item in self.aberration_object_list:
+        for item in self.aberration_list:
             item.compute()
 
         self.data_list = np.asarray([
             item.data
-            for item in self.aberration_object_list
+            for item in self.aberration_list
         ])
 
 
@@ -56,8 +56,8 @@ class FitKernel:
         plt.title(f"summation of j={self.j_list} aberrations")
 
         c = plt.pcolormesh(
-            self.aberration_object_list[0].meshed_arrays[0],
-            self.aberration_object_list[0].meshed_arrays[1],
+            self.aberration_list[0].meshed_arrays[0],
+            self.aberration_list[0].meshed_arrays[1],
             np.sum(self.data_list, axis=0),
             shading="auto", cmap="hot_r"
         )
@@ -77,8 +77,8 @@ class FitKernel:
         plt.title(f"summation of j={self.j_list} aberrations")
 
         c = plt.pcolormesh(
-            self.aberration_object_list[0].meshed_arrays[0],
-            self.aberration_object_list[0].meshed_arrays[1],
+            self.aberration_list[0].meshed_arrays[0],
+            self.aberration_list[0].meshed_arrays[1],
             np.sum(self.data_list, axis=0) / len(self.data_list),
             shading="auto", cmap="hot_r"
         )
