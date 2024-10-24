@@ -31,7 +31,7 @@ class FitKernel:
         ]
 
 
-    def compute(self) -> None:
+    def compute_aberrations(self) -> None:
         """
         """
         for item in self.aberration_list:
@@ -43,7 +43,7 @@ class FitKernel:
         ])
 
 
-    def show_sum(self) -> None:
+    def show_aberration_sum(self) -> None:
         """
         """
         plt.figure(figsize=(15, 15))
@@ -54,14 +54,14 @@ class FitKernel:
         c = plt.pcolormesh(
             self.aberration_list[0].meshed_arrays[0],
             self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.compute(), axis=0),
+            np.sum(self.compute_aberrations(), axis=0),
             shading="auto", cmap="hot_r"
         )
         plt.colorbar(c)
         plt.show()
 
 
-    def show_averaged_sum(self) -> None:
+    def show_averaged_aberration_sum(self) -> None:
         """
         """
         plt.figure(figsize=(15, 15))
@@ -72,7 +72,7 @@ class FitKernel:
         c = plt.pcolormesh(
             self.aberration_list[0].meshed_arrays[0],
             self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.compute(), axis=0) / len(self.j_list),
+            np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
             shading="auto", cmap="hot_r"
         )
         plt.colorbar(c)
