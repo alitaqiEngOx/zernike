@@ -12,13 +12,12 @@ class FitKernel:
     """
 
     def __init__(
-            self, j_list: list[int], 
-            data_list: Optional[list[NDArray]]=None
+            self, j_list: list[int]
+
     ):
         """
         """
         self.j_list = j_list
-        self.data_list = data_list
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
@@ -38,7 +37,7 @@ class FitKernel:
         for item in self.aberration_list:
             item.compute()
 
-        self.data_list = np.asarray([
+        return np.asarray([
             item.data
             for item in self.aberration_list
         ])
@@ -47,9 +46,6 @@ class FitKernel:
     def show_sum(self) -> None:
         """
         """
-        if self.data_list is None:
-            self.compute()
-
         plt.figure(figsize=(15, 15))
         ax = plt.subplot()
         ax.set_aspect("equal")
@@ -58,7 +54,7 @@ class FitKernel:
         c = plt.pcolormesh(
             self.aberration_list[0].meshed_arrays[0],
             self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.data_list, axis=0),
+            np.sum(self.compute(), axis=0),
             shading="auto", cmap="hot_r"
         )
         plt.colorbar(c)
@@ -68,9 +64,6 @@ class FitKernel:
     def show_averaged_sum(self) -> None:
         """
         """
-        if self.data_list is None:
-            self.compute()
-
         plt.figure(figsize=(15, 15))
         ax = plt.subplot()
         ax.set_aspect("equal")
@@ -79,7 +72,7 @@ class FitKernel:
         c = plt.pcolormesh(
             self.aberration_list[0].meshed_arrays[0],
             self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.data_list, axis=0) / len(self.data_list),
+            np.sum(self.compute(), axis=0) / len(self.j_list),
             shading="auto", cmap="hot_r"
         )
         plt.colorbar(c)
