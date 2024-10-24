@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 
-from zernike.operations.zernike import Zernike
+from zernike.operations.aberration import Aberration
 from zernike.operations.fit_kernel import FitKernel
 
 
@@ -28,7 +28,7 @@ def plot_aberration(
     radius_array = np.arange(0., radius_max + radius_step, radius_step)
     angle_array = np.linspace(0., 2.*np.pi, num_angles)
 
-    z = Zernike(j, radius_array, angle_array)
+    z = Aberration(j, radius_array, angle_array)
     z.show()
 
 

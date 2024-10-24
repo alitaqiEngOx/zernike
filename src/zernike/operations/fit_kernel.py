@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from zernike.operations.zernike import Zernike
+from zernike.operations.aberration import Aberration
 
 
 class FitKernel:
@@ -27,7 +27,7 @@ class FitKernel:
         )
 
         self.aberration_object_list = [
-            Zernike(j, dim, dim, "cartesian")
+            Aberration(j, dim, dim, "cartesian")
             for j in j_list
         ]
 

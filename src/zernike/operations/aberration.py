@@ -10,7 +10,7 @@ from zernike.utils.conversions import cartesian_to_polar
 
 
 @dataclass
-class Zernike:
+class Aberration:
     """
     """
 
