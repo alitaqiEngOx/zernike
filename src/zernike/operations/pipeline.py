@@ -32,8 +32,8 @@ def plot_aberration(
     z.show()
 
 
-def estimate_beam(*, j_list: list[int], data_path: Path) -> None:
+def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
     """
     """
-    f = FitKernel(j_list)
+    f = FitKernel(j_list, kernel_path)
     f.show_averaged_aberration_sum()

@@ -1,23 +1,21 @@
-from typing import Optional
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.typing import NDArray
 
 from zernike.operations.aberration import Aberration
+from zernike.utils.txt import read_data
 
 
 class FitKernel:
     """
     """
 
-    def __init__(
-            self, j_list: list[int]
-
-    ):
+    def __init__(self, j_list: list[int], kernel_path: Path):
         """
         """
         self.j_list = j_list
+        self.kernel = read_data(kernel_path)
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
