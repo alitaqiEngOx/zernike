@@ -36,4 +36,4 @@ def estimate_beam(*, j_list: list[int], data_path: Path) -> None:
     """
     """
     f = FitKernel(j_list)
-    f.compute_sum()
+    f.show_sum()
