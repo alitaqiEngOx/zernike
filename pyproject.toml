@@ -16,6 +16,7 @@ plot-aberration = "zernike.apps.plot_aberration:main"
 estimate-beam = "zernike.apps.estimate_beam:main"
 
 [tool.poetry.dependencies]
-python = ">=3.10, <3.12"
-numpy = "^2.1.2"
 matplotlib = "^3.9.2"
+numpy = "^2.1.2"
+python = ">=3.10, <3.12"
+scipy = "^1.14.1"

@@ -36,6 +36,7 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
     """
     """
     f = FitKernel(j_list, kernel_path)
-    f.show()
-    f.show("aberration_sum")
+    f.show("kernel")
     f.show("avg_aberration_sum")
+    
+    params, covariance = f.fit_data()

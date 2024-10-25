@@ -1,8 +1,10 @@
 from pathlib import Path
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
+from scipy.optimize import curve_fit
 
 from zernike.operations.aberration import Aberration
 from zernike.utils.txt import read_data
@@ -19,14 +21,14 @@ class FitKernel:
 
         if kernel_path.suffix == ".txt":
             self.kernel = read_data(kernel_path)
-        
+
         else:
             self.kernel = np.load(kernel_path)
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
             0.5 * np.sqrt(2.) + 0.01,
-            200
+            self.kernel.shape[0]
         )
 
         self.aberration_list = [
@@ -35,17 +37,19 @@ class FitKernel:
         ]
 
 
-    def compute_aberrations(self) -> NDArray:
+    def compute_aberrations(
+            self, *, xy: Optional[tuple[NDArray]]=None 
+    ) -> NDArray:
         """
         """
         for item in self.aberration_list:
-            item.compute()
+            item.compute(xy=xy)
 
         return np.asarray([
             item.data
             for item in self.aberration_list
         ])
-    
+
 
     def fit_data(self) -> None:
         """
@@ -53,16 +57,28 @@ class FitKernel:
         def wrapper(xy, *args) -> None:
             """
             """
-            data_list = self.compute_aberrations()
-            
+            data_list = self.compute_aberrations(xy=xy)
+
             data_list = np.asarray([
-                item * arg[idx]
-                for (idx, item), arg in zip(enumerate(data_list), args)
+                item * arg
+                for item, arg in zip(data_list, args)
             ])
-            
+
             return np.sum(data_list, axis=0).flatten()
 
-        return
+        x_meshed, y_meshed = np.meshgrid(
+            self.aberration_list[0].dim_0_array,
+            self.aberration_list[0].dim_1_array
+        )
+
+        params, covariance = curve_fit(
+            wrapper,
+            np.vstack((x_meshed.flatten(), y_meshed.flatten())), 
+            self.kernel.flatten(), 
+            p0=np.ones(len(self.j_list))
+        )
+
+        return params, covariance
 
 
     def show(self, plot="kernel") -> None:
