@@ -46,37 +46,39 @@ class FitKernel:
         ])
 
 
-    def show_aberration_sum(self) -> None:
+    def show(self, plot="kernel") -> None:
         """
         """
         plt.figure(figsize=(15, 15))
         ax = plt.subplot()
         ax.set_aspect("equal")
-        plt.title(f"summation of j={self.j_list} aberrations")
 
-        c = plt.pcolormesh(
-            self.aberration_list[0].meshed_arrays[0],
-            self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.compute_aberrations(), axis=0),
-            shading="auto", cmap="hot_r"
-        )
-        plt.colorbar(c)
-        plt.show()
+        if plot == "kernel":
+            plt.title(f"sampled data")
 
+            c = plt.imshow(self.kernel)
+            plt.axis("off")
 
-    def show_averaged_aberration_sum(self) -> None:
-        """
-        """
-        plt.figure(figsize=(15, 15))
-        ax = plt.subplot()
-        ax.set_aspect("equal")
-        plt.title(f"summation of j={self.j_list} aberrations")
+        else:
+            if plot == "aberration_sum":
+                plt.title(f"summation of j={self.j_list} aberrations")
 
-        c = plt.pcolormesh(
-            self.aberration_list[0].meshed_arrays[0],
-            self.aberration_list[0].meshed_arrays[1],
-            np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
-            shading="auto", cmap="hot_r"
-        )
+                c = plt.pcolormesh(
+                    self.aberration_list[0].meshed_arrays[0],
+                    self.aberration_list[0].meshed_arrays[1],
+                    np.sum(self.compute_aberrations(), axis=0),
+                    shading="auto", cmap="hot_r"
+                )
+
+            elif plot == "avg_aberration_sum":
+                plt.title(f"averaged summation of j={self.j_list} aberrations")
+
+                c = plt.pcolormesh(
+                    self.aberration_list[0].meshed_arrays[0],
+                    self.aberration_list[0].meshed_arrays[1],
+                    np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
+                    shading="auto", cmap="hot_r"
+                )
+
         plt.colorbar(c)
         plt.show()
