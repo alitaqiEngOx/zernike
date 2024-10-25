@@ -11,7 +11,9 @@ def main() -> int:
     """
     args = parse_args()
 
-    estimate_beam(j_list=args.j, kernel_path=args.sampled_data_path)
+    estimate_beam(
+        j_list=args.j, kernel_path=Path(args.sampled_data_path)
+    )
 
     return 0
 
