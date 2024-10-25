@@ -51,10 +51,10 @@ class FitKernel:
         ])
 
 
-    def fit_data(self) -> None:
+    def fit_data(self) -> tuple[NDArray]:
         """
         """
-        def wrapper(xy, *args) -> None:
+        def wrapper(xy, *args) -> NDArray:
             """
             """
             data_list = self.compute_aberrations(xy=xy)
@@ -71,14 +71,12 @@ class FitKernel:
             self.aberration_list[0].dim_1_array
         )
 
-        params, covariance = curve_fit(
+        return curve_fit(
             wrapper,
             np.vstack((x_meshed.flatten(), y_meshed.flatten())), 
             self.kernel.flatten(), 
             p0=np.ones(len(self.j_list))
         )
-
-        return params, covariance
 
 
     def show(self, plot="kernel") -> None:
