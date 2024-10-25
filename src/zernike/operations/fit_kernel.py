@@ -2,6 +2,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.typing import NDArray
 
 from zernike.operations.aberration import Aberration
 from zernike.utils.txt import read_data
@@ -34,7 +35,7 @@ class FitKernel:
         ]
 
 
-    def compute_aberrations(self) -> None:
+    def compute_aberrations(self) -> NDArray:
         """
         """
         for item in self.aberration_list:
@@ -49,6 +50,18 @@ class FitKernel:
     def fit_data(self) -> None:
         """
         """
+        def wrapper(xy, *args) -> None:
+            """
+            """
+            data_list = self.compute_aberrations()
+            
+            data_list = np.asarray([
+                item * arg[idx]
+                for (idx, item), arg in zip(enumerate(data_list), args)
+            ])
+            
+            return np.sum(data_list, axis=0).flatten()
+
         return
 
 
