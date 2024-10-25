@@ -119,32 +119,45 @@ class Aberration:
         return output
 
 
-    def compute(self) -> None:
+    def compute(self, *, xy: Optional[tuple[NDArray]]=None) -> None:
         """
         """
-        # polar frame
-        if self.coords_type.lower() == "polar":
-            r_meshed, theta_meshed = self.meshed_arrays
+        if xy is None:
+            # polar frame
+            if self.coords_type.lower() == "polar":
+                r_meshed, theta_meshed = self.meshed_arrays
 
-        # cartesian frame
-        elif self.coords_type.lower() == "cartesian":
-            x_meshed, y_meshed = self.meshed_arrays
+            # cartesian frame
+            elif self.coords_type.lower() == "cartesian":
+                x_meshed, y_meshed = self.meshed_arrays
+                r_meshed_ravelled, theta_meshed_ravelled = cartesian_to_polar(
+                    x_meshed.ravel(), y_meshed.ravel()
+                )
+
+                r_meshed = r_meshed_ravelled.reshape(
+                    self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+                )
+                theta_meshed = theta_meshed_ravelled.reshape(
+                    self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+                )
+
+            # unsupported frames
+            else:
+                raise ValueError(
+                    f"unsupported coordinate type '{self.coords_type}'"
+                )
+
+        else:
+            x, y = xy
+
+            x_meshed, y_meshed = np.meshgrid(x, y)
+
             r_meshed_ravelled, theta_meshed_ravelled = cartesian_to_polar(
                 x_meshed.ravel(), y_meshed.ravel()
             )
 
-            r_meshed = r_meshed_ravelled.reshape(
-                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
-            )
-            theta_meshed = theta_meshed_ravelled.reshape(
-                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
-            )
-
-        # unsupported frames
-        else:
-            raise ValueError(
-                f"unsupported coordinate type '{self.coords_type}'"
-            )
+            r_meshed = r_meshed_ravelled.reshape(y.shape[0], x.shape[0])
+            theta_meshed = theta_meshed_ravelled.reshape(y.shape[0], x.shape[0])
 
         if self.m == 0:
                 self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)

@@ -44,6 +44,12 @@ class FitKernel:
             item.data
             for item in self.aberration_list
         ])
+    
+
+    def fit_data(self) -> None:
+        """
+        """
+        return
 
 
     def show(self, plot="kernel") -> None:
