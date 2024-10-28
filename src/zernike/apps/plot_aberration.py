@@ -1,6 +1,8 @@
 import argparse
 import sys
 
+import numpy as np
+
 from zernike.operations.pipeline import plot_aberration
 
 
@@ -10,9 +12,17 @@ def main() -> int:
     """
     args = parse_args()
 
+    if args.coords_type.lower() == "cartesian" and\
+    args.dim_0 == [0., 1., 0.01] and\
+    args.dim_1 == [0., 2. * np.pi, 0.01]:
+        args.dim_0 = [
+            -0.5 * np.sqrt(2.), 0.5 * np.sqrt(2.), 0.01
+        ]
+        args.dim_1 = args.dim_0
+
     plot_aberration(
-        j=args.j, radius_max=args.max_radius, radius_step=args.radius_step, 
-        num_angles=args.num_angles
+        j=args.j, dim_0=args.dim_0, dim_1=args.dim_1,
+        coords_type=args.coords_type
     )
 
     return 0
@@ -27,17 +37,21 @@ def parse_args() -> argparse.Namespace:
     j: int
         order of the Zernike polynomial.
 
-    --max_radius (optional): float
-        maximum radius to be included in the plot
-        (defaults to 1.0).
+    --coords_type (optional): str
+        `polar` or `cartesian`.
+        (defaults to `polar`).
 
-    --num_angles (optional): int
-        number of angles to be computed between 0 deg and 360 deg
-        (defaults to 100).
+    --dim_0 (optional): float
+        minimum, maximum, and step in dimension 0.
+        (defaults to [0., 1., 0.01] if --coords_type is `polar`
+        and [-0.5 * np.sqrt(2.), -0.5 * np.sqrt(2.), 0.01] 
+        if --coords_type is `cartesian`).
 
-    --radius_step (optional): float
-        numerical step in the radius domain
-        (defaults to 0.01).
+    --dim_1 (optional): float
+        minimum, maximum, and step in dimension 1.
+        (defaults to [0., 2. * np.pi, 0.01] if --coords_type is `polar`
+        and [-0.5 * np.sqrt(2.), -0.5 * np.sqrt(2.), 0.01] 
+        if --coords_type is `cartesian`).
 
     Returns
     -------
@@ -54,22 +68,24 @@ def parse_args() -> argparse.Namespace:
         help="order of the Zernike polynomial",
     )
     parser.add_argument(
-        "--max_radius",
-        type=float,
-        default=1.,
-        help="maximum radius to be included in the plot",
+        "--coords_type",
+        type=str,
+        default="polar",
+        help="`polar` or `cartesian`",
     )
     parser.add_argument(
-        "--num_angles",
-        type=int,
-        default=500,
-        help="number of angles to be computed between 0 deg and 360 deg",
+        "--dim_0",
+        type=float,
+        nargs=3,
+        default=[0., 1., 0.01],
+        help="minimum, maximum, and step in dimension 0",
     )
     parser.add_argument(
-        "--radius_step",
+        "--dim_1",
         type=float,
-        default=0.01,
-        help="numerical step in the radius domain",
+        nargs=3,
+        default=[0., 2. * np.pi, 0.01],
+        help="minimum, maximum, and step in dimension 1",
     )
 
     return parser.parse_args()

@@ -27,7 +27,7 @@ class FitKernel:
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
-            0.5 * np.sqrt(2.) + 0.01,
+            0.5 * np.sqrt(2.),
             self.kernel.shape[0]
         )
 

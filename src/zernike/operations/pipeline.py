@@ -6,7 +6,8 @@ from zernike.operations.fit_kernel import FitKernel
 
 
 def plot_aberration(
-        *, j: int, radius_max: float, radius_step: float, num_angles: int
+        *, j: int, dim_0: list[float], dim_1: list[float],
+        coords_type: str="polar"
 ) -> None:
     """
     Principal function in the pipeline executing the desired functionality.
@@ -16,19 +17,39 @@ def plot_aberration(
     j: int
         order of the Zernike polynomial.
 
-    radius_max: float
-        maximum radius to be included in the plot.
+    dim_0: list[float]
+        minimum, maximum, and step in dimension 0.
 
-    radius_step: float
-        numerical step in the radius domain.
+    dim_1: list[float]
+        minimum, maximum, and step in dimension 0.
 
-    num_angles: int
-        number of angles to be computed between 0 deg and 360 deg.
+    coords:_type str (optional)
+        `polar` or `cartesian`.
     """
-    radius_array = np.arange(0., radius_max + radius_step, radius_step)
-    angle_array = np.linspace(0., 2.*np.pi, num_angles)
+    for dim in [dim_0, dim_1]:
+        if dim[0] >= dim[1]:
+            raise ValueError(
+                f"maximum value in {dim} cannot be smaller than or equal to "
+                "minimum value"
+            )
 
-    z = Aberration(j, radius_array, angle_array)
+        if dim[2] > dim[1] - dim[0]:
+            raise ValueError(
+                "step value in {dim} cannot be larger than the difference "
+                "between maximum and minimum values"
+            )
+
+    if coords_type.lower() == "polar":
+        dim_0[0] = max(dim_0[0], 0.)
+        dim_1[0] = max(dim_1[0], 0.)
+        dim_1[1] = min(dim_1[1], 2. * np.pi)
+
+    z = Aberration(
+        j,
+        np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
+        np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+        coords_type=coords_type
+    )
     z.show()
 
 
