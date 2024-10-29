@@ -93,7 +93,6 @@ class FitKernel:
             plt.title(f"sampled data")
 
             c = plt.imshow(self.kernel, cmap="hot_r")
-            plt.axis("off")
 
         else:
             if plot == "aberration_sum":
