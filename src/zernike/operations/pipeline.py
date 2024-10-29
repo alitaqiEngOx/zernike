@@ -48,6 +48,9 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
     ])
 
     # temporary code
+    print(f"mean_diff = {np.mean(np.sum(aberration_data_list, axis=0) - f.kernel)}")
+    print(f"std_diff = {np.std(np.sum(aberration_data_list, axis=0) - f.kernel)}")
+
     import matplotlib.pyplot as plt
 
     plt.figure(figsize=(15, 15))

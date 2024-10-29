@@ -71,6 +71,9 @@ def j_to_mn(j: int) -> tuple[int, int]:
         )
 
     # check `m`
+    if m < 0:
+        raise ValueError("`m` cannot be negative")
+
     if n - m < 0:
         raise ValueError("`n - m` cannot be negative")
 
@@ -80,7 +83,7 @@ def j_to_mn(j: int) -> tuple[int, int]:
     return m, n
 
 
-def mn_to_j(m: int, n:int) -> list[int]:
+def mn_to_j(m: int, n:int) -> int:
     """
     """
     # check `n`
@@ -88,6 +91,9 @@ def mn_to_j(m: int, n:int) -> list[int]:
         raise ValueError("`n` cannot be negative")
 
     # check `m`
+    if m < 0:
+        raise ValueError("`m` cannot be negative")
+
     if n - m < 0:
         raise ValueError("`n - m` cannot be negative")
 
@@ -97,6 +103,4 @@ def mn_to_j(m: int, n:int) -> list[int]:
     if m == 0:
         return [int(0.5 * n * (n + 1.) + 1.)]
 
-    j = int(0.5 * n * (n + 1.) + m)
-
-    return [j, j + 1]
+    return int(0.5 * n * (n + 1.) + m)

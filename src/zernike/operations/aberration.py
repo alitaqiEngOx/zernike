@@ -53,12 +53,15 @@ class Aberration:
                 0.25 * (2. * (self.j + 1.) - self.n * (self.n + 1.))
             ) - 1.
 
+        if m < 0:
+            raise ValueError("`m` cannot be negative")
+
         if self.n - m < 0:
             raise ValueError("`n - m` cannot be negative")
 
         if (self.n - m) % 2 != 0:
             raise ValueError("`n - m` cannot be odd")
-    
+
         return int(m)
 
 
