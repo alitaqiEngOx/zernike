@@ -50,8 +50,11 @@ def j_to_mn(j: int) -> tuple[int, int]:
         np.floor(
             (np.sqrt(2. * j - 1.) + 0.5) - 1.
         )
-
     )
+
+    # check `n`
+    if n < 0:
+        raise ValueError("`n` cannot be negative")
 
     if n % 2 == 0:
         m = int(
@@ -67,14 +70,33 @@ def j_to_mn(j: int) -> tuple[int, int]:
             ) - 1.
         )
 
+    # check `m`
+    if n - m < 0:
+        raise ValueError("`n - m` cannot be negative")
+
+    if (n - m) % 2 != 0:
+        raise ValueError("`n - m` cannot be odd")
+
     return m, n
 
 
 def mn_to_j(m: int, n:int) -> list[int]:
     """
     """
+    # check `n`
+    if n < 0:
+        raise ValueError("`n` cannot be negative")
+
+    # check `m`
+    if n - m < 0:
+        raise ValueError("`n - m` cannot be negative")
+
+    if (n - m) % 2 != 0:
+        raise ValueError("`n - m` cannot be odd")
+
     if m == 0:
         return [int(0.5 * n * (n + 1.) + 1.)]
 
     j = int(0.5 * n * (n + 1.) + m)
+
     return [j, j + 1]
