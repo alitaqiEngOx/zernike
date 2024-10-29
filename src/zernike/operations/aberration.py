@@ -47,7 +47,7 @@ class Aberration:
             m = 2. * np.floor(
                 0.25 * (2. * self.j + 1. - self.n * (self.n + 1.))
             )
-        
+
         else:
             m = 2. * np.floor(
                 0.25 * (2. * (self.j + 1.) - self.n * (self.n + 1.))
@@ -58,7 +58,7 @@ class Aberration:
 
         if (self.n - m) % 2 != 0:
             raise ValueError("`n - m` cannot be odd")
-        
+    
         return int(m)
 
 
