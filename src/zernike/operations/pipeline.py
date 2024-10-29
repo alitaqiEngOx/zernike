@@ -1,8 +1,79 @@
 import numpy as np
 from pathlib import Path
+from typing import Optional
 
 from zernike.operations.aberration import Aberration
 from zernike.operations.fit_kernel import FitKernel
+from zernike.utils.conversions import (
+    j_to_mn, mn_to_j
+)
+
+
+def convert(
+        *, j: Optional[int]=None, mn: Optional[list[int]]=None
+) -> None:
+    """
+    """
+    if (j is None and mn is None) or\
+        (j is not None and mn is not None):
+        raise ValueError(
+            "provide either `j` or `mn`"
+        )
+
+    if j is None:
+        j = mn_to_j(mn[0], mn[1])
+        for idx, item in enumerate(j):
+            print(f"j[{idx}] = {item}")
+
+        return
+
+    m, n = j_to_mn(j)
+    print(f"m = {m}; n = {n}")
+
+
+def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
+    """
+    """
+    f = FitKernel(j_list, kernel_path)
+    f.show("kernel")
+
+    # fit data to aberration
+    params, covariance = f.fit_data()
+
+    aberration_data_list = f.compute_aberrations()
+
+    aberration_data_list = np.asarray([
+        item * param
+        for item, param in zip(aberration_data_list, params)
+    ])
+
+    # temporary code
+    import matplotlib.pyplot as plt
+
+    plt.figure(figsize=(15, 15))
+    ax = plt.subplot()
+    ax.set_aspect("equal")
+    c = plt.pcolormesh(
+        f.aberration_list[0].meshed_arrays[0],
+        f.aberration_list[0].meshed_arrays[1],
+        np.sum(aberration_data_list, axis=0),
+        shading="auto", cmap="hot_r"
+    )
+    plt.colorbar(c)
+    plt.show()
+
+    plt.figure(figsize=(15, 15))
+    ax = plt.subplot()
+    ax.set_aspect("equal")
+    c = plt.pcolormesh(
+        f.aberration_list[0].meshed_arrays[0],
+        f.aberration_list[0].meshed_arrays[1],
+        np.sum(aberration_data_list, axis=0) - f.kernel,
+        shading="auto", cmap="hot_r"
+    )
+    plt.title("difference")
+    plt.colorbar(c)
+    plt.show()
 
 
 def plot_aberration(
@@ -51,48 +122,3 @@ def plot_aberration(
         coords_type=coords_type
     )
     z.show()
-
-
-def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
-    """
-    """
-    f = FitKernel(j_list, kernel_path)
-    f.show("kernel")
-
-    # fit data to aberration
-    params, covariance = f.fit_data()
-
-    aberration_data_list = f.compute_aberrations()
-
-    aberration_data_list = np.asarray([
-        item * param
-        for item, param in zip(aberration_data_list, params)
-    ])
-
-    # temporary code
-    import matplotlib.pyplot as plt
-
-    plt.figure(figsize=(15, 15))
-    ax = plt.subplot()
-    ax.set_aspect("equal")
-    c = plt.pcolormesh(
-        f.aberration_list[0].meshed_arrays[0],
-        f.aberration_list[0].meshed_arrays[1],
-        np.sum(aberration_data_list, axis=0),
-        shading="auto", cmap="hot_r"
-    )
-    plt.colorbar(c)
-    plt.show()
-
-    plt.figure(figsize=(15, 15))
-    ax = plt.subplot()
-    ax.set_aspect("equal")
-    c = plt.pcolormesh(
-        f.aberration_list[0].meshed_arrays[0],
-        f.aberration_list[0].meshed_arrays[1],
-        np.sum(aberration_data_list, axis=0) - f.kernel,
-        shading="auto", cmap="hot_r"
-    )
-    plt.title("difference")
-    plt.colorbar(c)
-    plt.show()
