@@ -83,7 +83,7 @@ def j_to_mn(j: int) -> tuple[int, int]:
     return m, n
 
 
-def mn_to_j(m: int, n:int) -> int:
+def mn_to_j(m: int, n:int) -> list[int]:
     """
     """
     # check `n`
@@ -103,4 +103,6 @@ def mn_to_j(m: int, n:int) -> int:
     if m == 0:
         return [int(0.5 * n * (n + 1.) + 1.)]
 
-    return int(0.5 * n * (n + 1.) + m)
+    j = int(0.5 * n * (n + 1.) + m)
+
+    return [j, j + 1]

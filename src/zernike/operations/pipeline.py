@@ -22,7 +22,9 @@ def convert(
 
     if j is None:
         j = mn_to_j(mn[0], mn[1])
-        print(f"j = {j}")
+        for idx, item in enumerate(j):
+            print(f"j[{idx}] = {item}")
+
         return
 
     m, n = j_to_mn(j)
