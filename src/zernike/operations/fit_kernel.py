@@ -25,6 +25,9 @@ class FitKernel:
         else:
             self.kernel = np.load(kernel_path)
 
+        # temporary code
+        self.kernel = np.absolute(self.kernel)
+
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
             0.5 * np.sqrt(2.),
