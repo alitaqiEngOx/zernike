@@ -71,6 +71,8 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
     ])
 
     # temporary code
+    f.show("kernel")
+    
     import matplotlib.pyplot as plt
     
     plt.figure(figsize=(15, 15))
