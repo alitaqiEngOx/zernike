@@ -92,7 +92,7 @@ class FitKernel:
         if plot == "kernel":
             plt.title(f"sampled data")
 
-            c = plt.imshow(self.kernel)
+            c = plt.imshow(self.kernel, cmap="hot_r")
             plt.axis("off")
 
         else:

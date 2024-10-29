@@ -58,7 +58,6 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
     """
     f = FitKernel(j_list, kernel_path)
     f.show("kernel")
-    f.show("avg_aberration_sum")
 
     # fit data to aberration
     params, covariance = f.fit_data()
@@ -72,7 +71,7 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
 
     # temporary code
     import matplotlib.pyplot as plt
-    
+
     plt.figure(figsize=(15, 15))
     ax = plt.subplot()
     ax.set_aspect("equal")
@@ -94,5 +93,6 @@ def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
         np.sum(aberration_data_list, axis=0) - f.kernel,
         shading="auto", cmap="hot_r"
     )
+    plt.title("difference")
     plt.colorbar(c)
     plt.show()
