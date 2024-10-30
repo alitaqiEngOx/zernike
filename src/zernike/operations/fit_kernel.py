@@ -7,6 +7,7 @@ from numpy.typing import NDArray
 from scipy.optimize import curve_fit
 
 from zernike.operations.aberration import Aberration
+from zernike.utils.conversions import mn_to_j
 from zernike.utils.txt import read_data
 
 
@@ -117,3 +118,26 @@ class FitKernel:
 
         plt.colorbar(c)
         plt.show()
+
+
+    @classmethod
+    def via_n(cls, n_list: list[int], kernel_path: Path):
+        """
+        """
+        j_list = []
+        for n in n_list:
+            if n % 2 == 0:
+                m_list = [
+                    m for m in range(n + 1) if m % 2 == 0
+                ]
+
+            else:
+                m_list = [
+                    m for m in range(n + 1) if m % 2 != 0
+                ]
+
+            for m in m_list:
+                for item in mn_to_j(m, n):
+                    j_list.append(item)
+
+        return cls(j_list, kernel_path)

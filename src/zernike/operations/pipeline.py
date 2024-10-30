@@ -15,7 +15,7 @@ def convert(
     """
     """
     if (j is None and mn is None) or\
-        (j is not None and mn is not None):
+    (j is not None and mn is not None):
         raise ValueError(
             "provide either `j` or `mn`"
         )
@@ -31,10 +31,24 @@ def convert(
     print(f"m = {m}; n = {n}")
 
 
-def estimate_beam(*, j_list: list[int], kernel_path: Path) -> None:
+def estimate_beam(
+        kernel_path: Path, *, j_list: Optional[list[str]]=None,
+        n_list: Optional[list[str]]=None
+) -> None:
     """
     """
-    f = FitKernel(j_list, kernel_path)
+    if (j_list is None and n_list is None) or\
+    (j_list is not None and n_list is not None):
+        raise ValueError(
+            "provide either `j` or `mn`"
+        )
+
+    if j_list is None:
+        f = FitKernel.via_n(n_list, kernel_path)
+
+    else:
+        f = FitKernel(j_list, kernel_path)
+
     f.show("kernel")
 
     # fit data to aberration
