@@ -35,8 +35,11 @@ def parse_args() -> argparse.Namespace:
 
     cmd Arguments
     -------------
-    j: int
-        order of the Zernike polynomial.
+    --j (optional): int
+        order of the Zernike polynomial via `j`.
+
+    --mn (optional): int
+        order of the Zernike polynomial via `m` & `n`.
 
     Returns
     -------
