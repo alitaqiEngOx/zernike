@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from zernike.operations import pipeline
+from zernike.operations.pipeline import convert
 
 
 def main() -> int:
@@ -20,11 +20,11 @@ def main() -> int:
             "expected either `j` or `mn` but got both"
         )
 
-    if args.j is not None:
-        pipeline.convert(j=args.j)
+    if args.j is None:
+        convert(mn=args.mn)
 
     else:
-        pipeline.convert(mn=args.mn)
+        convert(j=args.j)
 
     return 0
 
