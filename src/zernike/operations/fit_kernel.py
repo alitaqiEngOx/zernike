@@ -58,26 +58,30 @@ class FitKernel:
     def fit_data(self) -> tuple[NDArray]:
         """
         """
-        def wrapper(xy, *args) -> NDArray:
+        def wrapper(_xy, *weights) -> NDArray:
             """
             """
-            data_list = self.compute_aberrations(xy=xy)
-
-            data_list = np.asarray([
-                item * arg
-                for item, arg in zip(data_list, args)
+            weighted_data = np.asarray([
+                aberration * weight
+                for aberration, weight in zip(data_list, weights)
             ])
 
-            return np.sum(data_list, axis=0).flatten()
+            return np.sum(weighted_data, axis=0).flatten()
 
         x_meshed, y_meshed = np.meshgrid(
             self.aberration_list[0].dim_0_array,
             self.aberration_list[0].dim_1_array
         )
 
+        xy = np.vstack(
+            x_meshed.flatten(), y_meshed.flatten()
+        )
+
+        data_list = self.compute_aberrations(xy=xy)
+
         return curve_fit(
             wrapper,
-            np.vstack((x_meshed.flatten(), y_meshed.flatten())), 
+            xy, 
             self.kernel.flatten(), 
             p0=np.ones(len(self.j_list))
         )
