@@ -51,46 +51,81 @@ def estimate_beam(
 
     f.show("kernel")
 
-    # fit data to aberration
-    params, covariance = f.fit_data()
+    # fit aberrations to kernel
+    weights, fitted_kernel, residual_kernel = f.fit_data()
 
-    aberration_data_list = f.compute_aberrations()
-
-    aberration_data_list = np.asarray([
-        item * param
-        for item, param in zip(aberration_data_list, params)
-    ])
-
-    # temporary code
-    print(f"mean_diff = {np.mean(np.sum(aberration_data_list, axis=0) - f.kernel)}")
-    print(f"std_diff = {np.std(np.sum(aberration_data_list, axis=0) - f.kernel)}")
-
+    # temporary for plotting
     import matplotlib.pyplot as plt
 
     plt.figure(figsize=(15, 15))
     ax = plt.subplot()
     ax.set_aspect("equal")
+
     c = plt.pcolormesh(
         f.aberration_list[0].meshed_arrays[0],
         f.aberration_list[0].meshed_arrays[1],
-        np.sum(aberration_data_list, axis=0),
+        fitted_kernel,
         shading="auto", cmap="hot_r"
     )
+
+    plt.title("fitted")
     plt.colorbar(c)
     plt.show()
 
     plt.figure(figsize=(15, 15))
     ax = plt.subplot()
     ax.set_aspect("equal")
+
     c = plt.pcolormesh(
         f.aberration_list[0].meshed_arrays[0],
         f.aberration_list[0].meshed_arrays[1],
-        np.sum(aberration_data_list, axis=0) - f.kernel,
+        residual_kernel,
         shading="auto", cmap="hot_r"
     )
-    plt.title("difference")
+
+    plt.title("residual")
     plt.colorbar(c)
     plt.show()
+
+    #params, covariance = f.fit_data()
+
+    #aberration_data_list = f.compute_aberrations()
+
+    #aberration_data_list = np.asarray([
+    #    item * param
+    #    for item, param in zip(aberration_data_list, params)
+    #])
+
+    # temporary code
+    #print(f"mean_diff = {np.mean(np.sum(aberration_data_list, axis=0) - f.kernel)}")
+    #print(f"std_diff = {np.std(np.sum(aberration_data_list, axis=0) - f.kernel)}")
+
+    #import matplotlib.pyplot as plt
+
+    #plt.figure(figsize=(15, 15))
+    #ax = plt.subplot()
+    #ax.set_aspect("equal")
+    #c = plt.pcolormesh(
+    #    f.aberration_list[0].meshed_arrays[0],
+    #    f.aberration_list[0].meshed_arrays[1],
+    #    np.sum(aberration_data_list, axis=0),
+    #    shading="auto", cmap="hot_r"
+    #)
+    #plt.colorbar(c)
+    #plt.show()
+
+    #plt.figure(figsize=(15, 15))
+    #ax = plt.subplot()
+    #ax.set_aspect("equal")
+    #c = plt.pcolormesh(
+    #    f.aberration_list[0].meshed_arrays[0],
+    #    f.aberration_list[0].meshed_arrays[1],
+    #    np.sum(aberration_data_list, axis=0) - f.kernel,
+    #    shading="auto", cmap="hot_r"
+    #)
+    #plt.title("difference")
+    #plt.colorbar(c)
+    #plt.show()
 
 
 def plot_aberration(
