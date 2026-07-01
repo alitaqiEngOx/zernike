@@ -4,6 +4,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
+from scipy.optimize import curve_fit
 
 from zernike.operations.aberration import Aberration
 from zernike.utils.conversions import mn_to_j
@@ -57,7 +58,7 @@ class FitKernel:
     def fit_data(self) -> tuple[NDArray, NDArray, NDArray]:
         """
         """
-        # 1- compute all aberrations (list of 2D arrays)
+        # 1- compute all aberrations (list of 2D arrays)        
         data_list = self.compute_aberrations()
 
         # 2-
@@ -124,6 +125,80 @@ class FitKernel:
         #    p0=np.ones(len(self.j_list))
         #)
 
+    def compare_curve_fit_and_lstsq(self) -> None:
+        """
+        Compare curve_fit and linear least squares using the exact same
+        Zernike matrix A and the exact same target vector b.
+        """
+
+        # compute Zernike aberrations
+        data_list = self.compute_aberrations()
+
+        # build `A` matrix
+        A = np.asarray([
+            aberration.flatten()
+            for aberration in data_list
+        ]).T
+
+        # flatten real kernel
+        B = self.kernel.flatten()
+
+        # remove invalid pixels
+        mask = np.isfinite(B) & np.all(np.isfinite(A), axis=1)
+
+        A_fit = A[mask, :]
+        B_fit = B[mask]
+
+        # 1- linear least squares
+        weights_lstsq, residuals, rank, singular_values = np.linalg.lstsq(
+            A_fit,
+            B_fit,
+            rcond=None
+        )
+
+        prediction_lstsq = A_fit @ weights_lstsq
+
+        error_lstsq = np.linalg.norm(B_fit - prediction_lstsq)
+
+        # 2- curve_fit, but using same `A`
+        pixel_index = np.arange(A_fit.shape[0])
+
+        def wrapper(_pixel_index, *weights):
+            return A_fit @ np.asarray(weights)
+
+        weights_curve, covariance = curve_fit(
+            wrapper,
+            pixel_index,
+            B_fit,
+            p0=np.ones(A_fit.shape[1])
+        )
+
+        prediction_curve = A_fit @ weights_curve
+
+        error_curve = np.linalg.norm(B_fit - prediction_curve)
+
+        # 3- print comparison
+        print("Linear least-squares weights:")
+        print(weights_lstsq)
+
+        print("\ncurve_fit weights:")
+        print(weights_curve)
+
+        print("\nDifference:")
+        print(weights_curve - weights_lstsq)
+
+        print("\nLinear least-squares error:")
+        print(error_lstsq)
+
+        print("\ncurve_fit error:")
+        print(error_curve)
+
+        print("\nRank of A:")
+        print(rank)
+
+        print("\nSingular values:")
+        print(singular_values)
+
 
     def show(self, plot="kernel") -> None:
         """
@@ -135,7 +210,7 @@ class FitKernel:
         if plot == "kernel":
             plt.title(f"kernel")
 
-            c = plt.imshow(self.kernel, cmap="hot_r")
+            c = plt.imshow(self.kernel, cmap="hot_r", vmin=0., vmax=1.)
 
         else:
             if plot == "aberration_sum":
