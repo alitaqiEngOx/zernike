@@ -133,7 +133,7 @@ class FitKernel:
         ax.set_aspect("equal")
 
         if plot == "kernel":
-            plt.title(f"sampled data")
+            plt.title(f"kernel")
 
             c = plt.imshow(self.kernel, cmap="hot_r")
 
