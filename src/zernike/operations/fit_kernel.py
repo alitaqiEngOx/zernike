@@ -55,75 +55,61 @@ class FitKernel:
         ])
 
 
-    def fit_data(self) -> tuple[NDArray, NDArray, NDArray]:
+    def fit_data(
+            self, *, curvefit: bool=False
+    ) -> tuple[NDArray, NDArray, NDArray]:
         """
         """
-        # 1- compute all aberrations (list of 2D arrays)        
-        data_list = self.compute_aberrations()
+        # compute all aberrations & flatten/transpose them     
+        aberrations = self.compute_aberrations()
 
-        # 2-
-        #   a- flatten all 2D aberration arrays
-        #   b- group them in a list
-        #   c- apply the transpose of this list to turn rows
-        #      into lists of aberration magnitudes at respective
-        #      pixels
-        A = np.asarray([
+        flattened_aberrations = np.asarray([
             aberration.flatten()
-            for aberration in data_list
+            for aberration in aberrations
         ]).T
 
-        # 3- flatten the real beam/kernel, 
-        #    filtering out ingalid pixels
-        B = self.kernel.flatten()
+        # use `scipy.optimize.curve_fit`
+        if curvefit:
+            # define a wrapper function, passing all `weights` together
+            # with a `_dummy` as required by `curve_fit`
+            def wrapper(
+                    _dummy: NDArray, *weights: float
+            ) -> NDArray:
+                """
+                """
+                return flattened_aberrations @ np.asarray(weights)
 
-        mask = np.isfinite(B) & np.all(np.isfinite(A), axis=1)
+            # constryct xy domain as required by `curve_fit`
+            x_meshed, y_meshed = np.meshgrid(
+                self.aberration_list[0].dim_0_array,
+                self.aberration_list[0].dim_1_array
+            )
 
-        A_fit = A[mask, :]
-        B_fit = B[mask]
+            xy = np.vstack((
+                x_meshed.flatten(), y_meshed.flatten()
+            ))
 
-        # 4- solve the linear least-squares problem
-        weights, residuals, rank, singular_values = np.linalg.lstsq(
-            A_fit, B_fit, rcond=None
-        )
+            # compute weights
+            weights, _ = curve_fit(
+                wrapper, xy, self.kernel.flatten(),
+                p0=np.ones(len(self.j_list))
+            )
 
-        # 5- reconstruct the fitted beam
-        fitted_flat = np.full(
-            B.shape, np.nan, dtype=np.result_type(A, B, float)
-        )
-        fitted_flat[mask] = A_fit @ weights
-        fitted_kernel = fitted_flat.reshape(self.kernel.shape)
+        # use `numpy.linalg.lstsq`
+        else:
+            # compute weights
+            weights, *_ = np.linalg.lstsq(
+                flattened_aberrations, self.kernel.flatten(),
+                rcond=None
+            )
 
+        # reconstruct & return the fitted beam
+        weighed_aberrations = flattened_aberrations @ weights
+        fitted_kernel = weighed_aberrations.reshape(self.kernel.shape)
         residual_kernel = self.kernel - fitted_kernel
 
         return weights, fitted_kernel, residual_kernel
 
-        #def wrapper(_xy, *weights) -> NDArray:
-        #    """
-        #    """
-        #    weighted_data = np.asarray([
-        #        aberration * weight
-        #        for aberration, weight in zip(data_list, weights)
-        #    ])
-
-        #    return np.sum(weighted_data, axis=0).flatten()
-
-        #x_meshed, y_meshed = np.meshgrid(
-        #    self.aberration_list[0].dim_0_array,
-        #    self.aberration_list[0].dim_1_array
-        #)
-
-        #xy = np.vstack(
-        #    x_meshed.flatten(), y_meshed.flatten()
-        #)
-
-        #data_list = self.compute_aberrations(xy=xy)
-
-        #return curve_fit(
-        #    wrapper,
-        #    xy, 
-        #    self.kernel.flatten(), 
-        #    p0=np.ones(len(self.j_list))
-        #)
 
     def compare_curve_fit_and_lstsq(self) -> None:
         """
