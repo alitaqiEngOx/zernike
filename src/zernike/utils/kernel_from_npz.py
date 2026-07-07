@@ -3,12 +3,37 @@ licensing script of this repository. """
 
 from pathlib import Path
 
+import numpy as np
+
 
 def extract(
-        path: Path, *, save_as: Path
+        path: Path, index: list[str],
+        key: str="beam", *, outname: Path
 ) -> None:
     """
     """
+    with np.load(path) as archive:
+        if key not in archive.files:
+            raise KeyError(
+                f"array {key!r} does not exist in {path}; "
+                f"available arrays are {archive.files}"
+            )
+
+        numpy_idx = tuple(
+            parse_index(value)
+            for value in index
+        )
+
+        try:
+            kernel = archive[key][numpy_idx]
+
+        except IndexError as error:
+            raise IndexError(
+                f"index {index!r} is invalid for array "
+                f"{key!r} with shape {archive[key].shape}"
+            ) from error
+
+    np.save(outname, kernel)
 
 
 def parse_index(value: str) -> int | slice:

@@ -14,7 +14,8 @@ def main() -> int:
     args = parse_args()
 
     extract(
-        Path(args.path), save_as=Path(args.save_as)
+        Path(args.path), args.index, args.key,
+        outname=Path(args.outname)
     )
 
     return 0
@@ -34,7 +35,13 @@ def parse_args() -> argparse.Namespace:
         help="`.npz` path"
     )
     parser.add_argument(
-        "--save_as",
+        "--key",
+        type=str,
+        default="beam",
+        help="`.npz` array key to extract from"
+    )
+    parser.add_argument(
+        "--outname",
         type=str,
         help="output `.npy` name & path"
     )
