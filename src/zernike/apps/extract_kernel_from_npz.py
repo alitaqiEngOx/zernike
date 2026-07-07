@@ -3,6 +3,9 @@ licensing script of this repository. """
 
 import argparse
 import sys
+from pathlib import Path
+
+from zernike.utils.kernel_from_npz import extract
 
 
 def main() -> int:
@@ -10,7 +13,12 @@ def main() -> int:
     """
     args = parse_args()
 
+    extract(
+        Path(args.path), save_as=Path(args.save_as)
+    )
+
     return 0
+
 
 def parse_args() -> argparse.Namespace:
     """
