@@ -22,8 +22,13 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--path",
-        type=int,
+        type=str,
         help="`.npz` path"
+    )
+    parser.add_argument(
+        "--save_as",
+        type=str,
+        help="output `.npy` name & path"
     )
     parser.add_argument(
         "--index",
