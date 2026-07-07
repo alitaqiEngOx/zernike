@@ -104,8 +104,8 @@ class FitKernel:
             )
 
         # reconstruct & return the fitted beam
-        weighed_aberrations = flattened_aberrations @ weights
-        fitted_kernel = weighed_aberrations.reshape(self.kernel.shape)
+        fitted_kernel_flat = flattened_aberrations @ weights
+        fitted_kernel = fitted_kernel_flat.reshape(self.kernel.shape)
         residual_kernel = self.kernel - fitted_kernel
 
         return weights, fitted_kernel, residual_kernel
