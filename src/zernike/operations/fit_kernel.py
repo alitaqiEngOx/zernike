@@ -113,77 +113,19 @@ class FitKernel:
 
     def compare_curve_fit_and_lstsq(self) -> None:
         """
-        Compare curve_fit and linear least squares using the exact same
-        Zernike matrix A and the exact same target vector b.
         """
+        result_curve_fit = self.fit_data(curvefit=True)
+        result_lstsq = self.fit_data()      
 
-        # compute Zernike aberrations
-        data_list = self.compute_aberrations()
-
-        # build `A` matrix
-        A = np.asarray([
-            aberration.flatten()
-            for aberration in data_list
-        ]).T
-
-        # flatten real kernel
-        B = self.kernel.flatten()
-
-        # remove invalid pixels
-        mask = np.isfinite(B) & np.all(np.isfinite(A), axis=1)
-
-        A_fit = A[mask, :]
-        B_fit = B[mask]
-
-        # 1- linear least squares
-        weights_lstsq, residuals, rank, singular_values = np.linalg.lstsq(
-            A_fit,
-            B_fit,
-            rcond=None
-        )
-
-        prediction_lstsq = A_fit @ weights_lstsq
-
-        error_lstsq = np.linalg.norm(B_fit - prediction_lstsq)
-
-        # 2- curve_fit, but using same `A`
-        pixel_index = np.arange(A_fit.shape[0])
-
-        def wrapper(_pixel_index, *weights):
-            return A_fit @ np.asarray(weights)
-
-        weights_curve, covariance = curve_fit(
-            wrapper,
-            pixel_index,
-            B_fit,
-            p0=np.ones(A_fit.shape[1])
-        )
-
-        prediction_curve = A_fit @ weights_curve
-
-        error_curve = np.linalg.norm(B_fit - prediction_curve)
-
-        # 3- print comparison
-        print("Linear least-squares weights:")
-        print(weights_lstsq)
-
+        # print comparison
         print("\ncurve_fit weights:")
-        print(weights_curve)
+        print(result_curve_fit[0])
+
+        print("Linear least-squares weights:")
+        print(result_lstsq[0])
 
         print("\nDifference:")
-        print(weights_curve - weights_lstsq)
-
-        print("\nLinear least-squares error:")
-        print(error_lstsq)
-
-        print("\ncurve_fit error:")
-        print(error_curve)
-
-        print("\nRank of A:")
-        print(rank)
-
-        print("\nSingular values:")
-        print(singular_values)
+        print(result_curve_fit[0] - result_lstsq[0])
 
 
     def show(self, plot="kernel") -> None:
