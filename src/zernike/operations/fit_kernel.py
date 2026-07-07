@@ -2,7 +2,6 @@
 licensing script of this repository. """
 
 from pathlib import Path
-from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -45,7 +44,7 @@ class FitKernel:
 
 
     def compute_aberrations(
-            self, *, xy: Optional[tuple[NDArray]]=None 
+            self, *, xy: tuple[NDArray] | None=None 
     ) -> NDArray:
         """
         """

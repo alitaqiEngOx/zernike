@@ -3,7 +3,6 @@ licensing script of this repository. """
 
 import math
 from dataclasses import dataclass
-from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,7 +28,7 @@ class Aberration:
     coords_type: str = "polar"
     """ """
 
-    data: Optional[NDArray] = None
+    data: NDArray | None = None
     """ """
 
 
@@ -125,7 +124,7 @@ class Aberration:
         return output
 
 
-    def compute(self, *, xy: Optional[tuple[NDArray]]=None) -> None:
+    def compute(self, *, xy: tuple[NDArray] | None=None) -> None:
         """
         """
         if xy is None:

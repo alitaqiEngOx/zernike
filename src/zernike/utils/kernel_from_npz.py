@@ -9,3 +9,8 @@ def extract(
 ) -> None:
     """
     """
+
+
+def parse_index(value: str) -> int | slice:
+    """
+    """

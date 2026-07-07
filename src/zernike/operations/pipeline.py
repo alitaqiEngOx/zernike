@@ -3,7 +3,6 @@ licensing script of this repository. """
 
 import numpy as np
 from pathlib import Path
-from typing import Optional
 
 from zernike.operations.aberration import Aberration
 from zernike.operations.fit_kernel import FitKernel
@@ -13,7 +12,7 @@ from zernike.utils.conversions import (
 
 
 def convert(
-        *, j: Optional[int]=None, mn: Optional[list[int]]=None
+        *, j: int | None=None, mn: list[int] | None=None
 ) -> None:
     """
     """
@@ -35,8 +34,8 @@ def convert(
 
 
 def estimate_beam(
-        kernel_path: Path, *, j_list: Optional[list[str]]=None,
-        n_list: Optional[list[str]]=None
+        kernel_path: Path, *, j_list: list[str] | None=None,
+        n_list: list[str] | None=None
 ) -> None:
     """
     """
