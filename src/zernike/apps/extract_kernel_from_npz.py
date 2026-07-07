@@ -21,16 +21,17 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "path",
+        "--path",
         type=int,
         help="`.npz` path"
     )
     parser.add_argument(
         "--index",
-        type=int,
         nargs='*',
         help="position indices for the kernel to be extracted"
     )
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
