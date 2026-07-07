@@ -87,46 +87,6 @@ def estimate_beam(
     plt.colorbar(c)
     plt.show()
 
-    #params, covariance = f.fit_data()
-
-    #aberration_data_list = f.compute_aberrations()
-
-    #aberration_data_list = np.asarray([
-    #    item * param
-    #    for item, param in zip(aberration_data_list, params)
-    #])
-
-    # temporary code
-    #print(f"mean_diff = {np.mean(np.sum(aberration_data_list, axis=0) - f.kernel)}")
-    #print(f"std_diff = {np.std(np.sum(aberration_data_list, axis=0) - f.kernel)}")
-
-    #import matplotlib.pyplot as plt
-
-    #plt.figure(figsize=(15, 15))
-    #ax = plt.subplot()
-    #ax.set_aspect("equal")
-    #c = plt.pcolormesh(
-    #    f.aberration_list[0].meshed_arrays[0],
-    #    f.aberration_list[0].meshed_arrays[1],
-    #    np.sum(aberration_data_list, axis=0),
-    #    shading="auto", cmap="hot_r"
-    #)
-    #plt.colorbar(c)
-    #plt.show()
-
-    #plt.figure(figsize=(15, 15))
-    #ax = plt.subplot()
-    #ax.set_aspect("equal")
-    #c = plt.pcolormesh(
-    #    f.aberration_list[0].meshed_arrays[0],
-    #    f.aberration_list[0].meshed_arrays[1],
-    #    np.sum(aberration_data_list, axis=0) - f.kernel,
-    #    shading="auto", cmap="hot_r"
-    #)
-    #plt.title("difference")
-    #plt.colorbar(c)
-    #plt.show()
-
 
 def plot_aberration(
         *, j: int, dim_0: list[float], dim_1: list[float],
