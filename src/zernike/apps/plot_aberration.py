@@ -1,3 +1,6 @@
+""" Licensed under the same terms as described in the main 
+licensing script of this repository. """
+
 import argparse
 import sys
 
