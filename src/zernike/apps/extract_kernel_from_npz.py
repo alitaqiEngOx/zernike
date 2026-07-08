@@ -5,7 +5,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from zernike.utils.kernel_from_npz import extract
+from zernike.utils.npz import NPZ
 
 
 def main() -> int:
@@ -13,9 +13,10 @@ def main() -> int:
     """
     args = parse_args()
 
-    extract(
-        Path(args.path), args.index, args.key,
-        outname=Path(args.outname)
+    npz = NPZ(Path(args.path))
+
+    npz.extract(
+        args.key, args.index, outname=Path(args.outname)
     )
 
     return 0
