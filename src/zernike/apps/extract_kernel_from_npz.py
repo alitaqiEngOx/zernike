@@ -38,7 +38,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--outname",
         type=str,
-        help="output `.npy` name & path"
+        help="output filename & path"
     )
     parser.add_argument(
         "--key",
