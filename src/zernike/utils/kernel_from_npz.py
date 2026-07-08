@@ -6,17 +6,54 @@ from pathlib import Path
 import numpy as np
 
 
-def extract(
-        path: Path, index: list[str],
-        key: str="beam", *, outname: Path
-) -> None:
-    """
-    """
-    with np.load(path) as archive:
-        if key not in archive.files:
+class NPZ:
+    """"""
+
+    def __init__(self, path: Path) -> None:
+        """
+        """
+        self.path = path
+        self._keys: list[str] | None=None
+        self._keys_and_shapes: list[str] | None=None
+
+
+    @property
+    def keys(self) -> list[str]:
+        """
+        """
+        if not self._keys:
+            _ = self.keys_and_shapes
+
+        return self._keys
+
+
+    @property
+    def keys_and_shapes(self) -> list[str]:
+        """
+        """
+        if not self._keys_and_shapes:
+            with np.load(self.path) as archive:
+                self._keys = list(archive.files)
+
+                self._keys_and_shapes = [
+                    f"{key}:{archive[key].shape}"
+                    for key in self._keys
+                ]
+
+        return self._keys_and_shapes
+
+
+    def extract(
+            self, key: str, index: list[str], *,
+            outname: Path
+    ) -> None:
+        """
+        """
+        if key not in self.keys:
             raise KeyError(
-                f"array {key!r} does not exist in {path}; "
-                f"available arrays are {archive.files}"
+                f"array {key!r} does not exist "
+                f"in {self.path}; available arrays "
+                f"are {self.keys}"
             )
 
         numpy_idx = tuple(
@@ -24,16 +61,17 @@ def extract(
             for value in index
         )
 
-        try:
-            kernel = archive[key][numpy_idx]
+        with np.load(self.path) as archive:
+            try:
+                kernel = archive[key][numpy_idx]
 
-        except IndexError as error:
-            raise IndexError(
-                f"index {index!r} is invalid for array "
-                f"{key!r} with shape {archive[key].shape}"
-            ) from error
+            except IndexError as error:
+                raise IndexError(
+                    f"index {index!r} is invalid for array "
+                    f"{key!r} with shape {archive[key].shape}"
+                ) from error
 
-    np.save(outname, kernel)
+        np.save(outname, kernel)
 
 
 def parse_index(value: str) -> int | slice:
