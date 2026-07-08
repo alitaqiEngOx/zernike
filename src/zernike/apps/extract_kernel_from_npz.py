@@ -36,15 +36,15 @@ def parse_args() -> argparse.Namespace:
         help="`.npz` path"
     )
     parser.add_argument(
+        "--outname",
+        type=str,
+        help="output `.npy` name & path"
+    )
+    parser.add_argument(
         "--key",
         type=str,
         default="beam",
         help="`.npz` array key to extract from"
-    )
-    parser.add_argument(
-        "--outname",
-        type=str,
-        help="output `.npy` name & path"
     )
     parser.add_argument(
         "--index",
