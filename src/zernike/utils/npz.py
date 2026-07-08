@@ -1,6 +1,7 @@
 """ Licensed under the same terms as described in the main 
 licensing script of this repository. """
 
+import shutil
 from pathlib import Path
 
 import numpy as np
@@ -43,22 +44,39 @@ class NPZ:
         return self._keys_and_shapes
 
 
-    def extract(
-            self, key: str, index: list[str], *,
-            outname: Path
+    def dump(
+            self, outname: Path, *,
+            key: str | None=None, 
+            index: list[str] | None=None
     ) -> None:
         """
         """
+        # no `key`
+        if key is None:
+            if index is not None:
+                raise ValueError(
+                    "`index` cannot be provided "
+                    "when `key` is `None`"
+                )
+
+            shutil.copy2(self.path, outname)
+            return
+
+        # `key` but no `index`
         if key not in self.keys:
             raise KeyError(
-                f"array {key!r} does not exist "
-                f"in {self.path}; available arrays "
-                f"are {self.keys}"
+                f"array {key!r} does not exist in {self.path}; "
+                f"available arrays are {self.keys}"
             )
 
+        if index is None:
+            with np.load(self.path) as archive:
+                np.save(outname, archive[key])
+                return
+
+        # `key` and `index`
         numpy_idx = tuple(
-            parse_index(value)
-            for value in index
+            parse_index(value) for value in index
         )
 
         with np.load(self.path) as archive:
