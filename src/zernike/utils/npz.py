@@ -1,8 +1,12 @@
 """ Licensed under the same terms as described in the main 
 licensing script of this repository. """
 
+import ast
+import struct
 import shutil
+import zipfile
 from pathlib import Path
+from typing import BinaryIO
 
 import numpy as np
 
@@ -32,15 +36,29 @@ class NPZ:
     def keys_and_shapes(self) -> list[str]:
         """
         """
-        if not self._keys_and_shapes:
-            with np.load(self.path) as archive:
-                self._keys = list(archive.files)
-
-                self._keys_and_shapes = [
-                    f"{key}:{archive[key].shape}"
-                    for key in self._keys
+        if self._keys_and_shapes is None:
+            with zipfile.ZipFile(self.path, 'r') as archive:
+                members = [
+                    name
+                    for name in archive.namelist()
+                    if name.endswith(".npy")
                 ]
 
+                self._keys = [
+                    name.removesuffix(".npy")
+                    for name in members
+                ]
+
+                self._keys_and_shapes = []
+                for key, member in zip(self._keys, members):
+                    with archive.open(member, "r") as file:
+                        shape = read_npy_shape(file)
+
+                    self._keys_and_shapes.append(
+                        f"{key}:{shape}"
+                    )
+
+        assert self._keys_and_shapes is not None
         return self._keys_and_shapes
 
 
@@ -136,3 +154,36 @@ def parse_index(value: str) -> int | slice:
         )
 
     return slice(*parsed)
+
+
+def read_npy_shape(file: BinaryIO) -> tuple[int]:
+    """
+    """
+    version = np.lib.format.read_magic(file)
+
+    if version == (1, 0):
+        header_length = struct.unpack(
+            "<H", file.read(2)
+        )[0]
+
+        encoding = "latin1"
+
+    elif version in ((2, 0), (3, 0)):
+        header_length = struct.unpack(
+            "<I", file.read(4)
+        )[0]
+
+        encoding = (
+            "utf-8" if version == (3, 0)
+            else "latin1"
+        )
+
+    else:
+        raise ValueError(
+            f"unsupported NPY version {version}"
+        )
+
+    header = file.read(header_length).decode(encoding)
+    metadata = ast.literal_eval(header)
+
+    return tuple(metadata["shape"])
