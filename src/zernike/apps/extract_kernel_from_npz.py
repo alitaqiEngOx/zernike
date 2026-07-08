@@ -15,6 +15,21 @@ def main() -> int:
 
     npz = NPZ(Path(args.path))
 
+    if args.show_info:
+        info = [
+            item.split(':', maxsplit=1)
+            for item in npz.keys_and_shapes
+        ]
+
+        key_width = max(
+            len(key) for key, _ in info
+        )
+
+        print(f"{'key':<{key_width}} : shape")
+
+        for key, shape in info:
+            print(f"{key:<{key_width}} : {shape}")
+
     npz.extract(
         args.key, args.index, outname=Path(args.outname)
     )
