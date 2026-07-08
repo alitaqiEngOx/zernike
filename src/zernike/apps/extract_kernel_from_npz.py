@@ -51,6 +51,11 @@ def parse_args() -> argparse.Namespace:
         nargs='*',
         help="position indices for the kernel to be extracted"
     )
+    parser.add_argument(
+        "--show_info",
+        action="store_true",
+        help="display keys & shapes of your `.npz`"
+    )
 
     return parser.parse_args()
 
