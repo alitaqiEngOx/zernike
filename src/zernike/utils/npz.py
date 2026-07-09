@@ -69,7 +69,14 @@ class NPZ:
     ) -> None:
         """
         """
-        # no `key`
+        # -------------------------------------------------
+        # case 1:
+        # no key is provided.
+        #
+        # action: copy the full `.npz` unchanged.
+        #
+        # this does not load anything into memory.
+        # -------------------------------------------------
         if key is None:
             if index is not None:
                 raise ValueError(
@@ -80,17 +87,46 @@ class NPZ:
             shutil.copy2(self.path, outname)
             return
 
-        # `key` but no `index`
+        # validate key
         if key not in self.keys:
             raise KeyError(
                 f"array {key!r} does not exist in {self.path}; "
                 f"available arrays are {self.keys}"
             )
 
+        # -------------------------------------------------
+        # case 2:
+        # key is provided, but no index is provided.
+        #
+        # action: extract the `.npy` array directly.
+        #
+        # this does not load anything into memory.
+        # -------------------------------------------------
         if index is None:
-            with np.load(self.path) as archive:
-                np.save(outname, archive[key])
-                return
+            if outname.suffix != ".npy":
+                outname = Path(f"{outname}.npy")
+
+            outname.parent.mkdir(
+                parents=True, exist_ok=True
+            )
+
+            with zipfile.ZipFile(self.path, 'r') as archive:
+                with archive.open(f"{key}.npy", 'r') as source:
+                    with open(outname, 'wb') as destination:
+                        shutil.copyfileobj(
+                            source, destination,
+                            length=16 * 1024 * 1024
+                        )
+
+        return
+
+            
+            
+            
+            
+
+        
+      
 
         # `key` and `index`
         numpy_idx = tuple(
