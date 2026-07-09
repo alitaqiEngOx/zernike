@@ -4,6 +4,7 @@ licensing script of this repository. """
 import ast
 import struct
 import shutil
+import tempfile
 import zipfile
 from pathlib import Path
 from typing import BinaryIO
@@ -71,11 +72,11 @@ class NPZ:
         """
         # -------------------------------------------------
         # case 1:
-        # no key is provided.
+        # no key is provided
         #
-        # action: copy the full `.npz` unchanged.
+        # action: copy the full `.npz` unchanged
         #
-        # this does not load anything into memory.
+        # this does not load anything into memory
         # -------------------------------------------------
         if key is None:
             if index is not None:
@@ -96,11 +97,11 @@ class NPZ:
 
         # -------------------------------------------------
         # case 2:
-        # key is provided, but no index is provided.
+        # key is provided, but no index is provided
         #
-        # action: extract the `.npy` array directly.
+        # action: extract the `.npy` array directly
         #
-        # this does not load anything into memory.
+        # this does not load anything into memory
         # -------------------------------------------------
         if index is None:
             if outname.suffix != ".npy":
@@ -118,32 +119,54 @@ class NPZ:
                             length=16 * 1024 * 1024
                         )
 
-        return
+            return
 
-            
-            
-            
-            
-
-        
-      
-
-        # `key` and `index`
+        # -------------------------------------------------
+        # case 3:
+        # key and index are both provided
+        #
+        # action: extract only a chunk
+        #
+        # this generates a temporary `.npy` of the
+        # key to load from it
+        # -------------------------------------------------
         numpy_idx = tuple(
             parse_index(value) for value in index
         )
 
-        with np.load(self.path) as archive:
+        outname.parent.mkdir(
+            parents=True, exist_ok=True
+        )
+
+        with tempfile.TemporaryDirectory(
+            dir=outname.parent
+        ) as temp_dir:
+            temp_path = Path(temp_dir) / f"{key}.npy"
+
+            # stream the requested `.npy` to disk (no RAM)
+            with zipfile.ZipFile(self.path, 'r') as archive:
+                with archive.open(f"{key}.npy", 'r') as source:
+                    with open(temp_path, 'wb') as destination:
+                        shutil.copyfileobj(
+                            source, destination,
+                            length=16 * 1024 * 1024
+                        )
+
+            # memory-map `temp_path` & extract data
+            array = np.load(
+                temp_path, mmap_mode='r', allow_pickle=False
+            )
+
             try:
-                kernel = archive[key][numpy_idx]
+                kernel = array[numpy_idx]
 
             except IndexError as error:
                 raise IndexError(
                     f"index {index!r} is invalid for array "
-                    f"{key!r} with shape {archive[key].shape}"
+                    f"{key!r} with shape {array.shape}"
                 ) from error
 
-        np.save(outname, kernel)
+            np.save(outname, kernel)
 
 
 def parse_index(value: str) -> int | slice:
