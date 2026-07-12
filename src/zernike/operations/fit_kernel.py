@@ -5,6 +5,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import Normalize
 from numpy.typing import NDArray
 from scipy.optimize import curve_fit
 
@@ -140,7 +141,12 @@ class FitKernel:
         if plot == "kernel":
             plt.title(f"kernel")
 
-            c = plt.imshow(self.kernel, cmap="hot_r", vmin=0., vmax=1.)
+            norm = Normalize(
+                vmin = np.min(self.kernel),
+                vmax = np.max(self.kernel)
+            )
+
+            c = plt.imshow(self.kernel, cmap="hot_r", norm=norm)
 
         else:
             if plot == "aberration_sum":
