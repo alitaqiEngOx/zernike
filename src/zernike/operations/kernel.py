@@ -184,27 +184,6 @@ class Kernel:
         plt.colorbar(c)
         plt.show()
 
-        #else:
-        #    if plot == "aberration_sum":
-        #        plt.title(f"summation of j={self.j_list} aberrations")
-
-        #        c = plt.pcolormesh(
-        #            self.aberration_list[0].meshed_arrays[0],
-        #            self.aberration_list[0].meshed_arrays[1],
-        #            np.sum(self.compute_aberrations(), axis=0),
-        #            shading="auto", cmap="hot_r"
-        #        )
-
-        #    elif plot == "avg_aberration_sum":
-        #        plt.title(f"averaged summation of j={self.j_list} aberrations")
-
-        #        c = plt.pcolormesh(
-        #            self.aberration_list[0].meshed_arrays[0],
-        #            self.aberration_list[0].meshed_arrays[1],
-        #            np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
-        #            shading="auto", cmap="hot_r"
-        #        )
-
 
     def show_weights(self) -> None:
         """

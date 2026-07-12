@@ -64,58 +64,6 @@ def estimate_beam(
     # show weights
     k.show_weights()
 
-    # temporary for plotting
-    #import matplotlib.pyplot as plt
-
-    # fitted kernel
-    #plt.figure(figsize=(15, 15))
-    #ax = plt.subplot()
-    #ax.set_aspect("equal")
-
-    #c = plt.pcolormesh(
-    #    f.aberration_list[0].meshed_arrays[0],
-    #    f.aberration_list[0].meshed_arrays[1],
-    #    f.fitted_kernel,
-    #    shading="auto", cmap="hot_r"
-    #)
-
-    #plt.title("fitted")
-    #plt.colorbar(c)
-    #plt.show()
-
-    # residual kernel
-    #plt.figure(figsize=(15, 15))
-    #ax = plt.subplot()
-    #ax.set_aspect("equal")
-
-    #c = plt.pcolormesh(
-    #    f.aberration_list[0].meshed_arrays[0],
-    #    f.aberration_list[0].meshed_arrays[1],
-    #    f.residual_kernel,
-    #    shading="auto", cmap="hot_r"
-    #)
-
-    #plt.title("residual")
-    #plt.colorbar(c)
-    #plt.show()
-
-    # weights
-    #plt.figure(figsize=(12, 6))
-    #ax = plt.subplot()
-
-    #ax.bar(k.j_list, k.weights)
-    #ax.axhline(0., linewidth=1.)
-
-    #ax.set_xlabel("j")
-    #ax.set_ylabel("weight")
-    #ax.set_title("Fitted Zernike weights")
-
-    #ax.set_xticks(k.j_list)
-    #ax.tick_params(axis="x", rotation=45)
-
-    #plt.tight_layout()
-    #plt.show()
-
 
 def plot_aberration(
         *, j: int, dim_0: list[float], dim_1: list[float],
