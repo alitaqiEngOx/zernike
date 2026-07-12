@@ -168,7 +168,7 @@ class Kernel:
             vmax = np.max(self.real_kernel)
         )
 
-        plt.title(f"{type}")
+        plt.title(f"{type.replace('_', ' ')}")
 
         if type == "real_kernel":
             x = self.real_kernel
