@@ -206,6 +206,29 @@ class Kernel:
         #        )
 
 
+    def show_weights(self) -> None:
+        """
+        """
+        if self.weights is None:
+            raise TypeError("kernel has not yet been fitted")
+
+        plt.figure(figsize=(12, 6))
+        ax = plt.subplot()
+
+        ax.bar(self.j_list, self.weights)
+        ax.axhline(0., linewidth=1.)
+
+        ax.set_xlabel("j")
+        ax.set_ylabel("weight")
+        ax.set_title("Fitted Zernike weights")
+
+        ax.set_xticks(self.j_list)
+        ax.tick_params(axis="x", rotation=45)
+
+        plt.tight_layout()
+        plt.show()
+
+
     @classmethod
     def via_n(cls, n_list: list[int], kernel_path: Path):
         """

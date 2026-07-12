@@ -61,8 +61,11 @@ def estimate_beam(
     k.show("fitted_kernel")
     k.show("residual_kernel")
 
+    # show weights
+    k.show_weights()
+
     # temporary for plotting
-    import matplotlib.pyplot as plt
+    #import matplotlib.pyplot as plt
 
     # fitted kernel
     #plt.figure(figsize=(15, 15))
@@ -97,21 +100,21 @@ def estimate_beam(
     #plt.show()
 
     # weights
-    plt.figure(figsize=(12, 6))
-    ax = plt.subplot()
+    #plt.figure(figsize=(12, 6))
+    #ax = plt.subplot()
 
-    ax.bar(k.j_list, k.weights)
-    ax.axhline(0., linewidth=1.)
+    #ax.bar(k.j_list, k.weights)
+    #ax.axhline(0., linewidth=1.)
 
-    ax.set_xlabel("j")
-    ax.set_ylabel("weight")
-    ax.set_title("Fitted Zernike weights")
+    #ax.set_xlabel("j")
+    #ax.set_ylabel("weight")
+    #ax.set_title("Fitted Zernike weights")
 
-    ax.set_xticks(k.j_list)
-    ax.tick_params(axis="x", rotation=45)
+    #ax.set_xticks(k.j_list)
+    #ax.tick_params(axis="x", rotation=45)
 
-    plt.tight_layout()
-    plt.show()
+    #plt.tight_layout()
+    #plt.show()
 
 
 def plot_aberration(
