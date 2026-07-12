@@ -54,7 +54,7 @@ def estimate_beam(
     f.show("kernel")
 
     # fit aberrations to kernel
-    weights, fitted_kernel, residual_kernel = f.fit_data()
+    f.estimate()
 
     # temporary for plotting
     import matplotlib.pyplot as plt
@@ -67,7 +67,7 @@ def estimate_beam(
     c = plt.pcolormesh(
         f.aberration_list[0].meshed_arrays[0],
         f.aberration_list[0].meshed_arrays[1],
-        fitted_kernel,
+        f.fitted_kernel,
         shading="auto", cmap="hot_r"
     )
 
@@ -83,7 +83,7 @@ def estimate_beam(
     c = plt.pcolormesh(
         f.aberration_list[0].meshed_arrays[0],
         f.aberration_list[0].meshed_arrays[1],
-        residual_kernel,
+        f.residual_kernel,
         shading="auto", cmap="hot_r"
     )
 
@@ -95,7 +95,7 @@ def estimate_beam(
     plt.figure(figsize=(12, 6))
     ax = plt.subplot()
 
-    ax.bar(f.j_list, weights)
+    ax.bar(f.j_list, f.weights)
     ax.axhline(0., linewidth=1.)
 
     ax.set_xlabel("j")

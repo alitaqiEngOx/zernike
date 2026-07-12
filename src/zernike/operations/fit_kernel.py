@@ -24,18 +24,21 @@ class FitKernel:
         self.j_list = j_list
 
         if kernel_path.suffix == ".txt":
-            self.kernel = read_data(kernel_path)
+            self.real_kernel = read_data(kernel_path)
 
         else:
-            self.kernel = np.load(kernel_path)
+            self.real_kernel = np.load(kernel_path)
 
         # temporary code
-        self.kernel = np.absolute(self.kernel)
+        self.real_kernel = np.absolute(self.real_kernel)
+        self.fitted_kernel = None
+        self.residual_kernel = None
+        self.weights = None
 
         dim = np.linspace(
             -0.5 * np.sqrt(2.),
             0.5 * np.sqrt(2.),
-            self.kernel.shape[0]
+            self.real_kernel.shape[0]
         )
 
         self.aberration_list = [
@@ -58,11 +61,13 @@ class FitKernel:
         ])
 
 
-    def fit_data(
-            self, *, curvefit: bool=False
-    ) -> tuple[NDArray, NDArray, NDArray]:
+    def estimate(self, *, curvefit: bool=False) -> None:
         """
         """
+        # kernels already estimated
+        if self.fitted_kernel is not None:
+            return
+
         # compute all aberrations & flatten/transpose them     
         aberrations = self.compute_aberrations()
 
@@ -73,8 +78,8 @@ class FitKernel:
 
         # use `scipy.optimize.curve_fit`
         if curvefit:
-            # define a wrapper function, passing all `weights` together
-            # with a `_dummy` as required by `curve_fit`
+            # define a wrapper function, passing all `weights`
+            # together with a `_dummy` as required by `curve_fit`
             def wrapper(
                     _dummy: NDArray, *weights: float
             ) -> NDArray:
@@ -93,25 +98,28 @@ class FitKernel:
             ))
 
             # compute weights
-            weights, _ = curve_fit(
-                wrapper, xy, self.kernel.flatten(),
+            self.weights, _ = curve_fit(
+                wrapper, xy, self.real_kernel.flatten(),
                 p0=np.ones(len(self.j_list))
             )
 
         # use `numpy.linalg.lstsq`
         else:
             # compute weights
-            weights, *_ = np.linalg.lstsq(
-                flattened_aberrations, self.kernel.flatten(),
+            self.weights, *_ = np.linalg.lstsq(
+                flattened_aberrations, self.real_kernel.flatten(),
                 rcond=None
             )
 
         # reconstruct & return the fitted beam
-        fitted_kernel_flat = flattened_aberrations @ weights
-        fitted_kernel = fitted_kernel_flat.reshape(self.kernel.shape)
-        residual_kernel = self.kernel - fitted_kernel
+        fitted_kernel_flat = flattened_aberrations @ self.weights
 
-        return weights, fitted_kernel, residual_kernel
+        self.fitted_kernel = fitted_kernel_flat.reshape(
+            self.real_kernel.shape
+        )
+        self.residual_kernel = (
+            self.real_kernel - self.fitted_kernel
+        )
 
 
     def compare_curve_fit_and_lstsq(self) -> None:
@@ -142,11 +150,11 @@ class FitKernel:
             plt.title(f"kernel")
 
             norm = Normalize(
-                vmin = np.min(self.kernel),
-                vmax = np.max(self.kernel)
+                vmin = np.min(self.real_kernel),
+                vmax = np.max(self.real_kernel)
             )
 
-            c = plt.imshow(self.kernel, cmap="hot_r", norm=norm)
+            c = plt.imshow(self.real_kernel, cmap="hot_r", norm=norm)
 
         else:
             if plot == "aberration_sum":
