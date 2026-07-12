@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 
 from zernike.operations.aberration import Aberration
-from zernike.operations.fit_kernel import FitKernel
+from zernike.operations.kernel import Kernel
 from zernike.utils.conversions import (
     j_to_mn, mn_to_j
 )
@@ -46,10 +46,10 @@ def estimate_beam(
         )
 
     if j_list is None:
-        f = FitKernel.via_n(n_list, kernel_path)
+        f = Kernel.via_n(n_list, kernel_path)
 
     else:
-        f = FitKernel(j_list, kernel_path)
+        f = Kernel(j_list, kernel_path)
 
     f.show("kernel")
 

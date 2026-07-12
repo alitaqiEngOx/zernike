@@ -14,7 +14,7 @@ from zernike.utils.conversions import mn_to_j
 from zernike.utils.txt import read_data
 
 
-class FitKernel:
+class Kernel:
     """
     """
 
