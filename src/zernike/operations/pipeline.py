@@ -39,70 +39,75 @@ def estimate_beam(
 ) -> None:
     """
     """
+    # filter out incorrect entries
     if (j_list is None and n_list is None) or\
     (j_list is not None and n_list is not None):
         raise ValueError(
             "provide either `j` or `mn`"
         )
 
+    # define kernel in memory
     if j_list is None:
-        f = Kernel.via_n(n_list, kernel_path)
+        k = Kernel.via_n(n_list, kernel_path)
 
     else:
-        f = Kernel(j_list, kernel_path)
-
-    f.show("kernel")
+        k = Kernel(j_list, kernel_path)
 
     # fit aberrations to kernel
-    f.estimate()
+    k.estimate()
+
+    # show outputs
+    k.show()
+    k.show("fitted_kernel")
+    k.show("residual_kernel")
 
     # temporary for plotting
     import matplotlib.pyplot as plt
 
     # fitted kernel
-    plt.figure(figsize=(15, 15))
-    ax = plt.subplot()
-    ax.set_aspect("equal")
+    #plt.figure(figsize=(15, 15))
+    #ax = plt.subplot()
+    #ax.set_aspect("equal")
 
-    c = plt.pcolormesh(
-        f.aberration_list[0].meshed_arrays[0],
-        f.aberration_list[0].meshed_arrays[1],
-        f.fitted_kernel,
-        shading="auto", cmap="hot_r"
-    )
+    #c = plt.pcolormesh(
+    #    f.aberration_list[0].meshed_arrays[0],
+    #    f.aberration_list[0].meshed_arrays[1],
+    #    f.fitted_kernel,
+    #    shading="auto", cmap="hot_r"
+    #)
 
-    plt.title("fitted")
-    plt.colorbar(c)
-    plt.show()
+    #plt.title("fitted")
+    #plt.colorbar(c)
+    #plt.show()
 
     # residual kernel
-    plt.figure(figsize=(15, 15))
-    ax = plt.subplot()
-    ax.set_aspect("equal")
+    #plt.figure(figsize=(15, 15))
+    #ax = plt.subplot()
+    #ax.set_aspect("equal")
 
-    c = plt.pcolormesh(
-        f.aberration_list[0].meshed_arrays[0],
-        f.aberration_list[0].meshed_arrays[1],
-        f.residual_kernel,
-        shading="auto", cmap="hot_r"
-    )
+    #c = plt.pcolormesh(
+    #    f.aberration_list[0].meshed_arrays[0],
+    #    f.aberration_list[0].meshed_arrays[1],
+    #    f.residual_kernel,
+    #    shading="auto", cmap="hot_r"
+    #)
 
-    plt.title("residual")
-    plt.colorbar(c)
-    plt.show()
+    #plt.title("residual")
+    #plt.colorbar(c)
+    #plt.show()
 
     # weights
     plt.figure(figsize=(12, 6))
     ax = plt.subplot()
 
-    ax.bar(f.j_list, f.weights)
+    ax.bar(k.j_list, k.weights)
     ax.axhline(0., linewidth=1.)
 
     ax.set_xlabel("j")
     ax.set_ylabel("weight")
     ax.set_title("Fitted Zernike weights")
 
-    ax.set_xticks(f.j_list)
+    ax.set_xticks(k.j_list)
     ax.tick_params(axis="x", rotation=45)
 
     plt.tight_layout()

@@ -139,46 +139,71 @@ class Kernel:
         print(result_curve_fit[0] - result_lstsq[0])
 
 
-    def show(self, plot="kernel") -> None:
+    def show(self, type: str="real_kernel") -> None:
         """
         """
+        # filter incorrect entries
+        if type not in [
+            "real_kernel", "fitted_kernel", "residual_kernel"
+        ]:
+            raise ValueError(
+                "`type` must be either `real_kernel`, `fitted_kernel` "
+                "or `residual_kernel`"
+            )
+
+        if (
+            type == "fitted_kernel" and self.fitted_kernel is None
+        ) or (
+            type == "residual_kernel" and self.residual_kernel is None
+        ):
+            raise TypeError("kernel has not yet been fitted")
+
+        # plot
         plt.figure(figsize=(15, 15))
         ax = plt.subplot()
         ax.set_aspect("equal")
 
-        if plot == "kernel":
-            plt.title(f"kernel")
+        norm = Normalize(
+            vmin = np.min(self.real_kernel),
+            vmax = np.max(self.real_kernel)
+        )
 
-            norm = Normalize(
-                vmin = np.min(self.real_kernel),
-                vmax = np.max(self.real_kernel)
-            )
+        plt.title(f"{type}")
 
-            c = plt.imshow(self.real_kernel, cmap="hot_r", norm=norm)
+        if type == "real_kernel":
+            x = self.real_kernel
+
+        elif type == "fitted_kernel":
+            x = self.fitted_kernel
 
         else:
-            if plot == "aberration_sum":
-                plt.title(f"summation of j={self.j_list} aberrations")
+            x = self.residual_kernel
 
-                c = plt.pcolormesh(
-                    self.aberration_list[0].meshed_arrays[0],
-                    self.aberration_list[0].meshed_arrays[1],
-                    np.sum(self.compute_aberrations(), axis=0),
-                    shading="auto", cmap="hot_r"
-                )
-
-            elif plot == "avg_aberration_sum":
-                plt.title(f"averaged summation of j={self.j_list} aberrations")
-
-                c = plt.pcolormesh(
-                    self.aberration_list[0].meshed_arrays[0],
-                    self.aberration_list[0].meshed_arrays[1],
-                    np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
-                    shading="auto", cmap="hot_r"
-                )
+        c = plt.imshow(x, cmap="hot_r", norm=norm)
 
         plt.colorbar(c)
         plt.show()
+
+        #else:
+        #    if plot == "aberration_sum":
+        #        plt.title(f"summation of j={self.j_list} aberrations")
+
+        #        c = plt.pcolormesh(
+        #            self.aberration_list[0].meshed_arrays[0],
+        #            self.aberration_list[0].meshed_arrays[1],
+        #            np.sum(self.compute_aberrations(), axis=0),
+        #            shading="auto", cmap="hot_r"
+        #        )
+
+        #    elif plot == "avg_aberration_sum":
+        #        plt.title(f"averaged summation of j={self.j_list} aberrations")
+
+        #        c = plt.pcolormesh(
+        #            self.aberration_list[0].meshed_arrays[0],
+        #            self.aberration_list[0].meshed_arrays[1],
+        #            np.sum(self.compute_aberrations(), axis=0) / len(self.j_list),
+        #            shading="auto", cmap="hot_r"
+        #        )
 
 
     @classmethod
