@@ -65,6 +65,7 @@ def parse_args() -> argparse.Namespace:
         description="Zernike aberration plots",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+
     parser.add_argument(
         'j',
         type=int,
