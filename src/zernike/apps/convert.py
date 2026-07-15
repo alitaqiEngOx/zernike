@@ -53,6 +53,7 @@ def parse_args() -> argparse.Namespace:
         description="j <--> m/n converter",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+
     parser.add_argument(
         "--j",
         type=int,
@@ -66,6 +67,7 @@ def parse_args() -> argparse.Namespace:
         nargs=2,
         help="`m` & `n` (Noll indexing scheme)",
     )
+
     return parser.parse_args()
 
 
