@@ -34,6 +34,15 @@ class Aberration:
     """ """
 
 
+    def __post_init__(self) -> None:
+        """
+        """
+        if self.j < 1:
+            raise ValueError(
+                f"`j` must be >= 1; got j={self.j}"
+            ) 
+
+
     @property
     def m(self) -> int:
         """
