@@ -96,7 +96,7 @@ def mn_to_j(m: int, n:int) -> int:
     # check `n`
     if n < 0:
         raise ValueError(
-            f"`n` must be positive; got n={n}"
+            f"`n` must be non-negative; got n={n}"
         )
 
     # check valid Zernike pair
