@@ -37,15 +37,11 @@ class Aberration:
     @property
     def m(self) -> int:
         """
-        Computes `m`.
+        Computes `m` from Noll index `j`.
 
         Returns
         -------
         `m`.
-
-        Raises
-        ------
-        ValueError
         """
         m, _ = j_to_mn(self.j)
         return m
@@ -54,15 +50,11 @@ class Aberration:
     @property
     def n(self) -> int:
         """
-        Computes `n`.
+        Computes `n` from Noll index `j`.
 
         Returns
         -------
         `n`.
-
-        Raises
-        ------
-        ValueError
         """
         _, n = j_to_mn(self.j)
         return n
