@@ -87,14 +87,12 @@ def plot_aberration(
     for dim in [dim_0, dim_1]:
         if dim[0] >= dim[1]:
             raise ValueError(
-                f"maximum value in {dim} cannot be smaller than or equal to "
-                "minimum value"
+                f"`dim[0] >= dim[1]` not allowed; got {dim}"
             )
 
         if dim[2] > dim[1] - dim[0]:
             raise ValueError(
-                "step value in {dim} cannot be larger than the difference "
-                "between maximum and minimum values"
+                f"`dim[3] > dim[1] - dim[2]` not allowed; got {dim}"
             )
 
     if coords_type.lower() == "polar":
