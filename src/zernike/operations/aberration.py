@@ -107,7 +107,9 @@ class Aberration:
         return output
 
 
-    def compute(self, *, xy: tuple[NDArray] | None=None) -> None:
+    def compute(
+            self, *, xy: tuple[NDArray, NDArray] | None=None
+    ) -> None:
         """
         """
         if xy is None:
