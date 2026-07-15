@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
-from zernike.utils.conversions import cartesian_to_polar
+from zernike.utils.conversions import (
+    cartesian_to_polar, j_to_mn
+)
 
 
 @dataclass
@@ -35,7 +37,7 @@ class Aberration:
     @property
     def m(self) -> int:
         """
-        Computes non-negative integer `m`.
+        Computes `m`.
 
         Returns
         -------
@@ -45,32 +47,14 @@ class Aberration:
         ------
         ValueError
         """
-        if self.n % 2 == 0:
-            m = 2. * np.floor(
-                0.25 * (2. * self.j + 1. - self.n * (self.n + 1.))
-            )
-
-        else:
-            m = 2. * np.floor(
-                0.25 * (2. * (self.j + 1.) - self.n * (self.n + 1.))
-            ) - 1.
-
-        if m < 0:
-            raise ValueError("`m` cannot be negative")
-
-        if self.n - m < 0:
-            raise ValueError("`n - m` cannot be negative")
-
-        if (self.n - m) % 2 != 0:
-            raise ValueError("`n - m` cannot be odd")
-
-        return int(m)
+        m, _ = j_to_mn(self.j)
+        return m
 
 
     @property
     def n(self) -> int:
         """
-        Computes non-negative integer `n`.
+        Computes `n`.
 
         Returns
         -------
@@ -80,14 +64,8 @@ class Aberration:
         ------
         ValueError
         """
-        n = np.floor(
-            (np.sqrt(2. * self.j - 1.) + 0.5) - 1.
-        )
-
-        if n < 0:
-            raise ValueError("`n` cannot be negative")
-
-        return int(n)
+        _, n = j_to_mn(self.j)
+        return n
 
 
     @property
