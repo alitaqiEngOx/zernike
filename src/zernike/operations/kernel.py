@@ -213,19 +213,18 @@ class Kernel:
         """
         """
         j_list = []
+
         for n in n_list:
-            if n % 2 == 0:
-                m_list = [
-                    m for m in range(n + 1) if m % 2 == 0
-                ]
+            if n < 0:
+                raise ValueError(
+                    f"`n` must be non-negative; got n={n}"
+                )
 
-            else:
-                m_list = [
-                    m for m in range(n + 1) if m % 2 != 0
-                ]
+            j_min = n * (n + 1) // 2 + 1
+            j_max = (n + 1) * (n + 2) // 2
 
-            for m in m_list:
-                for item in mn_to_j(m, n):
-                    j_list.append(item)
+            j_list.extend(
+                range(j_min, j_max + 1)
+            )
 
         return cls(j_list, kernel_path)
