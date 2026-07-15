@@ -49,63 +49,79 @@ def polar_to_cartesian(
 def j_to_mn(j: int) -> tuple[int, int]:
     """
     """
+    # check `j`
+    if j < 1:
+        raise ValueError(
+            f"j must be positive; got j={j}"
+        )
+
+    # compute `n`
     n = int(
         np.floor(
             (np.sqrt(2. * j - 1.) + 0.5) - 1.
         )
     )
 
-    # check `n`
-    if n < 0:
-        raise ValueError("`n` cannot be negative")
-
+    # compute `m`
     if n % 2 == 0:
-        m = int(
+        m_abs = int(
             2. * np.floor(
                 0.25 * (2. * j + 1. - n * (n + 1.))
             )
         )
 
     else:
-        m = int(
+        m_abs = int(
                 2. * np.floor(
                 0.25 * (2. * (j + 1.) - n * (n + 1.))
             ) - 1.
         )
 
-    # check `m`
-    if m < 0:
-        raise ValueError("`m` cannot be negative")
+    # sanity checks
+    if n - m_abs < 0:
+        raise ValueError("`n - |m|` cannot be negative")
 
-    if n - m < 0:
-        raise ValueError("`n - m` cannot be negative")
+    if (n - m_abs) % 2 != 0:
+        raise ValueError("`n - |m|` cannot be odd")
 
-    if (n - m) % 2 != 0:
-        raise ValueError("`n - m` cannot be odd")
+    if j % 2 != 0:
+        return -m_abs, n
 
-    return m, n
+    return m_abs, n
 
 
-def mn_to_j(m: int, n:int) -> list[int]:
+def mn_to_j(m: int, n:int) -> int:
     """
     """
     # check `n`
     if n < 0:
-        raise ValueError("`n` cannot be negative")
+        raise ValueError(
+            f"`n` must be positive; got n={n}"
+        )
 
-    # check `m`
-    if m < 0:
-        raise ValueError("`m` cannot be negative")
+    # check valid Zernike pair
+    if n - abs(m) < 0:
+        raise ValueError("`n - |m|` cannot be negative")
 
-    if n - m < 0:
-        raise ValueError("`n - m` cannot be negative")
+    if (n - abs(m)) % 2 != 0:
+        raise ValueError("`n - |m|` cannot be odd")
 
-    if (n - m) % 2 != 0:
-        raise ValueError("`n - m` cannot be odd")
-
+    # radial mode (|m| = 0)
     if m == 0:
-        return [int(0.5 * n * (n + 1.) + 1.)]
+        return int(0.5 * n * (n + 1.0) + 1.0)
 
-    j = int(0.5 * n * (n + 1.) + m)
+    # first possible j for this |m|
+    j = int(0.5 * n * (n + 1.0) + abs(m))
 
-    return [j, j + 1]
+    # +ve m means cosine mode -> j is even
+    if m > 0:
+        if j % 2 == 0:
+            return j
+
+        return j + 1
+
+    # -ve m means sine mode -> j is odd
+    if j % 2 != 0:
+        return j
+
+    return j + 1
