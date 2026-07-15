@@ -14,25 +14,10 @@ def main() -> int:
     """
     args = parse_args()
 
-    if args.j is None and args.n is None:
-        raise ValueError(
-            "expected either `j` or `n` but got neither"
-        )
-
-    elif args.j is not None and args.n is not None:
-        raise ValueError(
-            "expected either `j` or `n` but got both"
-        )
-
-    if args.j is None:
-        estimate_beam(
-            Path(args.sampled_data_path), n_list=args.n
-        )
-
-    else:
-        estimate_beam(
-            Path(args.sampled_data_path), j_list=args.j
-        )
+    estimate_beam(
+        Path(args.sampled_data_path),
+        j_list=args.j, n_list=args.n
+    )
 
     return 0
 
