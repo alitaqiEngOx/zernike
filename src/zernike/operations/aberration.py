@@ -85,20 +85,22 @@ class Aberration:
         Returns
         -------
         `R`.
-        """        
+        """
+        n = self.n
+        m_abs = abs(self.m)   
         output = 0
 
-        for s in range(int(0.5 * (self.n - self.m) + 1)):
+        for s in range(int(0.5 * (n - m_abs) + 1)):
             factor = (
                 ((-1.)**s) * 
-                math.factorial(self.n - s)
+                math.factorial(n - s)
             ) / (
                 math.factorial(s) * 
-                math.factorial(int(((self.n + self.m) / 2) - s)) * 
-                math.factorial(int(((self.n - self.m) / 2) - s))
+                math.factorial(int(((n + m_abs) / 2) - s)) * 
+                math.factorial(int(((n - m_abs) / 2) - s))
             )
 
-            output += factor * radius**(self.n - (2. * s))
+            output += factor * radius**(n - (2. * s))
 
         return output
 
@@ -145,19 +147,24 @@ class Aberration:
                 self.dim_1_array.shape[0], self.dim_0_array.shape[0]
             )
 
-        if self.m == 0:
-                self.data = np.sqrt(self.n + 1.) * self.R(r_meshed)
+        n = self.n
+        m = self.m
+        R = self.R(r_meshed)
+
+        if m == 0:
+            self.data = np.sqrt(self.n + 1.) * R
+
+        elif m > 0:
+            self.data = (
+                np.sqrt(2. * (n + 1.)) * R *
+                np.cos(abs(m) * theta_meshed)
+            )
 
         else:
-            if self.j % 2 == 0:
-                self.data = np.sqrt(2. * (self.n + 1.)) *\
-                    self.R(r_meshed) *\
-                        np.cos(self.m * theta_meshed)
-
-            else:
-                self.data = np.sqrt(2. * (self.n + 1.)) *\
-                    self.R(r_meshed) *\
-                        np.sin(self.m * theta_meshed)
+            self.data = (
+                np.sqrt(2. * (n + 1.)) * R *
+                np.sin(abs(m) * theta_meshed)
+            )
 
 
     def show(self) -> None:
