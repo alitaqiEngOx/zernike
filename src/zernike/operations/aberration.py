@@ -78,7 +78,9 @@ class Aberration:
         )
 
 
-    def R(self, radius: float) -> float:
+    def R(
+            self, radius: float | NDArray
+    ) -> float | NDArray:
         """
         Computes `R` at a given radius value.
 
@@ -88,7 +90,7 @@ class Aberration:
         """
         n = self.n
         m_abs = abs(self.m)   
-        output = 0
+        output = 0.
 
         for s in range(int(0.5 * (n - m_abs) + 1)):
             factor = (
