@@ -58,6 +58,7 @@ def parse_args() -> argparse.Namespace:
         description="Estimates beam data with Zernike polynomials",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+
     parser.add_argument(
         "--j",
         type=int,
@@ -70,13 +71,22 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=None,
         nargs='*',
-        help="Zernike polynomials via `n` (as many as desired - will include all `m`)"
+        help=(
+            "Zernike polynomials via `n` (as many as desired "
+            "- will include all `m`)"
+        )
     )
     parser.add_argument(
         "--sampled_data_path",
         type=str,
-        default=f"{Path(__file__).parents[3].joinpath('data', 'sampled_beam.txt')}",
-        help="`.txt` file or `.npy` binary bearing the sampled data."
+        default=(
+            f"{Path(__file__).parents[3].joinpath(
+                'data', 'sampled_beam.txt'
+            )}"
+        ),
+        help=(
+            "`.txt` file or `.npy` binary bearing the sampled data."
+        )
     )
 
     return parser.parse_args()
