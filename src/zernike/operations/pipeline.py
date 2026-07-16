@@ -12,7 +12,8 @@ from zernike.utils.conversions import (
 
 
 def convert(
-        *, j: int | None=None, mn: list[int] | None=None
+        *, j: int | None=None,
+        mn: list[int] | None=None
 ) -> None:
     """
     """
@@ -32,7 +33,8 @@ def convert(
 
 
 def estimate_beam(
-        kernel_path: Path, *, j_list: list[str] | None=None,
+        kernel_path: Path, *,
+        j_list: list[str] | None=None,
         n_list: list[str] | None=None
 ) -> None:
     """
@@ -64,7 +66,8 @@ def estimate_beam(
 
 
 def plot_aberration(
-        *, j: int, dim_0: list[float], dim_1: list[float],
+        *, j: int,
+        dim_0: list[float], dim_1: list[float],
         coords_type: str="polar"
 ) -> None:
     """
