@@ -4,8 +4,6 @@ licensing script of this repository. """
 import argparse
 import sys
 
-import numpy as np
-
 from zernike.operations.pipeline import plot_aberration
 
 
@@ -14,14 +12,6 @@ def main() -> int:
     Pipeline entry point.
     """
     args = parse_args()
-
-    if args.coords_type.lower() == "cartesian" and\
-    args.dim_0 == [0., 1., 0.01] and\
-    args.dim_1 == [0., 2. * np.pi, 0.01]:
-        args.dim_0 = [
-            -0.5 * np.sqrt(2.), 0.5 * np.sqrt(2.), 0.01
-        ]
-        args.dim_1 = args.dim_0
 
     plot_aberration(
         j=args.j, dim_0=args.dim_0, dim_1=args.dim_1,
@@ -46,15 +36,11 @@ def parse_args() -> argparse.Namespace:
 
     --dim_0 (optional): float
         minimum, maximum, and step in dimension 0.
-        (defaults to [0., 1., 0.01] if --coords_type is `polar`
-        and [-0.5 * np.sqrt(2.), -0.5 * np.sqrt(2.), 0.01] 
-        if --coords_type is `cartesian`).
+        (defaults to `None`).
 
     --dim_1 (optional): float
         minimum, maximum, and step in dimension 1.
-        (defaults to [0., 2. * np.pi, 0.01] if --coords_type is `polar`
-        and [-0.5 * np.sqrt(2.), -0.5 * np.sqrt(2.), 0.01] 
-        if --coords_type is `cartesian`).
+        (defaults to `None`).
 
     Returns
     -------
@@ -81,14 +67,14 @@ def parse_args() -> argparse.Namespace:
         "--dim_0",
         type=float,
         nargs=3,
-        default=[0., 1., 0.01],
+        default=None,
         help="minimum, maximum and step in dimension 0",
     )
     parser.add_argument(
         "--dim_1",
         type=float,
         nargs=3,
-        default=[0., 2. * np.pi, 0.01],
+        default=None,
         help="minimum, maximum and step in dimension 1",
     )
 
