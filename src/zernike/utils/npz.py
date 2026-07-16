@@ -27,9 +27,10 @@ class NPZ:
     def keys(self) -> list[str]:
         """
         """
-        if not self._keys:
+        if self._keys is None:
             _ = self.keys_and_shapes
 
+        assert self._keys is not None
         return self._keys
 
 
@@ -70,6 +71,9 @@ class NPZ:
     ) -> None:
         """
         """
+        outname.parent.mkdir(
+            parents=True, exist_ok=True
+        )
         # -------------------------------------------------
         # case 1:
         # no key is provided
@@ -84,6 +88,9 @@ class NPZ:
                     "`index` cannot be provided "
                     "when `key` is `None`"
                 )
+
+            if outname.suffix != ".npz":
+                outname = Path(f"{outname}.npz")
 
             shutil.copy2(self.path, outname)
             return
@@ -107,10 +114,6 @@ class NPZ:
             if outname.suffix != ".npy":
                 outname = Path(f"{outname}.npy")
 
-            outname.parent.mkdir(
-                parents=True, exist_ok=True
-            )
-
             with zipfile.ZipFile(self.path, 'r') as archive:
                 with archive.open(f"{key}.npy", 'r') as source:
                     with open(outname, 'wb') as destination:
@@ -130,13 +133,15 @@ class NPZ:
         # this generates a temporary `.npy` of the
         # key to load from it
         # -------------------------------------------------
+        if index == []:
+            raise ValueError("`index` cannot be empty")
+
         numpy_idx = tuple(
             parse_index(value) for value in index
         )
 
-        outname.parent.mkdir(
-            parents=True, exist_ok=True
-        )
+        if outname.suffix != ".npy":
+            outname = Path(f"{outname}.npy")
 
         with tempfile.TemporaryDirectory(
             dir=outname.parent
@@ -158,13 +163,18 @@ class NPZ:
             )
 
             try:
-                kernel = array[numpy_idx]
+                kernel = np.array(
+                    array[numpy_idx], copy=True
+                )
 
-            except IndexError as error:
+            except (IndexError, ValueError) as error:
                 raise IndexError(
                     f"index {index!r} is invalid for array "
                     f"{key!r} with shape {array.shape}"
                 ) from error
+
+            finally:
+                del array
 
             np.save(outname, kernel)
 
@@ -215,7 +225,7 @@ def parse_index(value: str) -> int | slice:
     return slice(*parsed)
 
 
-def read_npy_shape(file: BinaryIO) -> tuple[int]:
+def read_npy_shape(file: BinaryIO) -> tuple[int, ...]:
     """
     """
     version = np.lib.format.read_magic(file)

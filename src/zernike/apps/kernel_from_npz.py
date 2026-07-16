@@ -5,7 +5,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from zernike.utils.npz import NPZ
+from zernike.operations.pipeline import kernel_from_npz
 
 
 def main() -> int:
@@ -13,28 +13,11 @@ def main() -> int:
     """
     args = parse_args()
 
-    npz = NPZ(Path(args.path))
-
-    if args.show_info:
-        info = [
-            item.split(':', maxsplit=1)
-            for item in npz.keys_and_shapes
-        ]
-
-        key_width = max(
-            len(key) for key, _ in info
-        )
-
-        print(f"{'key':<{key_width}} : shape")
-
-        for key, shape in info:
-            print(f"{key:<{key_width}} : {shape}")
-
-    if args.save_as:
-        npz.dump(
-            Path(args.save_as), key=args.key,
-            index=args.index
-        )
+    kernel_from_npz(
+        Path(args.path), show_info=args.show_info,
+        key=args.key, index=args.index,
+        save_as=Path(args.save_as)
+    )
 
     return 0
 
@@ -60,7 +43,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--index",
-        nargs='*',
+        nargs='+',
+        default=None,
         help="position indices for the kernel to be extracted"
     )
     parser.add_argument(
