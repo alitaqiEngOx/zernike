@@ -82,14 +82,14 @@ def parse_args() -> argparse.Namespace:
         type=float,
         nargs=3,
         default=[0., 1., 0.01],
-        help="minimum, maximum, and step in dimension 0",
+        help="minimum, maximum and step in dimension 0",
     )
     parser.add_argument(
         "--dim_1",
         type=float,
         nargs=3,
         default=[0., 2. * np.pi, 0.01],
-        help="minimum, maximum, and step in dimension 1",
+        help="minimum, maximum and step in dimension 1",
     )
 
     return parser.parse_args()
