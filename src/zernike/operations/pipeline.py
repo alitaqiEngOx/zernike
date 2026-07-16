@@ -17,8 +17,11 @@ def convert(
 ) -> None:
     """
     """
-    if (j is None and mn is None) or\
-    (j is not None and mn is not None):
+    # filter out incorrect entries
+    if (
+        (j is None and mn is None) or
+        (j is not None and mn is not None)
+    ):
         raise ValueError(
             "provide either `j` or `mn`"
         )
@@ -40,8 +43,10 @@ def estimate_beam(
     """
     """
     # filter out incorrect entries
-    if (j_list is None and n_list is None) or\
-    (j_list is not None and n_list is not None):
+    if (
+        (j_list is None and n_list is None) or
+        (j_list is not None and n_list is not None)
+    ):
         raise ValueError(
             "provide either `j` or `mn`"
         )
