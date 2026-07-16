@@ -110,26 +110,51 @@ def kernel_from_npz(
 
 def plot_aberration(
         *, j: int,
-        dim_0: list[float], dim_1: list[float],
+        dim_0: list[float] | None=None,
+        dim_1: list[float] | None=None,
         coords_type: str="polar"
 ) -> None:
     """
-    Principal function in the pipeline executing the desired functionality.
+    Principal function in the pipeline executing
+    the desired functionality.
 
     Arguments
     ---------
     j: int
         order of the Zernike polynomial.
 
-    dim_0: list[float]
-        minimum, maximum, and step in dimension 0.
+    dim_0: list[float] (optional)
+        minimum, maximum and step in dimension 0.
 
-    dim_1: list[float]
-        minimum, maximum, and step in dimension 0.
+    dim_1: list[float] (optional)
+        minimum, maximum and step in dimension 1.
 
-    coords:_type str (optional)
+    coords_type: str (optional)
         `polar` or `cartesian`.
     """
+    if coords_type.lower() == "cartesian":
+        if dim_0 is None:
+            dim_0 = [
+                -0.5 * np.sqrt(2.),
+                0.5 * np.sqrt(2.), 0.01
+            ]
+
+        if dim_1 is None:
+            dim_1 = dim_0.copy()
+
+    elif coords_type.lower() == "polar":
+        if dim_0 is None:
+            dim_0 = [0., 1., 0.01]
+
+        if dim_1 is None:
+            dim_1 = [0., 2. * np.pi, 0.01]
+
+    else:
+        raise ValueError(
+            "`coords_type` must either be `cartesian` "
+            f"or `polar; got {coords_type}`"
+        )
+
     for dim in [dim_0, dim_1]:
         if dim[0] >= dim[1]:
             raise ValueError(
@@ -138,7 +163,7 @@ def plot_aberration(
 
         if dim[2] > dim[1] - dim[0]:
             raise ValueError(
-                f"`dim[3] > dim[1] - dim[2]` not allowed; got {dim}"
+                f"`dim[2] > dim[1] - dim[0]` not allowed; got {dim}"
             )
 
     if coords_type.lower() == "polar":
@@ -152,4 +177,5 @@ def plot_aberration(
         np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
         coords_type=coords_type
     )
+
     z.show()
