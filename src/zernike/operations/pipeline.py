@@ -51,7 +51,7 @@ def estimate_beam(
             "provide either `j` or `mn`"
         )
 
-    # define kernel in memory
+    # load kernel in memory
     if j_list is None:
         k = Kernel.via_n(n_list, kernel_path)
 
