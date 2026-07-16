@@ -13,21 +13,7 @@ def main() -> int:
     """
     args = parse_args()
 
-    if args.j is None and args.mn is None:
-        raise ValueError(
-            "expected either `j` or `mn` but got neither"
-        )
-
-    elif args.j is not None and args.mn is not None:
-        raise ValueError(
-            "expected either `j` or `mn` but got both"
-        )
-
-    if args.j is None:
-        convert(mn=args.mn)
-
-    else:
-        convert(j=args.j)
+    convert(j=args.j, mn=args.mn)
 
     return 0
 
