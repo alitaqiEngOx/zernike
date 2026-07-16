@@ -10,7 +10,6 @@ from numpy.typing import NDArray
 from scipy.optimize import curve_fit
 
 from zernike.operations.aberration import Aberration
-from zernike.utils.conversions import mn_to_j
 from zernike.utils.txt import read_data
 
 
@@ -18,7 +17,9 @@ class Kernel:
     """
     """
 
-    def __init__(self, j_list: list[int], kernel_path: Path):
+    def __init__(
+            self, j_list: list[int], kernel_path: Path
+    ):
         """
         """
         self.j_list = j_list
@@ -64,11 +65,11 @@ class Kernel:
     def estimate(self, *, curvefit: bool=False) -> None:
         """
         """
-        # kernels already estimated
+        # if kernels already estimated
         if self.fitted_kernel is not None:
             return
 
-        # compute all aberrations & flatten/transpose them     
+        # 1- compute & flatten/transpose all aberrations
         aberrations = self.compute_aberrations()
 
         flattened_aberrations = np.asarray([
@@ -76,9 +77,9 @@ class Kernel:
             for aberration in aberrations
         ]).T
 
-        # use `scipy.optimize.curve_fit`
+        # if `scipy.optimize.curve_fit` requested
         if curvefit:
-            # define a wrapper function, passing all `weights`
+            # 2a.1- define a wrapper function, passing all `weights`
             # together with a `_dummy` as required by `curve_fit`
             def wrapper(
                     _dummy: NDArray, *weights: float
@@ -87,7 +88,7 @@ class Kernel:
                 """
                 return flattened_aberrations @ np.asarray(weights)
 
-            # constryct xy domain as required by `curve_fit`
+            # 2a.2- constryct xy domain as required by `curve_fit`
             x_meshed, y_meshed = np.meshgrid(
                 self.aberration_list[0].dim_0_array,
                 self.aberration_list[0].dim_1_array
@@ -97,21 +98,21 @@ class Kernel:
                 x_meshed.flatten(), y_meshed.flatten()
             ))
 
-            # compute weights
+            # 2a.3- compute weights
             self.weights, _ = curve_fit(
                 wrapper, xy, self.real_kernel.flatten(),
                 p0=np.ones(len(self.j_list))
             )
 
-        # use `numpy.linalg.lstsq`
+        # if `numpy.linalg.lstsq` requested
         else:
-            # compute weights
+            # 2b.1- compute weights
             self.weights, *_ = np.linalg.lstsq(
                 flattened_aberrations, self.real_kernel.flatten(),
                 rcond=None
             )
 
-        # reconstruct & return the fitted beam
+        # 3- reconstruct & store the fitted beam
         fitted_kernel_flat = flattened_aberrations @ self.weights
 
         self.fitted_kernel = fitted_kernel_flat.reshape(
