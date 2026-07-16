@@ -123,23 +123,6 @@ class Kernel:
         )
 
 
-    def compare_curve_fit_and_lstsq(self) -> None:
-        """
-        """
-        result_curve_fit = self.fit_data(curvefit=True)
-        result_lstsq = self.fit_data()      
-
-        # print comparison
-        print("\ncurve_fit weights:")
-        print(result_curve_fit[0])
-
-        print("Linear least-squares weights:")
-        print(result_lstsq[0])
-
-        print("\nDifference:")
-        print(result_curve_fit[0] - result_lstsq[0])
-
-
     def show(self, type: str="real_kernel") -> None:
         """
         """
@@ -153,9 +136,11 @@ class Kernel:
             )
 
         if (
-            type == "fitted_kernel" and self.fitted_kernel is None
+            type == "fitted_kernel" and 
+            self.fitted_kernel is None
         ) or (
-            type == "residual_kernel" and self.residual_kernel is None
+            type == "residual_kernel" and 
+            self.residual_kernel is None
         ):
             raise TypeError("kernel has not yet been fitted")
 
@@ -229,3 +214,25 @@ class Kernel:
             )
 
         return cls(j_list, kernel_path)
+
+
+def compare_curve_fit_and_lstsq(
+        j_list: list[int], kernel_path: Path
+) -> None:
+    """
+    """
+    k_curve_fit = Kernel(j_list, kernel_path)
+    k_lstsq = Kernel(j_list, kernel_path)
+
+    k_curve_fit.estimate(curvefit=True)
+    k_lstsq.estimate()
+
+    # print comparison
+    print("\n`scipy.optimize.curve_fit` weights:")
+    print(k_curve_fit.weights)
+
+    print("`numpy.linalg.lstsq` weights:")
+    print(k_lstsq.weights)
+
+    print("\ndifference:")
+    print(k_curve_fit.weights - k_lstsq.weights)
