@@ -27,9 +27,6 @@ def parse_args() -> argparse.Namespace:
 
     cmd Arguments
     -------------
-    j: int
-        order of the Zernike polynomial.
-
     --coords_type (optional): str
         `polar` or `cartesian`.
         (defaults to `polar`).
@@ -42,6 +39,14 @@ def parse_args() -> argparse.Namespace:
         minimum, maximum, and step in dimension 1.
         (defaults to `None`).
 
+    --j: (optional) int
+        order of the Zernike polynomial via `j`.
+        (defaults to `None`).
+
+    --mn: (optional) int
+        order of the Zernike polynomial via `m` and `n`.
+        (defaults to `None`).
+
     Returns
     -------
     argparse.Namespace class instance enclosing the parsed
@@ -52,11 +57,6 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument(
-        'j',
-        type=int,
-        help="order of the Zernike polynomial",
-    )
     parser.add_argument(
         "--coords_type",
         type=str,
@@ -76,6 +76,19 @@ def parse_args() -> argparse.Namespace:
         nargs=3,
         default=None,
         help="minimum, maximum and step in dimension 1",
+    )
+    parser.add_argument(
+        '--j',
+        type=int,
+        default=None,
+        help="Zernike polynomial via `j`",
+    )
+    parser.add_argument(
+        '--mn',
+        type=int,
+        nargs=2,
+        default=None,
+        help="Zernike polynomial via `m` and `n`",
     )
 
     return parser.parse_args()
