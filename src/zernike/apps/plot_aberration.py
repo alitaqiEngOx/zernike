@@ -14,7 +14,11 @@ def main() -> int:
     args = parse_args()
 
     plot_aberration(
-        j=args.j, dim_0=args.dim_0, dim_1=args.dim_1,
+        j=args.j, mn=(
+            tuple(args.mn) if args.mn
+            else None
+        ),
+        dim_0=args.dim_0, dim_1=args.dim_1,
         coords_type=args.coords_type,
         basis=args.basis
     )
