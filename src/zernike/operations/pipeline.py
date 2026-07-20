@@ -49,7 +49,7 @@ def estimate_beam(
         (j_list is not None and n_list is not None)
     ):
         raise ValueError(
-            "provide either `j` or `mn`"
+            "provide either `j` or `n`"
         )
 
     # load kernel in memory
@@ -109,7 +109,8 @@ def kernel_from_npz(
 
 
 def plot_aberration(
-        *, j: int,
+        *, j: int | None=None,
+        mn: tuple[int] | None=None,
         dim_0: list[float] | None=None,
         dim_1: list[float] | None=None,
         coords_type: str="polar",
@@ -121,8 +122,11 @@ def plot_aberration(
 
     Arguments
     ---------
-    j: int
-        order of the Zernike polynomial.
+    j: int (optional)
+        order of Zernike polynomial via `j`.
+
+    mn: tuple[int] (optional)
+        order of Zernike polynomial via `m` & `n`.
 
     dim_0: list[float] (optional)
         minimum, maximum and step in dimension 0.
@@ -136,6 +140,15 @@ def plot_aberration(
     basis: str (optional)
         `complex` or `real`.
     """
+    # filter out incorrect entries
+    if (
+        (j is None and mn is None) or
+        (j is not None and mn is not None)
+    ):
+        raise ValueError(
+            "provide either `j` or `mn`"
+        )
+
     if coords_type.lower() == "cartesian":
         if dim_0 is None:
             dim_0 = [
