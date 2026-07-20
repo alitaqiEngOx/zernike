@@ -149,6 +149,7 @@ def plot_aberration(
             "provide either `j` or `mn`"
         )
 
+    # define coordinates
     if coords_type.lower() == "cartesian":
         if dim_0 is None:
             dim_0 = [
@@ -188,6 +189,7 @@ def plot_aberration(
         dim_1[0] = max(dim_1[0], 0.)
         dim_1[1] = min(dim_1[1], 2. * np.pi)
 
+    # define and plot aberration
     z = Aberration(
         j,
         np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
