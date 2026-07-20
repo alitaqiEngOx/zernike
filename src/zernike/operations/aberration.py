@@ -9,7 +9,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from zernike.utils.conversions import (
-    cartesian_to_polar, j_to_mn
+    cartesian_to_polar, j_to_mn, mn_to_j
 )
 
 
@@ -209,3 +209,22 @@ class Aberration:
 
         plt.colorbar(c)
         plt.show()
+
+
+    @classmethod
+    def via_mn(
+        cls, mn: tuple[int],
+        dim_0_array: NDArray,
+        dim_1_array: NDArray,
+        coords_type: str="polar",
+        data: NDArray | None=None
+    ):
+        """
+        """
+        m, n = mn
+        j = mn_to_j(m, n)
+
+        return cls(
+            j, dim_0_array, dim_1_array,
+            coords_type, data
+        )
