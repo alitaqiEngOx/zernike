@@ -183,7 +183,9 @@ class Aberration:
         # polar frame
         if self.coords_type.lower() == "polar":
             plt.subplot(projection="polar")
-            plt.title(f"j = {self.j}")
+            plt.title(
+                f"j={self.j}; mn=({self.m}; {self.n}) - polar"
+            )
 
             c = plt.pcolormesh(
                 dim_1_meshed, dim_0_meshed, self.data, 
@@ -194,7 +196,9 @@ class Aberration:
         elif self.coords_type.lower() == "cartesian":
             ax = plt.subplot()
             ax.set_aspect("equal")
-            plt.title(f"j = {self.j} - Cartesian")
+            plt.title(
+                f"j={self.j}; mn=({self.m}; {self.n}) - cartesian"
+            )
 
             c = plt.pcolormesh(
                 dim_0_meshed, dim_1_meshed, self.data, 
