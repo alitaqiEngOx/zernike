@@ -132,6 +132,9 @@ def plot_aberration(
 
     coords_type: str (optional)
         `polar` or `cartesian`.
+
+    basis: str (optional)
+        `complex` or `real`.
     """
     if coords_type.lower() == "cartesian":
         if dim_0 is None:
