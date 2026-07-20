@@ -15,7 +15,8 @@ def main() -> int:
 
     plot_aberration(
         j=args.j, dim_0=args.dim_0, dim_1=args.dim_1,
-        coords_type=args.coords_type
+        coords_type=args.coords_type,
+        basis=args.basis
     )
 
     return 0

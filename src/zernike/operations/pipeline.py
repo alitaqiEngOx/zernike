@@ -112,7 +112,8 @@ def plot_aberration(
         *, j: int,
         dim_0: list[float] | None=None,
         dim_1: list[float] | None=None,
-        coords_type: str="polar"
+        coords_type: str="polar",
+        basis: str="real"
 ) -> None:
     """
     Principal function in the pipeline executing
