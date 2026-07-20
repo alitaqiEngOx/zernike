@@ -72,7 +72,8 @@ def parse_args() -> argparse.Namespace:
         "--coords_type",
         type=str,
         default="polar",
-        help="`polar` or `cartesian`"
+        choices=["cartesian", "polar"],
+        help="`cartesian` or `polar`"
     )
     parser.add_argument(
         "--dim_0",
