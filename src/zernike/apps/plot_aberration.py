@@ -27,6 +27,10 @@ def parse_args() -> argparse.Namespace:
 
     cmd Arguments
     -------------
+    --basis (optional): str
+        `complex` or `real`.
+        (defaults to `real`).
+
     --coords_type (optional): str
         `polar` or `cartesian`.
         (defaults to `polar`).
@@ -58,37 +62,44 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--basis",
+        type=str,
+        default="real",
+        choices=["complex", "real"],
+        help="Plot basis: `complex` or `real`"
+    )
+    parser.add_argument(
         "--coords_type",
         type=str,
         default="polar",
-        help="`polar` or `cartesian`",
+        help="`polar` or `cartesian`"
     )
     parser.add_argument(
         "--dim_0",
         type=float,
         nargs=3,
         default=None,
-        help="minimum, maximum and step in dimension 0",
+        help="minimum, maximum and step in dimension 0"
     )
     parser.add_argument(
         "--dim_1",
         type=float,
         nargs=3,
         default=None,
-        help="minimum, maximum and step in dimension 1",
+        help="minimum, maximum and step in dimension 1"
     )
     parser.add_argument(
         '--j',
         type=int,
         default=None,
-        help="Zernike polynomial via `j`",
+        help="Zernike polynomial via `j`"
     )
     parser.add_argument(
         '--mn',
         type=int,
         nargs=2,
         default=None,
-        help="Zernike polynomial via `m` and `n`",
+        help="Zernike polynomial via `m` and `n`"
     )
 
     return parser.parse_args()
