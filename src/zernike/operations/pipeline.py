@@ -195,7 +195,7 @@ def plot_aberration(
             j,
             np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
             np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
-            coords_type=coords_type
+            coords_type, basis
         )
 
     else:
@@ -203,7 +203,7 @@ def plot_aberration(
             mn,
             np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
             np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
-            coords_type=coords_type
+            coords_type, basis
         )
 
     z.show()

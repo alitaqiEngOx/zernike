@@ -30,6 +30,9 @@ class Aberration:
     coords_type: str="polar"
     """ """
 
+    basis: str="real"
+    """ """
+
     data: NDArray | None=None
     """ """
 
@@ -221,6 +224,7 @@ class Aberration:
         dim_0_array: NDArray,
         dim_1_array: NDArray,
         coords_type: str="polar",
+        basis: str="real",
         data: NDArray | None=None
     ):
         """
@@ -230,5 +234,5 @@ class Aberration:
 
         return cls(
             j, dim_0_array, dim_1_array,
-            coords_type, data
+            coords_type, basis, data
         )
