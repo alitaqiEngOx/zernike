@@ -190,11 +190,20 @@ def plot_aberration(
         dim_1[1] = min(dim_1[1], 2. * np.pi)
 
     # define and plot aberration
-    z = Aberration(
-        j,
-        np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
-        np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
-        coords_type=coords_type
-    )
+    if j:
+        z = Aberration(
+            j,
+            np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
+            np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+            coords_type=coords_type
+        )
+
+    else:
+        z = Aberration.via_mn(
+            mn,
+            np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
+            np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+            coords_type=coords_type
+        )
 
     z.show()
