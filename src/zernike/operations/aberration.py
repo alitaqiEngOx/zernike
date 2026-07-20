@@ -27,10 +27,10 @@ class Aberration:
     dim_1_array: NDArray
     """ """
 
-    coords_type: str = "polar"
+    coords_type: str="polar"
     """ """
 
-    data: NDArray | None = None
+    data: NDArray | None=None
     """ """
 
 
