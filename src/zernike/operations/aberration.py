@@ -154,24 +154,28 @@ class Aberration:
                 self.dim_1_array.shape[0], self.dim_0_array.shape[0]
             )
 
-        n = self.n
-        m = self.m
-        R = self.R(r_meshed)
-
-        if m == 0:
-            self.data = np.sqrt(self.n + 1.) * R
-
-        elif m > 0:
-            self.data = (
-                np.sqrt(2. * (n + 1.)) * R *
-                np.cos(abs(m) * theta_meshed)
-            )
+        if self.basis == "complex":
+            pass
 
         else:
-            self.data = (
-                np.sqrt(2. * (n + 1.)) * R *
-                np.sin(abs(m) * theta_meshed)
-            )
+            n = self.n
+            m = self.m
+            R = self.R(r_meshed)
+
+            if m == 0:
+                self.data = np.sqrt(self.n + 1.) * R
+
+            elif m > 0:
+                self.data = (
+                    np.sqrt(2. * (n + 1.)) * R *
+                    np.cos(abs(m) * theta_meshed)
+                )
+
+            else:
+                self.data = (
+                    np.sqrt(2. * (n + 1.)) * R *
+                    np.sin(abs(m) * theta_meshed)
+                )
 
 
     def show(self) -> None:
