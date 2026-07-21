@@ -154,9 +154,16 @@ class Aberration:
                 self.dim_1_array.shape[0], self.dim_0_array.shape[0]
             )
 
+        # define `m`, `n` & `R`
+        n = self.n
+        m = self.m
+        R = self.R(r_meshed)
+
+        # if `basis` is `complex`
         if self.basis == "complex":
             pass
 
+        # if `basis` is `real`
         else:
             n = self.n
             m = self.m
