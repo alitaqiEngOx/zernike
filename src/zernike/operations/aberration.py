@@ -43,7 +43,16 @@ class Aberration:
         if self.j < 1:
             raise ValueError(
                 f"`j` must be >= 1; got j={self.j}"
-            ) 
+            )
+        
+        if (
+            (self.basis.lower() is not "complex") and
+            (self.basis.lower() is not "real")
+        ):
+            raise ValueError(
+                "`basis` must either be `real` or `complex`; "
+                f"got {self.basis}"
+            )
 
 
     @property
@@ -160,8 +169,11 @@ class Aberration:
         R = self.R(r_meshed)
 
         # if `basis` is `complex`
-        if self.basis == "complex":
-            pass
+        if self.basis.lower() == "complex":
+            self.data = (
+                np.sqrt(n + 1.) * R *
+                np.exp(1j * m * theta_meshed)
+            )
 
         # if `basis` is `real`
         else:
