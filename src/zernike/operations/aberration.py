@@ -47,8 +47,17 @@ class Aberration:
             )
 
         if (
-            (self.basis.lower() != "complex") and
-            (self.basis.lower() != "real")
+            self.coords_type.lower() not in
+            ["cartesian", "polar"]
+        ):
+            raise ValueError(
+                "unsupported coordinate type "
+                f"{self.coords_type!r}"
+            )
+
+        if (
+            self.basis.lower() not in
+            ["complex", "real"]
         ):
             raise ValueError(
                 "`basis` must either be `real` or `complex`; "
@@ -199,7 +208,6 @@ class Aberration:
         """
         def figure(
                 data: NDArray, *,
-                projection: str | None=None,
                 tag: str | None=None,
                 vmin: float | None=None,
                 vmax: float | None=None,
@@ -207,35 +215,37 @@ class Aberration:
         ) -> None:
             """
             """
-            plt.figure(figsize=(12, 12))
-            plt.subplot(
-                projection=(
-                    f"{projection}" if projection is not None
-                    else projection
+            fig = plt.figure(figsize=(12, 12))
+            
+            # polar frame
+            if self.coords_type.lower() == "polar":
+                ax = fig.add_subplot(projection="polar")
+
+                c = ax.pcolormesh(
+                    dim_1_meshed, dim_0_meshed, data,
+                    shading="auto",
+                    cmap=cmap, vmin=vmin, vmax=vmax
                 )
-            )
 
-            ax = plt.subplot()
-            ax.set_aspect("equal")
+            # cartesian frame
+            elif self.coords_type.lower() == "cartesian":
+                ax = fig.add_subplot()
+                ax.set_aspect("equal")
 
-            title = f"j={self.j}; mn=({self.m}; {self.n})"
-            title += (
-                f" - {projection}" if projection 
-                else " - cartesian"
-            )
+                c = ax.pcolormesh(
+                    dim_0_meshed, dim_1_meshed, data,
+                    shading="auto",
+                    cmap=cmap, vmin=vmin, vmax=vmax
+                )
 
-            if tag:
+            title = f"j={self.j}; mn=({self.m}, {self.n})"
+            title += f" - {self.coords_type.lower()}"
+            if tag is not None:
                 title += f" - {tag}"
 
-            plt.title(title)
+            ax.set_title(title)
 
-            c = plt.pcolormesh(
-                dim_1_meshed, dim_0_meshed, data,
-                shading="auto", cmap=cmap,
-                vmin=vmin, vmax=vmax
-            )
-
-            plt.colorbar(c)
+            fig.colorbar(c, ax=ax)
             plt.show()
 
         # compute `self.data`
@@ -247,34 +257,18 @@ class Aberration:
         if self.basis == "complex":
             # plot magnitude
             figure(
-                np.abs(self.data),
-                projection=(
-                    None if self.coords_type == "cartesian"
-                    else self.coords_type
-                ),
-                tag="magnitude"
+                np.abs(self.data), tag="magnitude"
             )
 
             # plot phase
             figure(
-                np.angle(self.data),
-                projection=(
-                    None if self.coords_type == "cartesian"
-                    else self.coords_type
-                ),
-                tag="phase",
+                np.angle(self.data), tag="phase",
                 cmap="twilight",
                 vmin=-np.pi, vmax=np.pi
             )
 
         else:
-            figure(
-                self.data,
-                projection=(
-                    None if self.coords_type == "cartesian"
-                    else self.coords_type
-                ),
-            )
+            figure(self.data)
             
             
             
