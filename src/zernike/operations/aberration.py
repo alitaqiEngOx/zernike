@@ -204,9 +204,17 @@ class Aberration:
             """
             """
             plt.figure(figsize=(15, 15))
-            plt.subplot(projection=f"{projection}")
+            plt.subplot(
+                projection=(
+                    f"{projection}" if projection is not None
+                    else projection
+                )
+            )
 
-            title = f"j={self.j}; mn=({self.m}; {self.n}"
+            ax = plt.subplot()
+            ax.set_aspect("equal")
+
+            title = f"j={self.j}; mn=({self.m}; {self.n})"
 
             title += (
                 f" - {projection}" if projection 
