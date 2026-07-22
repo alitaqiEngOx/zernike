@@ -177,10 +177,6 @@ class Aberration:
 
         # if `basis` is `real`
         else:
-            n = self.n
-            m = self.m
-            R = self.R(r_meshed)
-
             if m == 0:
                 self.data = np.sqrt(self.n + 1.) * R
 
