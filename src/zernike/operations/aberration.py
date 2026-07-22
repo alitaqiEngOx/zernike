@@ -233,8 +233,17 @@ class Aberration:
         dim_0_meshed, dim_1_meshed = self.meshed_arrays
 
         if self.basis == "complex":
-            for part in ["magnitude", "phase"]:
-                pass
+            figure(
+                np.abs(self.data),
+                projection=self.coords_type,
+                tag="magnitude"
+            )
+
+            figure(
+                np.angle(self.data),
+                projection=self.coords_type,
+                tag="phase"
+            )
 
         else:
             pass
