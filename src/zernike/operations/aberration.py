@@ -196,45 +196,105 @@ class Aberration:
     def show(self) -> None:
         """
         """
+        def figure(
+                data: NDArray, *,
+                projection: str | None=None,
+                tag: str | None=None
+        ) -> None:
+            """
+            """
+            plt.figure(figsize=(15, 15))
+            plt.subplot(projection=f"{projection}")
+
+            title = f"j={self.j}; mn=({self.m}; {self.n}"
+
+            title += (
+                f" - {projection}" if projection 
+                else " - cartesian"
+            )
+
+            if tag:
+                title += f" - {tag}"
+
+            plt.title(title)
+
+            c = plt.pcolormesh(
+                dim_1_meshed, dim_0_meshed, data, 
+                shading="auto", cmap="hot_r"
+            )
+
+            plt.colorbar(c)
+            plt.show()
+
+        # compute `self.data`
         if self.data is None:
             self.compute()
 
         dim_0_meshed, dim_1_meshed = self.meshed_arrays
-        plt.figure(figsize=(15, 15))
+
+        if self.basis == "complex":
+            for part in ["magnitude", "phase"]:
+                pass
+
+        else:
+            pass
+            
+            
+            
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        #plt.figure(figsize=(15, 15))
 
         # polar frame
-        if self.coords_type.lower() == "polar":
-            plt.subplot(projection="polar")
-            plt.title(
-                f"j={self.j}; mn=({self.m}; {self.n}) - polar"
-            )
+        #if self.coords_type.lower() == "polar":
+        #    plt.subplot(projection="polar")
+        #    plt.title(
+        #        f"j={self.j}; mn=({self.m}; {self.n}) - polar"
+        #    )
 
-            c = plt.pcolormesh(
-                dim_1_meshed, dim_0_meshed, self.data, 
-                shading="auto", cmap="hot_r"
-            )
+        #    c = plt.pcolormesh(
+        #        dim_1_meshed, dim_0_meshed, self.data, 
+        #        shading="auto", cmap="hot_r"
+        #    )
 
         # cartesian frame
-        elif self.coords_type.lower() == "cartesian":
-            ax = plt.subplot()
-            ax.set_aspect("equal")
-            plt.title(
-                f"j={self.j}; mn=({self.m}; {self.n}) - cartesian"
-            )
+        #elif self.coords_type.lower() == "cartesian":
+        #    ax = plt.subplot()
+        #    ax.set_aspect("equal")
+        #    plt.title(
+        #        f"j={self.j}; mn=({self.m}; {self.n}) - cartesian"
+        #    )
 
-            c = plt.pcolormesh(
-                dim_0_meshed, dim_1_meshed, self.data, 
-                shading="auto", cmap="hot_r"
-            )
+        #    c = plt.pcolormesh(
+        #        dim_0_meshed, dim_1_meshed, self.data, 
+        #        shading="auto", cmap="hot_r"
+        #    )
 
         # unsupported frames
-        else:
-            raise ValueError(
-                f"unsupported coordinate type '{self.coords_type}'"
-            )
+        #else:
+        #    raise ValueError(
+        #        f"unsupported coordinate type '{self.coords_type}'"
+        #    )
 
-        plt.colorbar(c)
-        plt.show()
+        #plt.colorbar(c)
+        #plt.show()
 
 
     @classmethod
