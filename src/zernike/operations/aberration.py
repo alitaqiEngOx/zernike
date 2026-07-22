@@ -233,12 +233,14 @@ class Aberration:
         dim_0_meshed, dim_1_meshed = self.meshed_arrays
 
         if self.basis == "complex":
+            # plot magnitude
             figure(
                 np.abs(self.data),
                 projection=self.coords_type,
                 tag="magnitude"
             )
 
+            # plot phase
             figure(
                 np.angle(self.data),
                 projection=self.coords_type,
