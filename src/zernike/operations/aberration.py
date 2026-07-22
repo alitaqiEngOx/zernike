@@ -4,6 +4,7 @@ licensing script of this repository. """
 import math
 from dataclasses import dataclass
 
+from matplotlib.colors import Colormap
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
@@ -199,7 +200,10 @@ class Aberration:
         def figure(
                 data: NDArray, *,
                 projection: str | None=None,
-                tag: str | None=None
+                tag: str | None=None,
+                vmin: float | None=None,
+                vmax: float | None=None,
+                cmap: str | Colormap | None="hot_r"
         ) -> None:
             """
             """
@@ -215,7 +219,6 @@ class Aberration:
             ax.set_aspect("equal")
 
             title = f"j={self.j}; mn=({self.m}; {self.n})"
-
             title += (
                 f" - {projection}" if projection 
                 else " - cartesian"
@@ -227,8 +230,9 @@ class Aberration:
             plt.title(title)
 
             c = plt.pcolormesh(
-                dim_1_meshed, dim_0_meshed, data, 
-                shading="auto", cmap="hot_r"
+                dim_1_meshed, dim_0_meshed, data,
+                shading="auto", cmap="hot_r",
+                vmin=vmin, vmax=vmax
             )
 
             plt.colorbar(c)
@@ -258,7 +262,9 @@ class Aberration:
                     None if self.coords_type == "cartesian"
                     else self.coords_type
                 ),
-                tag="phase"
+                tag="phase",
+                cmap="twilight",
+                vmin=-np.pi, vmax=np.pi
             )
 
         else:
