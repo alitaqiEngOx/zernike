@@ -203,7 +203,7 @@ class Aberration:
         ) -> None:
             """
             """
-            plt.figure(figsize=(15, 15))
+            plt.figure(figsize=(12, 12))
             plt.subplot(
                 projection=(
                     f"{projection}" if projection is not None
