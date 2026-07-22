@@ -44,10 +44,10 @@ class Aberration:
             raise ValueError(
                 f"`j` must be >= 1; got j={self.j}"
             )
-        
+
         if (
-            (self.basis.lower() is not "complex") and
-            (self.basis.lower() is not "real")
+            (self.basis.lower() != "complex") and
+            (self.basis.lower() != "real")
         ):
             raise ValueError(
                 "`basis` must either be `real` or `complex`; "
