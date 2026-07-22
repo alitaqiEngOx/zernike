@@ -236,19 +236,31 @@ class Aberration:
             # plot magnitude
             figure(
                 np.abs(self.data),
-                projection=self.coords_type,
+                projection=(
+                    None if self.coords_type == "cartesian"
+                    else self.coords_type
+                ),
                 tag="magnitude"
             )
 
             # plot phase
             figure(
                 np.angle(self.data),
-                projection=self.coords_type,
+                projection=(
+                    None if self.coords_type == "cartesian"
+                    else self.coords_type
+                ),
                 tag="phase"
             )
 
         else:
-            pass
+            figure(
+                self.data,
+                projection=(
+                    None if self.coords_type == "cartesian"
+                    else self.coords_type
+                ),
+            )
             
             
             
