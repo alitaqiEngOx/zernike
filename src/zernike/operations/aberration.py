@@ -269,63 +269,6 @@ class Aberration:
 
         else:
             figure(self.data)
-            
-            
-            
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        #plt.figure(figsize=(15, 15))
-
-        # polar frame
-        #if self.coords_type.lower() == "polar":
-        #    plt.subplot(projection="polar")
-        #    plt.title(
-        #        f"j={self.j}; mn=({self.m}; {self.n}) - polar"
-        #    )
-
-        #    c = plt.pcolormesh(
-        #        dim_1_meshed, dim_0_meshed, self.data, 
-        #        shading="auto", cmap="hot_r"
-        #    )
-
-        # cartesian frame
-        #elif self.coords_type.lower() == "cartesian":
-        #    ax = plt.subplot()
-        #    ax.set_aspect("equal")
-        #    plt.title(
-        #        f"j={self.j}; mn=({self.m}; {self.n}) - cartesian"
-        #    )
-
-        #    c = plt.pcolormesh(
-        #        dim_0_meshed, dim_1_meshed, self.data, 
-        #        shading="auto", cmap="hot_r"
-        #    )
-
-        # unsupported frames
-        #else:
-        #    raise ValueError(
-        #        f"unsupported coordinate type '{self.coords_type}'"
-        #    )
-
-        #plt.colorbar(c)
-        #plt.show()
 
 
     @classmethod
