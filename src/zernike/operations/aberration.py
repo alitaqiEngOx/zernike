@@ -231,7 +231,7 @@ class Aberration:
 
             c = plt.pcolormesh(
                 dim_1_meshed, dim_0_meshed, data,
-                shading="auto", cmap="hot_r",
+                shading="auto", cmap=cmap,
                 vmin=vmin, vmax=vmax
             )
 
