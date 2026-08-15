@@ -3,23 +3,74 @@ licensing script of this repository. """
 
 import argparse
 import sys
+import time
 from pathlib import Path
 
 from zernike.operations.pipeline import kernel_from_npz
+from zernike.utils import log_handler
 
 
 def main() -> int:
     """
     """
-    args = parse_args()
+    # start timer
+    start_time = time.time()
 
-    kernel_from_npz(
-        Path(args.path), show_info=args.show_info,
-        key=args.key, index=args.index,
-        save_as=Path(args.save_as)
+    # activate logger
+    main_logger = log_handler.enter_pipeline("extract")
+
+    # customise runtime warning logs
+    log_handler.customise_runtime_warnings(
+        logger=main_logger
     )
 
-    return 0
+    try:
+        # ----------------------------------------
+        # 1. PARSE CLI ARGUMENTS
+        # ----------------------------------------
+        try:
+            args = parse_args()
+
+        # parser raises `SystemExit(0)` for `--help`
+        except SystemExit as exc:
+            if exc.code == 0:
+                log_handler.exit_pipeline(
+                    start_time=start_time
+                )
+
+                return 0
+
+            raise
+
+        # ----------------------------------------
+        # 2. PIPELINE
+        # ----------------------------------------
+        main_logger.info("Entering pipeline\n")
+
+        kernel_from_npz(
+            Path(args.path), show_info=args.show_info,
+            key=args.key, index=args.index,
+            save_as=Path(args.save_as)
+        )
+
+        # ----------------------------------------
+        # 3. SUCCESSFUL EXIT
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            success=True
+        )
+
+        return 0
+
+    except (Exception, SystemExit) as exc:
+        # ----------------------------------------
+        # 4. ERROR HANDLING
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            error=exc
+        )
 
 
 def parse_args() -> argparse.Namespace:
