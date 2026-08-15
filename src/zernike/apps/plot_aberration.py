@@ -3,27 +3,78 @@ licensing script of this repository. """
 
 import argparse
 import sys
+import time
 
 from zernike.operations.pipeline import plot_aberration
+from zernike.utils import log_handler
 
 
 def main() -> int:
     """
     Pipeline entry point.
     """
-    args = parse_args()
+    # start timer
+    start_time = time.time()
 
-    plot_aberration(
-        j=args.j, mn=(
-            tuple(args.mn) if args.mn
-            else None
-        ),
-        dim_0=args.dim_0, dim_1=args.dim_1,
-        coords_type=args.coords_type,
-        basis=args.basis
+    # activate logger
+    main_logger = log_handler.enter_pipeline("plot")
+
+    # customise runtime warning logs
+    log_handler.customise_runtime_warnings(
+        logger=main_logger
     )
 
-    return 0
+    try:
+        # ----------------------------------------
+        # 1. PARSE CLI ARGUMENTS
+        # ----------------------------------------
+        try:
+            args = parse_args()
+
+        # parser raises `SystemExit(0)` for `--help`
+        except SystemExit as exc:
+            if exc.code == 0:
+                log_handler.exit_pipeline(
+                    start_time=start_time
+                )
+
+                return 0
+
+            raise
+
+        # ----------------------------------------
+        # 2. PIPELINE
+        # ----------------------------------------
+        main_logger.info("Entering pipeline\n")
+
+        plot_aberration(
+            j=args.j, mn=(
+                tuple(args.mn) if args.mn
+                else None
+            ),
+            dim_0=args.dim_0, dim_1=args.dim_1,
+            coords_type=args.coords_type,
+            basis=args.basis
+        )
+
+        # ----------------------------------------
+        # 3. SUCCESSFUL EXIT
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            success=True
+        )
+
+        return 0
+
+    except (Exception, SystemExit) as exc:
+        # ----------------------------------------
+        # 4. ERROR HANDLING
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            error=exc
+        )
 
 
 def parse_args() -> argparse.Namespace:
