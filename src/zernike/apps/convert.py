@@ -42,18 +42,28 @@ def main() -> int:
 
             raise
 
-    except:
+        # ----------------------------------------
+        # 2. PIPELINE
+        # ----------------------------------------
+        main_logger.info("Entering pipeline\n")
+
+        convert(j=args.j, mn=args.mn)
+
+        # ----------------------------------------
+        # 3. SUCCESSFUL EXIT
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            success=True
+        )
+
+        return 0
+
+    except (Exception, SystemExit) as exc:
+        # ----------------------------------------
+        # 4. ERROR HANDLING
+        # ----------------------------------------
         pass
-
-    
-    
-    
-    
-  
-
-    convert(j=args.j, mn=args.mn)
-
-    return 0
 
 
 def parse_args() -> argparse.Namespace:
