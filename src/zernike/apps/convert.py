@@ -63,7 +63,10 @@ def main() -> int:
         # ----------------------------------------
         # 4. ERROR HANDLING
         # ----------------------------------------
-        pass
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            error=exc
+        )
 
 
 def parse_args() -> argparse.Namespace:
