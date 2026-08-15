@@ -3,23 +3,74 @@ licensing script of this repository. """
 
 import argparse
 import sys
+import time
 from pathlib import Path
 
 from zernike.operations.pipeline import estimate_beam
+from zernike.utils import log_handler
 
 
 def main() -> int:
     """
     Pipeline entry point.
     """
-    args = parse_args()
+    # start timer
+    start_time = time.time()
 
-    estimate_beam(
-        Path(args.sampled_data_path),
-        j_list=args.j, n_list=args.n
+    # activate logger
+    main_logger = log_handler.enter_pipeline("estimate")
+
+    # customise runtime warning logs
+    log_handler.customise_runtime_warnings(
+        logger=main_logger
     )
 
-    return 0
+    try:
+        # ----------------------------------------
+        # 1. PARSE CLI ARGUMENTS
+        # ----------------------------------------
+        try:
+            args = parse_args()
+
+        # parser raises `SystemExit(0)` for `--help`
+        except SystemExit as exc:
+            if exc.code == 0:
+                log_handler.exit_pipeline(
+                    start_time=start_time
+                )
+
+                return 0
+
+            raise
+
+        # ----------------------------------------
+        # 2. PIPELINE
+        # ----------------------------------------
+        main_logger.info("Entering pipeline\n")
+
+        estimate_beam(
+            Path(args.sampled_data_path),
+            j_list=args.j, n_list=args.n
+        )
+
+        # ----------------------------------------
+        # 3. SUCCESSFUL EXIT
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            success=True
+        )
+
+        return 0
+
+    except (Exception, SystemExit) as exc:
+        # ----------------------------------------
+        # 4. ERROR HANDLING
+        # ----------------------------------------
+        log_handler.exit_pipeline(
+            start_time=start_time, logger=main_logger,
+            error=exc
+        )
 
 
 def parse_args() -> argparse.Namespace:
