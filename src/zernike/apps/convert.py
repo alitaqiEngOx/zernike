@@ -19,7 +19,37 @@ def main() -> int:
     # activate logger
     main_logger = log_handler.enter_pipeline("convert")
 
-    args = parse_args()
+    # customise runtime warning logs
+    log_handler.customise_runtime_warnings(
+        logger=main_logger
+    )
+
+    try:
+        # ----------------------------------------
+        # 1. PARSE CLI ARGUMENTS
+        # ----------------------------------------
+        try:
+            args = parse_args()
+
+        # parser raises `SystemExit(0)` for `--help`
+        except SystemExit as exc:
+            if exc.code == 0:
+                log_handler.exit_pipeline(
+                    start_time=start_time
+                )
+
+                return 0
+
+            raise
+
+    except:
+        pass
+
+    
+    
+    
+    
+  
 
     convert(j=args.j, mn=args.mn)
 
