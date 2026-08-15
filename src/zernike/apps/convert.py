@@ -3,14 +3,22 @@ licensing script of this repository. """
 
 import argparse
 import sys
+import time
 
 from zernike.operations.pipeline import convert
+from zernike.utils import log_handler
 
 
 def main() -> int:
     """
     Pipeline entry point.
     """
+    # start timer
+    start_time = time.time()
+
+    # activate logger
+    main_logger = log_handler.enter_pipeline()
+
     args = parse_args()
 
     convert(j=args.j, mn=args.mn)
