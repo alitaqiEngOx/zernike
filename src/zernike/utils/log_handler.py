@@ -62,6 +62,67 @@ def create(
     return logger
 
 
+def customise_runtime_warnings(
+        *, logger: logging.Logger
+) -> None:
+    """
+    """
+    global _default_warning_logger
+    _default_warning_logger = logger
+
+    def show_warning(
+            message, category, filename, lineno, file=None,
+            line=None
+    ) -> None:
+        """
+        """
+        logger.warning("▼▼▼ Runtime warning ▼▼▼\n")
+
+        warning_logger = create(
+            "warning", header_footer=True
+        )
+
+        warning_logger.warning(
+            f"{category.__name__}: {message}\n"
+        )
+
+        warning_logger.warning("────── WARNING LOC ──────\n")
+        warning_logger.warning(
+            f'File "{filename}", line {lineno}\n'
+        )
+
+        if line is not None:
+            logger.warning(f"    {line.strip()}\n")
+
+        warning_logger.warning("────── END WARNING ──────\n")
+
+    warnings.showwarning = show_warning
+
+    # Show RuntimeWarnings whenever they occur
+    warnings.simplefilter("always", RuntimeWarning)
+
+
+def enter_pipeline(name: str) -> logging.Logger:
+    """
+    """
+    header_logger = create("header", header_footer=True)
+
+    header_logger.info(
+        "\n===== BioWave-Extract =====\n"
+    )
+
+    header_logger.info(
+        " * Author: A. Taqi;"
+        " alitaqi94.developer@gmail.com\n"
+    )
+
+    header_logger.info(" * All Rights Reserved\n")
+
+    logger = create(name)
+
+    return logger
+
+
 _warning_logger: contextvars.ContextVar[
     logging.Logger | None
 ] = contextvars.ContextVar(
