@@ -20,5 +20,5 @@ kernel-from-npz = "zernike.apps.kernel_from_npz:main"
 [tool.poetry.dependencies]
 matplotlib = "^3.9.2"
 numpy = "^2.1.2"
-python = ">=3.10, <3.12"
+python = ">=3.11, <3.13"
 scipy = "^1.14.1"
