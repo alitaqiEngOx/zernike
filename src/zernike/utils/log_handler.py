@@ -108,7 +108,7 @@ def enter_pipeline(name: str) -> logging.Logger:
     header_logger = create("header", header_footer=True)
 
     header_logger.info(
-        "\n===== BioWave-Extract =====\n"
+        "\n===== ZERNIKE =====\n"
     )
 
     header_logger.info(

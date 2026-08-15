@@ -17,7 +17,7 @@ def main() -> int:
     start_time = time.time()
 
     # activate logger
-    main_logger = log_handler.enter_pipeline()
+    main_logger = log_handler.enter_pipeline("convert")
 
     args = parse_args()
 
