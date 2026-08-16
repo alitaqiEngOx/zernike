@@ -4,6 +4,7 @@ licensing script of this repository. """
 import argparse
 import sys
 import time
+from pathlib import Path
 
 from zernike.operations.pipeline import plot_aberration
 from zernike.utils import log_handler
@@ -47,15 +48,15 @@ def main() -> int:
         # ----------------------------------------
         main_logger.info("Entering pipeline\n")
 
-        plot_aberration(
-            j=args.j, mn=(
-                tuple(args.mn) if args.mn
-                else None
-            ),
-            dim_0=args.dim_0, dim_1=args.dim_1,
-            coords_type=args.coords_type,
-            basis=args.basis
-        )
+        #plot_aberration(
+        #    j=args.j, mn=(
+        #        tuple(args.mn) if args.mn
+        #        else None
+        #    ),
+        #    coords_type=args.coords_type,
+        #    dim_0=args.dim_0, dim_1=args.dim_1,
+        #    basis=args.basis
+        #)
 
         # ----------------------------------------
         # 3. SUCCESSFUL EXIT
@@ -83,29 +84,8 @@ def parse_args() -> argparse.Namespace:
 
     cmd Arguments
     -------------
-    --basis (optional): str
-        `complex` or `real`.
-        (defaults to `real`).
-
-    --coords_type (optional): str
-        `polar` or `cartesian`.
-        (defaults to `polar`).
-
-    --dim_0 (optional): float
-        minimum, maximum, and step in dimension 0.
-        (defaults to `None`).
-
-    --dim_1 (optional): float
-        minimum, maximum, and step in dimension 1.
-        (defaults to `None`).
-
-    --j: (optional) int
-        order of the Zernike polynomial via `j`.
-        (defaults to `None`).
-
-    --mn: (optional) int
-        order of the Zernike polynomial via `m` and `n`.
-        (defaults to `None`).
+    --config (optional): str
+        path to your `.yml` configuration file.
 
     Returns
     -------
@@ -118,46 +98,56 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--basis",
+        "--config",
         type=str,
-        default="real",
-        choices=["complex", "real"],
-        help="Plot basis: `complex` or `real`"
+        default=str(
+            Path(__file__).parents[3] /
+            "data" / "plot_default.yml"
+        ),
+        help="path to your `.yml` configuration file"
     )
-    parser.add_argument(
-        "--coords_type",
-        type=str,
-        default="polar",
-        choices=["cartesian", "polar"],
-        help="`cartesian` or `polar`"
-    )
-    parser.add_argument(
-        "--dim_0",
-        type=float,
-        nargs=3,
-        default=None,
-        help="minimum, maximum and step in dimension 0"
-    )
-    parser.add_argument(
-        "--dim_1",
-        type=float,
-        nargs=3,
-        default=None,
-        help="minimum, maximum and step in dimension 1"
-    )
-    parser.add_argument(
-        '--j',
-        type=int,
-        default=None,
-        help="Zernike polynomial via `j`"
-    )
-    parser.add_argument(
-        '--mn',
-        type=int,
-        nargs=2,
-        default=None,
-        help="Zernike polynomial via `m` and `n`"
-    )
+
+    #parser.add_argument(
+    #    "--basis",
+    #    type=str,
+    #    default="real",
+    #    choices=["complex", "real"],
+    #    help="Plot basis: `complex` or `real`"
+    #)
+    #parser.add_argument(
+    #    "--coords_type",
+    #    type=str,
+    #    default="polar",
+    #    choices=["cartesian", "polar"],
+    #    help="`cartesian` or `polar`"
+    #)
+    #parser.add_argument(
+    #    "--dim_0",
+    #    type=float,
+    #    nargs=3,
+    #    default=None,
+    #    help="minimum, maximum and step in dimension 0"
+    #)
+    #parser.add_argument(
+    #    "--dim_1",
+    #    type=float,
+    #    nargs=3,
+    #    default=None,
+    #    help="minimum, maximum and step in dimension 1"
+    #)
+    #parser.add_argument(
+    #    '--j',
+    #    type=int,
+    #    default=None,
+    #    help="Zernike polynomial via `j`"
+    #)
+    #parser.add_argument(
+    #    '--mn',
+    #    type=int,
+    #    nargs=2,
+    #    default=None,
+    #    help="Zernike polynomial via `m` and `n`"
+    #)
 
     return parser.parse_args()
 

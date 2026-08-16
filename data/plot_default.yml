@@ -1,0 +1,17 @@
+# YAML file for input plotting data
+
+plot-0:
+  j: 13
+  mn: null
+  basis: complex
+  coords_type: polar
+  dim_0: null
+  dim_1: null
+
+plot-0:
+  j: null
+  mn: -6 5
+  basis: complex
+  coords_type: cartesian
+  dim_0: null
+  dim_1: null
