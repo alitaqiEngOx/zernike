@@ -115,105 +115,98 @@ def kernel_from_npz(
     )
 
 
-def plot_aberration(
-        *, j: int | None=None,
-        mn: tuple[int] | None=None,
-        dim_0: list[float] | None=None,
-        dim_1: list[float] | None=None,
-        coords_type: str="polar",
-        basis: str="real"
-) -> None:
+def plot_aberration(config: Path) -> None:
     """
-    Principal function in the pipeline executing
-    the desired functionality.
+    Principal aberration plotting function.
 
     Arguments
     ---------
-    j: int (optional)
-        order of Zernike polynomial via `j`.
-
-    mn: tuple[int] (optional)
-        order of Zernike polynomial via `m` & `n`.
-
-    dim_0: list[float] (optional)
-        minimum, maximum and step in dimension 0.
-
-    dim_1: list[float] (optional)
-        minimum, maximum and step in dimension 1.
-
-    coords_type: str (optional)
-        `polar` or `cartesian`.
-
-    basis: str (optional)
-        `complex` or `real`.
+    config: pathlib.Path
+        path to the configuration file.
     """
-    # filter out incorrect entries
-    if (
-        (j is None and mn is None) or
-        (j is not None and mn is not None)
-    ):
-        raise ValueError(
-            "provide either `j` or `mn`"
-        )
+    # read `.yml`
+    config_dict = read_yaml(config)
 
-    # define coordinates
-    if coords_type.lower() == "cartesian":
-        if dim_0 is None:
-            dim_0 = [
-                -0.5 * np.sqrt(2.),
-                0.5 * np.sqrt(2.), 0.01
-            ]
+    for key, value in config_dict.items():
+        # ----------------------------------------
+        # 1. DEFINE PARAMETERS/COORDINATES
+        # ----------------------------------------
+        j = value["j"]
+        mn = value["mn"]
+        basis = value["basis"]
+        coords_type = value["coords_type"]
+        dim_0 = value["dim_0"]
+        dim_1 = value["dim_1"]
 
-        if dim_1 is None:
-            dim_1 = dim_0.copy()
-
-    elif coords_type.lower() == "polar":
-        if dim_0 is None:
-            dim_0 = [0., 1., 0.01]
-
-        if dim_1 is None:
-            dim_1 = [0., 2. * np.pi, 0.01]
-
-    else:
-        raise ValueError(
-            "`coords_type` must either be `cartesian` "
-            f"or `polar; got {coords_type}`"
-        )
-
-    for dim in [dim_0, dim_1]:
-        if dim[0] >= dim[1]:
+        # filter out unsupported entries
+        if (
+            (j is None and mn is None) or
+            (j is not None and mn is not None)
+        ):
             raise ValueError(
-                f"`dim[0] >= dim[1]` not allowed; got {dim}"
+                "provide either `j` or `mn`"
             )
 
-        if dim[2] > dim[1] - dim[0]:
+        # define coordinates
+        if coords_type.lower() == "cartesian":
+            if dim_0 is None:
+                dim_0 = [
+                    -0.5 * np.sqrt(2.),
+                    0.5 * np.sqrt(2.), 0.01
+                ]
+
+            if dim_1 is None:
+                dim_1 = dim_0.copy()
+
+        elif coords_type.lower() == "polar":
+            if dim_0 is None:
+                dim_0 = [0., 1., 0.01]
+
+            if dim_1 is None:
+                dim_1 = [0., 2. * np.pi, 0.01]
+
+        else:
             raise ValueError(
-                f"`dim[2] > dim[1] - dim[0]` not allowed; got {dim}"
+                "`coords_type` must either be `cartesian` "
+                f"or `polar; got {coords_type}`"
             )
 
-    if coords_type.lower() == "polar":
-        dim_0[0] = max(dim_0[0], 0.)
-        dim_1[0] = max(dim_1[0], 0.)
-        dim_1[1] = min(dim_1[1], 2. * np.pi)
+        for dim in [dim_0, dim_1]:
+            if dim[0] >= dim[1]:
+                raise ValueError(
+                    f"`dim[0] >= dim[1]` not allowed; got {dim}"
+                )
 
-    # define and plot aberration
-    if j:
-        z = Aberration(
-            j,
-            np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
-            np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
-            coords_type, basis
-        )
+            if dim[2] > dim[1] - dim[0]:
+                raise ValueError(
+                    f"`dim[2] > dim[1] - dim[0]` not allowed; got {dim}"
+                )
 
-    else:
-        z = Aberration.via_mn(
-            mn,
-            np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
-            np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
-            coords_type, basis
-        )
+        if coords_type.lower() == "polar":
+            dim_0[0] = max(dim_0[0], 0.)
+            dim_1[0] = max(dim_1[0], 0.)
+            dim_1[1] = min(dim_1[1], 2. * np.pi)
 
-    z.show()
+        # ----------------------------------------
+        # 2. DEFINE/PLOT ABERRATION
+        # ----------------------------------------
+        if j:
+            z = Aberration(
+                j,
+                np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
+                np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+                coords_type, basis
+            )
+
+        else:
+            z = Aberration.via_mn(
+                mn,
+                np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
+                np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+                coords_type, basis
+            )
+
+        z.show()
 
 
 def read_yaml(dir: Path) -> dict[str, Any]:
