@@ -138,6 +138,18 @@ def plot_aberration(config: Path) -> None:
         dim_0 = value["dim_0"]
         dim_1 = value["dim_1"]
 
+        
+        
+        
+        # fix mn and dims
+        
+        
+        
+        
+        
+        
+        
+        
         # filter out unsupported entries
         if (
             (j is None and mn is None) or
