@@ -1,15 +1,22 @@
 """ Licensed under the same terms as described in the main 
 licensing script of this repository. """
 
-import numpy as np
+import yaml
 from pathlib import Path
+from typing import Any
+
+import numpy as np
 
 from zernike.operations.aberration import Aberration
 from zernike.operations.kernel import Kernel
 from zernike.utils.conversions import (
     j_to_mn, mn_to_j
 )
+from zernike.utils.log_handler import create
 from zernike.utils.npz import NPZ
+
+
+LOGGER = create("pipeline")
 
 
 def convert(
@@ -207,3 +214,20 @@ def plot_aberration(
         )
 
     z.show()
+
+
+def read_yaml(dir: Path) -> dict[str, Any]:
+    """
+    """
+    LOGGER.info(f"reading `{dir.name}`")
+
+    try:
+        with open(f"{dir}", 'r') as file:
+            return yaml.safe_load(file)
+
+    except Exception:
+        LOGGER.error(
+            f"could not read file: {dir.name}\n"
+        )
+
+        raise
