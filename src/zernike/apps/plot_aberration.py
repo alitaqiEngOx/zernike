@@ -48,15 +48,7 @@ def main() -> int:
         # ----------------------------------------
         main_logger.info("Entering pipeline\n")
 
-        #plot_aberration(
-        #    j=args.j, mn=(
-        #        tuple(args.mn) if args.mn
-        #        else None
-        #    ),
-        #    coords_type=args.coords_type,
-        #    dim_0=args.dim_0, dim_1=args.dim_1,
-        #    basis=args.basis
-        #)
+        plot_aberration(Path(args.config))
 
         # ----------------------------------------
         # 3. SUCCESSFUL EXIT
