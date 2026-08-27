@@ -12,10 +12,10 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
 [tool.poetry.scripts]
-convert = "zernike.apps.convert:main"
-estimate = "zernike.apps.estimate_beam:main"
-extract = "zernike.apps.kernel_from_npz:main"
-plot = "zernike.apps.plot_aberration:main"
+zernike-convert = "zernike.apps.convert:main"
+zernike-estimate = "zernike.apps.estimate_beam:main"
+zernike-extract = "zernike.apps.kernel_from_npz:main"
+zernike-plot = "zernike.apps.plot_aberration:main"
 
 [tool.poetry.dependencies]
 matplotlib = "^3.9.2"
