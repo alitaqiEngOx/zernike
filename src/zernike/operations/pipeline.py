@@ -1,6 +1,7 @@
 """ Licensed under the same terms as described in the main 
 licensing script of this repository. """
 
+import shlex
 import yaml
 from pathlib import Path
 from typing import Any
@@ -138,28 +139,73 @@ def plot_aberration(config: Path) -> None:
         dim_0 = value["dim_0"]
         dim_1 = value["dim_1"]
 
-        
-        
-        
-        # fix mn and dims
-        
-        
-        
-        
-        
-        
-        
-        
         # filter out unsupported entries
         if (
             (j is None and mn is None) or
             (j is not None and mn is not None)
         ):
-            raise ValueError(
-                "provide either `j` or `mn`"
+            LOGGER.error(
+                "bad `{key}` definition"
             )
 
-        # define coordinates
+            raise ValueError(
+                "expected either `j` or `mn` "
+                f"under `{key}`"
+            )
+
+        # adjust `mn` type
+        if mn is not None:
+            try:
+                params = shlex.split(mn)
+
+            except:
+                LOGGER.error(
+                    "bad `mn` definition"
+                )
+
+                raise
+
+            if len(params) != 2:
+                LOGGER.error(
+                    "bad `mn` definition"
+                )
+
+                raise ValueError(
+                    "expected `mn` comprising 2 values "
+                    f"under `{key}`, got ({mn})"
+                )
+
+            mn_int = []
+
+            for param in params:
+                if not param.replace('-', '').isdigit():
+                    LOGGER.error(
+                        "bad `mn` definition"
+                    )
+
+                    raise ValueError(
+                        "expected digits for `mn` under "
+                        f"`{key}`, got ({mn})"
+                    )
+                
+                mn_int.append(int(param))
+
+            mn = mn_int
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        # define/adjust coordinates
         if coords_type.lower() == "cartesian":
             if dim_0 is None:
                 dim_0 = [
@@ -199,6 +245,29 @@ def plot_aberration(config: Path) -> None:
             dim_1[0] = max(dim_1[0], 0.)
             dim_1[1] = min(dim_1[1], 2. * np.pi)
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         # ----------------------------------------
         # 2. DEFINE/PLOT ABERRATION
         # ----------------------------------------
