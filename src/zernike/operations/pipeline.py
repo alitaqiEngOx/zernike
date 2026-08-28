@@ -255,26 +255,38 @@ def plot_aberration(config: Path) -> None:
             dim_1[0] = max(dim_1[0], 0.)
             dim_1[1] = min(dim_1[1], 2. * np.pi)
 
-        
-        
-        
-
         # ----------------------------------------
         # 3. DEFINE/PLOT ABERRATION
         # ----------------------------------------
         if j:
             z = Aberration(
                 j,
-                np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
-                np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+                np.arange(
+                    dim_0[0],
+                    dim_0[1] + dim_0[2],
+                    dim_0[2]
+                ),
+                np.arange(
+                    dim_1[0],
+                    dim_1[1] + dim_1[2],
+                    dim_1[2]
+                ),
                 coords_type, basis
             )
 
         else:
             z = Aberration.via_mn(
-                mn,
-                np.arange(dim_0[0], dim_0[1] + dim_0[2], dim_0[2]),
-                np.arange(dim_1[0], dim_1[1] + dim_1[2], dim_1[2]),
+                j,
+                np.arange(
+                    dim_0[0],
+                    dim_0[1] + dim_0[2],
+                    dim_0[2]
+                ),
+                np.arange(
+                    dim_1[0],
+                    dim_1[1] + dim_1[2],
+                    dim_1[2]
+                ),
                 coords_type, basis
             )
 
