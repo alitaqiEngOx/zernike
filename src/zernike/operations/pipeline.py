@@ -125,12 +125,57 @@ def plot_aberration(config: Path) -> None:
     config: pathlib.Path
         path to the configuration file.
     """
-    # read `.yml`
+    def adjust(arr: str, *, label: str) -> list[int]:
+        """
+        """
+        try:
+            params = shlex.split(arr)
+
+        except:
+            LOGGER.error(
+                f"bad `{label}` definition "
+                f"for `{key}`"
+            )
+
+            raise
+
+        if len(params) != 3:
+            LOGGER.error(
+                f"bad `{label}` definition for "
+                f"`{key}`"
+            )
+
+            raise ValueError(
+                f"expected `{label}` comprising 3 "
+                f"values under `{key}`, got ({arr})"
+            )
+
+        arr_int = []
+
+        for param in params:
+            if not param.replace('-', '').isdigit():
+                LOGGER.error(
+                    f"bad `{label}` definition for "
+                    f"`{key}`"
+                )
+
+                raise ValueError(
+                    "expected digits for `mn` under "
+                    f"`{key}`, got ({arr})"
+                )
+
+            arr_int.append(int(param))
+
+        return arr_int
+
+    # ----------------------------------------
+    # 1. READ `.yml` AND LOOP THROUGH ENTRIES
+    # ----------------------------------------
     config_dict = read_yaml(config)
 
     for key, value in config_dict.items():
         # ----------------------------------------
-        # 1. DEFINE PARAMETERS/COORDINATES
+        # 2. DEFINE PARAMETERS/COORDINATES
         # ----------------------------------------
         j = value["j"]
         mn = value["mn"]
@@ -153,46 +198,10 @@ def plot_aberration(config: Path) -> None:
                 f"under `{key}`"
             )
 
-        # adjust `mn` type
+        # assert/adjust dimensions
         if mn is not None:
-            try:
-                params = shlex.split(mn)
+            mn = adjust(mn, label="mn")
 
-            except:
-                LOGGER.error(
-                    f"bad `mn` definition for `{key}`"
-                )
-
-                raise
-
-            if len(params) != 2:
-                LOGGER.error(
-                    f"bad `mn` definition for `{key}`"
-                )
-
-                raise ValueError(
-                    "expected `mn` comprising 2 values "
-                    f"under `{key}`, got ({mn})"
-                )
-
-            mn_int = []
-
-            for param in params:
-                if not param.replace('-', '').isdigit():
-                    LOGGER.error(
-                        f"bad `mn` definition for {key}"
-                    )
-
-                    raise ValueError(
-                        "expected digits for `mn` under "
-                        f"`{key}`, got ({mn})"
-                    )
-
-                mn_int.append(int(param))
-
-            mn = mn_int
-
-        # define/adjust coordinates
         if coords_type.lower() == "cartesian":
             if dim_0 is None:
                 dim_0 = [
@@ -201,70 +210,26 @@ def plot_aberration(config: Path) -> None:
                 ]
 
             else:
-                try:
-                    params = shlex.split(dim_0)
+                dim_0 = adjust(dim_0, label="dim_0")
 
-                except:
-                    LOGGER.error(
-                        "bad `dim_0` definition for "
-                        f"`{key}`"
-                    )
-
-                    raise
-
-                if len(params) != 2:
-                    LOGGER.error(
-                        "bad `dim_0` definition for "
-                        f"`{key}`"
-                    )
-
-                    raise ValueError(
-                        "expected `dim_0` comprising 2 "
-                        f"values under `{key}`, got "
-                        f"({dim_0})"
-                    )
-
-                dim_0_int = []
-
-                for param in params:
-                    if not param.replace('-', '').isdigit():
-                        LOGGER.error(
-                            "bad `dim_0` definition"
-                        )
-
-                        raise ValueError(
-                            "expected digits for `dim_0` under "
-                            f"`{key}`, got ({dim_0})"
-                        )
-
-                    dim_0_int.append(int(param))
-
-                dim_0 = dim_0_int
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             if dim_1 is None:
-                dim_1 = dim_0.copy()
+                dim_1 == dim_0.copy()
+
+            else:
+                dim_1 = adjust(dim_1, label="dim_1")
 
         elif coords_type.lower() == "polar":
             if dim_0 is None:
                 dim_0 = [0., 1., 0.01]
 
+            else:
+                dim_0 = adjust(dim_0, label="dim_0")
+
             if dim_1 is None:
                 dim_1 = [0., 2. * np.pi, 0.01]
+
+            else:
+                dim_1 = adjust(dim_1, label="dim_1")
 
         else:
             raise ValueError(
@@ -272,6 +237,20 @@ def plot_aberration(config: Path) -> None:
                 f"or `polar; got {coords_type}`"
             )
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         for dim in [dim_0, dim_1]:
             if dim[0] >= dim[1]:
                 raise ValueError(
