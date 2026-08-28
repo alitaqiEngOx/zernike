@@ -237,29 +237,17 @@ def plot_aberration(config: Path) -> None:
                 f"or `polar; got {coords_type}`"
             )
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         for dim in [dim_0, dim_1]:
             if dim[0] >= dim[1]:
                 raise ValueError(
-                    f"`dim[0] >= dim[1]` not allowed; got {dim}"
+                    "`dim[0] >= dim[1]` not allowed; "
+                    f"got {dim}"
                 )
 
             if dim[2] > dim[1] - dim[0]:
                 raise ValueError(
-                    f"`dim[2] > dim[1] - dim[0]` not allowed; got {dim}"
+                    "`dim[2] > dim[1] - dim[0]` not "
+                    f"allowed; got {dim}"
                 )
 
         if coords_type.lower() == "polar":
@@ -270,28 +258,9 @@ def plot_aberration(config: Path) -> None:
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         # ----------------------------------------
-        # 2. DEFINE/PLOT ABERRATION
+        # 3. DEFINE/PLOT ABERRATION
         # ----------------------------------------
         if j:
             z = Aberration(
