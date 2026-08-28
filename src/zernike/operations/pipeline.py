@@ -160,14 +160,14 @@ def plot_aberration(config: Path) -> None:
 
             except:
                 LOGGER.error(
-                    "bad `mn` definition"
+                    f"bad `mn` definition for `{key}`"
                 )
 
                 raise
 
             if len(params) != 2:
                 LOGGER.error(
-                    "bad `mn` definition"
+                    f"bad `mn` definition for `{key}`"
                 )
 
                 raise ValueError(
@@ -180,31 +180,18 @@ def plot_aberration(config: Path) -> None:
             for param in params:
                 if not param.replace('-', '').isdigit():
                     LOGGER.error(
-                        "bad `mn` definition"
+                        f"bad `mn` definition for {key}"
                     )
 
                     raise ValueError(
                         "expected digits for `mn` under "
                         f"`{key}`, got ({mn})"
                     )
-                
+
                 mn_int.append(int(param))
 
             mn = mn_int
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         # define/adjust coordinates
         if coords_type.lower() == "cartesian":
             if dim_0 is None:
@@ -213,6 +200,62 @@ def plot_aberration(config: Path) -> None:
                     0.5 * np.sqrt(2.), 0.01
                 ]
 
+            else:
+                try:
+                    params = shlex.split(dim_0)
+
+                except:
+                    LOGGER.error(
+                        "bad `dim_0` definition for "
+                        f"`{key}`"
+                    )
+
+                    raise
+
+                if len(params) != 2:
+                    LOGGER.error(
+                        "bad `dim_0` definition for "
+                        f"`{key}`"
+                    )
+
+                    raise ValueError(
+                        "expected `dim_0` comprising 2 "
+                        f"values under `{key}`, got "
+                        f"({dim_0})"
+                    )
+
+                dim_0_int = []
+
+                for param in params:
+                    if not param.replace('-', '').isdigit():
+                        LOGGER.error(
+                            "bad `dim_0` definition"
+                        )
+
+                        raise ValueError(
+                            "expected digits for `dim_0` under "
+                            f"`{key}`, got ({dim_0})"
+                        )
+
+                    dim_0_int.append(int(param))
+
+                dim_0 = dim_0_int
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             if dim_1 is None:
                 dim_1 = dim_0.copy()
 
