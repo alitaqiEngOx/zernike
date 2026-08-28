@@ -12,6 +12,10 @@ from numpy.typing import NDArray
 from zernike.utils.conversions import (
     cartesian_to_polar, j_to_mn, mn_to_j
 )
+from zernike.utils.log_handler import create
+
+
+LOGGER = create("pipeline")
 
 
 @dataclass
@@ -42,6 +46,10 @@ class Aberration:
         """
         """
         if self.j < 1:
+            LOGGER.error(
+                f"bad `j` definition"
+            )
+
             raise ValueError(
                 f"`j` must be >= 1; got j={self.j}"
             )
