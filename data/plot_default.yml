@@ -10,7 +10,7 @@ plot-0:
 
 plot-1:
   j: null
-  mn: -6 5
+  mn: -6 8
   basis: complex
   coords_type: cartesian
   dim_0: null
