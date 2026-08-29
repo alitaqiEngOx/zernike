@@ -139,7 +139,11 @@ def plot_aberration(config: Path) -> None:
 
             raise
 
-        if len(params) != 3:
+        expected_len_params = (
+            2 if label == "mn" else 3
+        )
+
+        if len(params) != expected_len_params:
             LOGGER.error(
                 f"bad `{label}` definition for "
                 f"`{key}`"
@@ -213,7 +217,7 @@ def plot_aberration(config: Path) -> None:
                 dim_0 = adjust(dim_0, label="dim_0")
 
             if dim_1 is None:
-                dim_1 == dim_0.copy()
+                dim_1 = dim_0.copy()
 
             else:
                 dim_1 = adjust(dim_1, label="dim_1")

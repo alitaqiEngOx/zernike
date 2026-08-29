@@ -18,7 +18,7 @@ def main() -> int:
     start_time = time.time()
 
     # activate logger
-    main_logger = log_handler.enter_pipeline("plot")
+    main_logger = log_handler.enter_pipeline("main")
 
     # customise runtime warning logs
     log_handler.customise_runtime_warnings(
