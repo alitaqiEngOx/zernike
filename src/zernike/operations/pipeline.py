@@ -134,7 +134,7 @@ def plot_aberration(config: Path) -> None:
         except:
             LOGGER.error(
                 f"bad `{label}` definition "
-                f"for `{key}`"
+                f"for `{key}`\n"
             )
 
             raise
@@ -146,12 +146,13 @@ def plot_aberration(config: Path) -> None:
         if len(params) != expected_len_params:
             LOGGER.error(
                 f"bad `{label}` definition for "
-                f"`{key}`"
+                f"`{key}`\n"
             )
 
             raise ValueError(
-                f"expected `{label}` comprising 3 "
-                f"values under `{key}`, got ({arr})"
+                f"expected `{label}` comprising "
+                f"{expected_len_params} values "
+                f"under `{key}`, got ({arr})"
             )
 
         arr_int = []
@@ -160,7 +161,7 @@ def plot_aberration(config: Path) -> None:
             if not param.replace('-', '').isdigit():
                 LOGGER.error(
                     f"bad `{label}` definition for "
-                    f"`{key}`"
+                    f"`{key}`\n"
                 )
 
                 raise ValueError(
@@ -194,12 +195,12 @@ def plot_aberration(config: Path) -> None:
             (j is not None and mn is not None)
         ):
             LOGGER.error(
-                "bad `{key}` definition"
+                f"bad indexing for `{key}`\n"
             )
 
             raise ValueError(
                 "expected either `j` or `mn` "
-                f"under `{key}`"
+                f"under `{key}"
             )
 
         # assert/adjust dimensions
@@ -236,6 +237,11 @@ def plot_aberration(config: Path) -> None:
                 dim_1 = adjust(dim_1, label="dim_1")
 
         else:
+            LOGGER.error(
+                f"bad `coords_type` for `{key}`: "
+                f"{coords_type}\n"
+            )
+
             raise ValueError(
                 "`coords_type` must either be `cartesian` "
                 f"or `polar; got {coords_type}`"
@@ -243,12 +249,20 @@ def plot_aberration(config: Path) -> None:
 
         for dim in [dim_0, dim_1]:
             if dim[0] >= dim[1]:
+                LOGGER.error(
+                    f"bad dimensions for `{key}`\n"
+                )
+
                 raise ValueError(
                     "`dim[0] >= dim[1]` not allowed; "
                     f"got {dim}"
                 )
 
             if dim[2] > dim[1] - dim[0]:
+                LOGGER.error(
+                    f"bad dimensions for `{key}`\n"
+                )
+
                 raise ValueError(
                     "`dim[2] > dim[1] - dim[0]` not "
                     f"allowed; got {dim}"
