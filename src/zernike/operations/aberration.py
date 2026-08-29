@@ -15,7 +15,7 @@ from zernike.utils.conversions import (
 from zernike.utils.log_handler import create
 
 
-LOGGER = create("pipeline")
+LOGGER = create("aberration")
 
 
 @dataclass
@@ -47,7 +47,7 @@ class Aberration:
         """
         if self.j < 1:
             LOGGER.error(
-                f"bad `j` definition"
+                f"bad `j` definition\n"
             )
 
             raise ValueError(
@@ -58,6 +58,10 @@ class Aberration:
             self.coords_type.lower() not in
             ["cartesian", "polar"]
         ):
+            LOGGER.error(
+                "bad `coords_type` definition\n"
+            )
+
             raise ValueError(
                 "unsupported coordinate type "
                 f"{self.coords_type!r}"
@@ -67,6 +71,10 @@ class Aberration:
             self.basis.lower() not in
             ["complex", "real"]
         ):
+            LOGGER.error(
+                "bad `basis` definition\n"
+            )
+
             raise ValueError(
                 "`basis` must either be `real` or "
                 f"`complex`; got {self.basis}"
@@ -83,6 +91,7 @@ class Aberration:
         `m`.
         """
         m, _ = j_to_mn(self.j)
+
         return m
 
 
