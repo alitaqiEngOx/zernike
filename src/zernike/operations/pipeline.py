@@ -294,7 +294,7 @@ def plot_aberration(config: Path) -> None:
 
         else:
             z = Aberration.via_mn(
-                j,
+                mn,
                 np.arange(
                     dim_0[0],
                     dim_0[1] + dim_0[2],
