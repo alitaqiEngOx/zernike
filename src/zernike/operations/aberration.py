@@ -68,8 +68,8 @@ class Aberration:
             ["complex", "real"]
         ):
             raise ValueError(
-                "`basis` must either be `real` or `complex`; "
-                f"got {self.basis}"
+                "`basis` must either be `real` or "
+                f"`complex`; got {self.basis}"
             )
 
 
@@ -138,7 +138,8 @@ class Aberration:
 
 
     def compute(
-            self, *, xy: tuple[NDArray, NDArray] | None=None
+            self, *,
+            xy: tuple[NDArray, NDArray] | None=None
     ) -> None:
         """
         """
@@ -148,37 +149,39 @@ class Aberration:
                 r_meshed, theta_meshed = self.meshed_arrays
 
             # cartesian frame
-            elif self.coords_type.lower() == "cartesian":
+            else:
                 x_meshed, y_meshed = self.meshed_arrays
-                r_meshed_ravelled, theta_meshed_ravelled = cartesian_to_polar(
-                    x_meshed.ravel(), y_meshed.ravel()
+                r_meshed_ravelled, theta_meshed_ravelled = (
+                    cartesian_to_polar(
+                        x_meshed.ravel(), y_meshed.ravel()
+                    )
                 )
 
                 r_meshed = r_meshed_ravelled.reshape(
-                    self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+                    self.dim_1_array.shape[0],
+                    self.dim_0_array.shape[0]
                 )
                 theta_meshed = theta_meshed_ravelled.reshape(
-                    self.dim_1_array.shape[0], self.dim_0_array.shape[0]
-                )
-
-            # unsupported frames
-            else:
-                raise ValueError(
-                    f"unsupported coordinate type '{self.coords_type}'"
+                    self.dim_1_array.shape[0],
+                    self.dim_0_array.shape[0]
                 )
 
         else:
             x_meshed_ravelled, y_meshed_ravelled = xy
 
-            r_meshed_ravelled, theta_meshed_ravelled = cartesian_to_polar(
-                x_meshed_ravelled, y_meshed_ravelled
+            r_meshed_ravelled, theta_meshed_ravelled = (
+                cartesian_to_polar(
+                    x_meshed_ravelled, y_meshed_ravelled
+                )
             )
 
             r_meshed = r_meshed_ravelled.reshape(
-                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+                self.dim_1_array.shape[0],
+                self.dim_0_array.shape[0]
             )
             theta_meshed = theta_meshed_ravelled.reshape(
-                self.dim_1_array.shape[0], self.dim_0_array.shape[0]
+                self.dim_1_array.shape[0],
+                self.dim_0_array.shape[0]
             )
 
         # define `m`, `n` & `R`
