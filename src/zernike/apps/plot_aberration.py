@@ -99,48 +99,6 @@ def parse_args() -> argparse.Namespace:
         help="path to your `.yml` configuration file"
     )
 
-    #parser.add_argument(
-    #    "--basis",
-    #    type=str,
-    #    default="real",
-    #    choices=["complex", "real"],
-    #    help="Plot basis: `complex` or `real`"
-    #)
-    #parser.add_argument(
-    #    "--coords_type",
-    #    type=str,
-    #    default="polar",
-    #    choices=["cartesian", "polar"],
-    #    help="`cartesian` or `polar`"
-    #)
-    #parser.add_argument(
-    #    "--dim_0",
-    #    type=float,
-    #    nargs=3,
-    #    default=None,
-    #    help="minimum, maximum and step in dimension 0"
-    #)
-    #parser.add_argument(
-    #    "--dim_1",
-    #    type=float,
-    #    nargs=3,
-    #    default=None,
-    #    help="minimum, maximum and step in dimension 1"
-    #)
-    #parser.add_argument(
-    #    '--j',
-    #    type=int,
-    #    default=None,
-    #    help="Zernike polynomial via `j`"
-    #)
-    #parser.add_argument(
-    #    '--mn',
-    #    type=int,
-    #    nargs=2,
-    #    default=None,
-    #    help="Zernike polynomial via `m` and `n`"
-    #)
-
     return parser.parse_args()
 
 
