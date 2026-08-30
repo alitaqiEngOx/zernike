@@ -14,6 +14,7 @@ from zernike.utils.conversions import (
     j_to_mn, mn_to_j
 )
 from zernike.utils.log_handler import create
+from zernike.utils.outtree import make_global_outdir
 from zernike.utils.npz import NPZ
 
 
@@ -174,13 +175,24 @@ def plot_aberration(config: Path) -> None:
         return arr_int
 
     # ----------------------------------------
-    # 1. READ `.yml` AND LOOP THROUGH ENTRIES
+    # 1. GENERATE OUTPUTS' DIRECTORY
+    # ----------------------------------------
+    LOGGER.info("generating outputs' directory")
+
+    outdir = make_global_outdir(
+        config.parent, return_name=True
+    )
+
+    LOGGER.info(f"generated directory `{outdir}/`")
+
+    # ----------------------------------------
+    # 2. READ `.yml` AND LOOP THROUGH ENTRIES
     # ----------------------------------------
     config_dict = read_yaml(config)
 
     for key, value in config_dict.items():
         # ----------------------------------------
-        # 2. DEFINE PARAMETERS/COORDINATES
+        # 3. DEFINE PARAMETERS/COORDINATES
         # ----------------------------------------
         LOGGER.info(f"fetching data for `{key}`")
 
@@ -276,7 +288,7 @@ def plot_aberration(config: Path) -> None:
             dim_1[1] = min(dim_1[1], 2. * np.pi)
 
         # ----------------------------------------
-        # 3. DEFINE/PLOT ABERRATION
+        # 4. DEFINE/PLOT ABERRATION
         # ----------------------------------------
         LOGGER.info(f"loading aberration for `{key}`")
 
