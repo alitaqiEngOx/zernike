@@ -79,10 +79,10 @@ class Aberration:
                 "`basis` must either be `real` or "
                 f"`complex`; got {self.basis}"
             )
-        
+
         LOGGER.info(
-            "successfully loaded aberration "
-            f"`j={self.j}` / `m={self.m}` / n={self.n}"
+            "loaded aberration "
+            f"`j={self.j}`/ `(m n)=({self.m} {self.n})`"
         )
 
 
