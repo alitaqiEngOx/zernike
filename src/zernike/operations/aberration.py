@@ -3,6 +3,7 @@ licensing script of this repository. """
 
 import math
 from dataclasses import dataclass
+from pathlib import Path
 
 from matplotlib.colors import Colormap
 import matplotlib.pyplot as plt
@@ -81,8 +82,7 @@ class Aberration:
             )
 
         LOGGER.info(
-            "loaded aberration "
-            f"`j={self.j}`/ `(m n)=({self.m} {self.n})`"
+            f"registered `j={self.j}`/`(m n)=({self.m} {self.n})`"
         )
 
 
@@ -157,6 +157,8 @@ class Aberration:
     ) -> None:
         """
         """
+        LOGGER.info(f"computing aberration")
+
         if xy is None:
             # polar frame
             if self.coords_type.lower() == "polar":
@@ -228,7 +230,7 @@ class Aberration:
                 )
 
 
-    def show(self) -> None:
+    def show(self, *, saving_dir: Path | None=None) -> None:
         """
         """
         def figure(
@@ -241,7 +243,7 @@ class Aberration:
             """
             """
             fig = plt.figure(figsize=(12, 12))
-            
+
             # polar frame
             if self.coords_type.lower() == "polar":
                 ax = fig.add_subplot(projection="polar")
@@ -272,6 +274,17 @@ class Aberration:
 
             fig.colorbar(c, ax=ax)
             plt.show()
+
+        if saving_dir:
+            LOGGER.info(
+                f"saving `j={self.j}`/`(m n)=({self.m} {self.n})`"
+                f" to `{saving_dir.name}`"
+            )
+
+        else:
+            LOGGER.info(
+                f"showing `j={self.j}`/`(m n)=({self.m} {self.n})`"
+            )
 
         # compute `self.data`
         if self.data is None:

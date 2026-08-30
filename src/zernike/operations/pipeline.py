@@ -182,6 +182,8 @@ def plot_aberration(config: Path) -> None:
         # ----------------------------------------
         # 2. DEFINE PARAMETERS/COORDINATES
         # ----------------------------------------
+        LOGGER.info(f"fetching data for `{key}`")
+
         j = value["j"]
         mn = value["mn"]
         basis = value["basis"]
@@ -276,6 +278,8 @@ def plot_aberration(config: Path) -> None:
         # ----------------------------------------
         # 3. DEFINE/PLOT ABERRATION
         # ----------------------------------------
+        LOGGER.info(f"loading aberration for `{key}`")
+
         if j:
             z = Aberration(
                 j,
@@ -309,6 +313,8 @@ def plot_aberration(config: Path) -> None:
             )
 
         z.show()
+
+    LOGGER.info("job completed\n")
 
 
 def read_yaml(dir: Path) -> dict[str, Any]:
