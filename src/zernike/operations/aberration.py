@@ -235,6 +235,7 @@ class Aberration:
         """
         def figure(
                 data: NDArray, *,
+                saving_dir: Path | None=None,
                 tag: str | None=None,
                 vmin: float | None=None,
                 vmax: float | None=None,
@@ -273,17 +274,33 @@ class Aberration:
             ax.set_title(title)
 
             fig.colorbar(c, ax=ax)
-            plt.show()
+
+            if saving_dir:
+                name = (
+                    f"j_{self.j}_mn_{self.m}_{self.n}_"
+                    f"{self.coords_type.lower()}"
+                )
+
+                if tag is not None:
+                    name += f"_{tag}"
+
+                plt.savefig(
+                    str(saving_dir / f"{name}.png")
+                )
+
+            else:
+                plt.show()
 
         if saving_dir:
             LOGGER.info(
-                f"saving `j={self.j}`/`(m n)=({self.m} {self.n})`"
-                f" to `{saving_dir.name}`"
+                f"saving `j={self.j}"
+                f"/(m n)=({self.m} {self.n})`"
             )
 
         else:
             LOGGER.info(
-                f"showing `j={self.j}`/`(m n)=({self.m} {self.n})`"
+                f"showing `j={self.j}"
+                f"/(m n)=({self.m} {self.n})`"
             )
 
         # compute `self.data`
@@ -295,18 +312,22 @@ class Aberration:
         if self.basis == "complex":
             # plot magnitude
             figure(
-                np.abs(self.data), tag="magnitude"
+                np.abs(self.data),
+                saving_dir=saving_dir,
+                tag="magnitude"
             )
 
             # plot phase
             figure(
-                np.angle(self.data), tag="phase",
+                np.angle(self.data),
+                saving_dir=saving_dir,
+                tag="phase",
                 cmap="twilight",
                 vmin=-np.pi, vmax=np.pi
             )
 
         else:
-            figure(self.data)
+            figure(self.data, saving_dir=saving_dir)
 
 
     @classmethod

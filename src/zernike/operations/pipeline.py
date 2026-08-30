@@ -324,7 +324,9 @@ def plot_aberration(config: Path) -> None:
                 coords_type, basis
             )
 
-        z.show()
+        z.show(
+            saving_dir=config.parent / outdir
+        )
 
     LOGGER.info("job completed\n")
 
