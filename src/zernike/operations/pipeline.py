@@ -104,13 +104,17 @@ def kernel_from_npz(config: Path) -> None:
     )
 
     LOGGER.info(f"generated directory `{outdir}/`")
-    
-    
-    
-    
-    
-    
-    
+
+    # ----------------------------------------
+    # 2. READ `.yml` AND LOOP THROUGH ENTRIES
+    # ----------------------------------------
+    config_dict = read_yaml(config)
+
+    for key, value in config_dict.items():
+        # ----------------------------------------
+        # 3. DEFINE PARAMETERS/COORDINATES
+        # ----------------------------------------
+        LOGGER.info(f"fetching data for `{key}`")
     
     
     
