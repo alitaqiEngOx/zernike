@@ -86,9 +86,24 @@ def kernel_from_npz(config: Path) -> None:
         #index: list[str] | None=None,
         #save_as: Path | None=None
 #) -> None:
-#    """
-#    """
-    
+    """
+    Principal kernel extraction function (from `.npz`).
+
+    Arguments
+    ---------
+    config: pathlib.Path
+        path to the configuration file.
+    """
+    # ----------------------------------------
+    # 1. GENERATE OUTPUTS' DIRECTORY
+    # ----------------------------------------
+    LOGGER.info("generating outputs' directory")
+
+    outdir = make_global_outdir(
+        config.parent, return_name=True
+    )
+
+    LOGGER.info(f"generated directory `{outdir}/`")
     
     
     
