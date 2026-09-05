@@ -12,12 +12,13 @@ from zernike.utils import log_handler
 
 def main() -> int:
     """
+    Pipeline entry point.
     """
     # start timer
     start_time = time.time()
 
     # activate logger
-    main_logger = log_handler.enter_pipeline("extract")
+    main_logger = log_handler.enter_pipeline("main")
 
     # customise runtime warning logs
     log_handler.customise_runtime_warnings(
@@ -47,11 +48,11 @@ def main() -> int:
         # ----------------------------------------
         main_logger.info("Entering pipeline\n")
 
-        kernel_from_npz(
-            Path(args.path), show_info=args.show_info,
-            key=args.key, index=args.index,
-            save_as=Path(args.save_as)
-        )
+        #kernel_from_npz(
+        #    Path(args.path), show_info=args.show_info,
+        #    key=args.key, index=args.index,
+        #    save_as=Path(args.save_as)
+        #)
 
         # ----------------------------------------
         # 3. SUCCESSFUL EXIT
