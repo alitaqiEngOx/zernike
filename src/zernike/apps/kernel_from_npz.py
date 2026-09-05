@@ -76,6 +76,17 @@ def main() -> int:
 
 def parse_args() -> argparse.Namespace:
     """
+    Parses command line arguments.
+
+    cmd Arguments
+    -------------
+    --config (optional): str
+        path to your `.yml` configuration file.
+
+    Returns
+    -------
+    argparse.Namespace class instance enclosing the parsed
+    cmd arguments.
     """
     parser = argparse.ArgumentParser(
         description="Extracts kernel from `.npz`",
@@ -83,33 +94,43 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "path",
+        "--config",
         type=str,
-        help="`.npz` path"
+        default=str(
+            Path(__file__).parents[3] /
+            "data" / "extract_default.yml"
+        ),
+        help="path to your `.yml` configuration file"
     )
-    parser.add_argument(
-        "--key",
-        type=str,
-        default=None,
-        help="`.npz` array key to extract from"
-    )
-    parser.add_argument(
-        "--index",
-        nargs='+',
-        default=None,
-        help="position indices for the kernel to be extracted"
-    )
-    parser.add_argument(
-        "--save_as",
-        type=str,
-        default=None,
-        help="output filename & path"
-    )
-    parser.add_argument(
-        "--show_info",
-        action="store_true",
-        help="display keys & shapes of your `.npz`"
-    )
+
+    #parser.add_argument(
+    #    "path",
+    #    type=str,
+    #    help="`.npz` path"
+    #)
+    #parser.add_argument(
+    #    "--key",
+    #    type=str,
+    #    default=None,
+    #    help="`.npz` array key to extract from"
+    #)
+    #parser.add_argument(
+    #    "--index",
+    #    nargs='+',
+    #    default=None,
+    #    help="position indices for the kernel to be extracted"
+    #)
+    #parser.add_argument(
+    #    "--save_as",
+    #    type=str,
+    #    default=None,
+    #    help="output filename & path"
+    #)
+    #parser.add_argument(
+    #    "--show_info",
+    #    action="store_true",
+    #    help="display keys & shapes of your `.npz`"
+    #)
 
     return parser.parse_args()
 
