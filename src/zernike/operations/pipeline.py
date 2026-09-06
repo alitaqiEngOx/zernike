@@ -117,10 +117,16 @@ def kernel_from_npz(config: Path) -> None:
         LOGGER.info(f"fetching data for `{key}`")
 
         npz_path = value["pnz_path"]
-        array = value["array"]
+        _key = value["key"]
         index = value["index"]
         save_as = value["save_as"]
         show_info = value["show_info"]
+
+        npz = NPZ(npz_path)
+
+        npz.dump(
+            save_as, key=_key, index=index 
+        )
     
     
     

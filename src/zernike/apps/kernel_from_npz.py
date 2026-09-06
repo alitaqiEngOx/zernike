@@ -48,6 +48,8 @@ def main() -> int:
         # ----------------------------------------
         main_logger.info("Entering pipeline\n")
 
+        kernel_from_npz(Path(args.config))
+
         #kernel_from_npz(
         #    Path(args.path), show_info=args.show_info,
         #    key=args.key, index=args.index,

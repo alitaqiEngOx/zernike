@@ -2,7 +2,7 @@
 
 extract-0:
   npz_path: default
-  array: null
+  key: null
   index: null
   save_as: null
   show_info: True
