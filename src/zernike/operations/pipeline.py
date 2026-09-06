@@ -111,10 +111,45 @@ def kernel_from_npz(config: Path) -> None:
         # ----------------------------------------
         LOGGER.info(f"fetching data for `{key}`")
 
-        npz_path: Path = value["pnz_path"]
-        _key: str | None = value["key"]
-        index: list[str] | None = value["index"]
-        save_as: Path | None = value["save_as"]
+        # `.npz` path
+        if "npz_path" not in value.keys():
+            LOGGER.error("failed to load `.npz`")
+
+            raise KeyError(
+                f"no `.npz` path provided for {key}"
+            )
+
+        try:
+            npz_path: Path = Path(value["npz_path"])
+
+        except:
+            LOGGER.error("failed to load `.npz`")
+
+            raise
+
+        # `_key` parameter
+        _key: str | None = (
+            value["key"] if "key" in value.keys()
+            else None
+        )
+
+
+
+        # continue here...
+
+
+
+        index: list[str] | None = (
+            value["index"] 
+            if "index" in value.keys()
+            else None
+        )
+
+        save_as: Path | None = (
+            value["save_as"] 
+            if "save_as" in value.keys()
+            else None
+        )
 
         show_info: bool | None = (
             value["show_info"] 
