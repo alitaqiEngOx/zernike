@@ -115,6 +115,12 @@ def kernel_from_npz(config: Path) -> None:
         # 3. DEFINE PARAMETERS/COORDINATES
         # ----------------------------------------
         LOGGER.info(f"fetching data for `{key}`")
+
+        npz_path = value["pnz_path"]
+        array = value["array"]
+        index = value["index"]
+        save_as = value["save_as"]
+        show_info = value["show_info"]
     
     
     
