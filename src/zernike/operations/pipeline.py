@@ -116,14 +116,14 @@ def kernel_from_npz(config: Path) -> None:
             LOGGER.error("failed to load `.npz`")
 
             raise KeyError(
-                f"no `.npz` path provided for {key}"
+                f"no `.npz` path provided for `{key}`"
             )
 
         try:
             npz_path: Path = Path(value["npz_path"])
 
         except:
-            LOGGER.error("failed to load `.npz`")
+            LOGGER.error(f"failed to load `{npz_path}`")
 
             raise
 
@@ -133,31 +133,34 @@ def kernel_from_npz(config: Path) -> None:
             else None
         )
 
-
-
-        # continue here...
-
-
-
+        # `index` parameter
         index: list[str] | None = (
-            value["index"] 
+            shlex.split(value["index"])
             if "index" in value.keys()
             else None
         )
 
-        save_as: Path | None = (
-            value["save_as"] 
-            if "save_as" in value.keys()
-            else None
-        )
+        # saving path
+        if "save_as" not in value.keys():
+            LOGGER.error(
+                f"no saving path provided for `{key}`"
+            )
 
-        show_info: bool | None = (
+            raise KeyError(
+                f"`save_as` not defined for {key}"
+            )
+
+        save_as: Path = Path(value["save_as"])
+
+        show_info: bool = (
             value["show_info"] 
             if "show_info" in value.keys()
-            else None
+            else False
         )
 
         npz = NPZ(npz_path)
+
+        # work on `show_info`
 
         npz.dump(
             save_as, key=_key, index=index 
