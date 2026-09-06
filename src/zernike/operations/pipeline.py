@@ -81,11 +81,6 @@ def estimate_beam(
 
 
 def kernel_from_npz(config: Path) -> None:
-        #npz_path: Path, *, show_info: bool=False,
-        #key: str | None=None,
-        #index: list[str] | None=None,
-        #save_as: Path | None=None
-#) -> None:
     """
     Principal kernel extraction function (from `.npz`).
 
