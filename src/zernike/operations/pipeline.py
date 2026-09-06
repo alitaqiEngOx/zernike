@@ -116,11 +116,16 @@ def kernel_from_npz(config: Path) -> None:
         # ----------------------------------------
         LOGGER.info(f"fetching data for `{key}`")
 
-        npz_path = value["pnz_path"]
-        _key = value["key"]
-        index = value["index"]
-        save_as = value["save_as"]
-        show_info = value["show_info"]
+        npz_path: Path = value["pnz_path"]
+        _key: str | None = value["key"]
+        index: list[str] | None = value["index"]
+        save_as: Path | None = value["save_as"]
+
+        show_info: bool | None = (
+            value["show_info"] 
+            if "show_info" in value.keys()
+            else None
+        )
 
         npz = NPZ(npz_path)
 
@@ -139,24 +144,24 @@ def kernel_from_npz(config: Path) -> None:
     
     
     
-    npz = NPZ(npz_path)
+    #npz = NPZ(npz_path)
 
-    if show_info:
-        info = [
-            item.split(':', maxsplit=1)
-            for item in npz.keys_and_shapes
-        ]
+    #if show_info:
+    #    info = [
+    #        item.split(':', maxsplit=1)
+    #        for item in npz.keys_and_shapes
+    #    ]
 
-        key_width = max(
-            len(key) for key, _ in info
-        )
+    #    key_width = max(
+    #        len(key) for key, _ in info
+    #    )
 
-        print(f"{'key':<{key_width}} : shape")
+    #    print(f"{'key':<{key_width}} : shape")
 
-        for key, shape in info:
-            print(f"{key:<{key_width}} : {shape}")
+    #    for key, shape in info:
+    #        print(f"{key:<{key_width}} : {shape}")
 
-        return
+    #    return
 
     if save_as is None:
         raise ValueError(
