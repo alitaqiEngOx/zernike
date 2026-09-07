@@ -1,6 +1,7 @@
 """ Licensed under the same terms as described in the main 
 licensing script of this repository. """
 
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -36,15 +37,24 @@ def dump_npz_info(
 ) -> None:
     """
     """
+    now = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    key_width = max(
+        len(key) for key, _ in info
+    )
+
     lines = [
         "========= ZERNIKE =========\n\n",
         (
             "* Author: A. Taqi; "
             "alitaqi94.developer@gmail.com\n"
         ),
-        "* All Rights Reserved\n\n",
-        f"### Header info for: `{npz_path.name}`\n",
-        "### "
+        "* All Rights Reserved\n\n\n",
+        f"### Header info for: `{npz_path.name}` ###\n",
+        f"### Date/time generated: {now} ###\n\n\n"
+        f"{'key':<{key_width}} : shape"
     ]
 
     with open(f"{outname}", 'w') as file:
