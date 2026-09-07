@@ -28,3 +28,19 @@ def read_data(dir: Path) -> NDArray:
     ]
 
     return np.asarray(data)
+
+
+def dump_npz_info(
+        outname: Path, info: list[list[str]]
+) -> None:
+    """
+    """
+    lines = [
+        "========= ZERNIKE =========\n",
+        (
+            "* Author: A. Taqi; "
+            "alitaqi94.developer@gmail.com\n"
+        ),
+        "* All Rights Reserved\n\n",
+        "### Header info for ``",
+    ]
