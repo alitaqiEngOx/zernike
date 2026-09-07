@@ -13,7 +13,7 @@ from zernike.utils.conversions import (
 )
 from zernike.utils.log_handler import create
 from zernike.utils.outtree import make_global_outdir
-from zernike.utils.npz import NPZ, show_npz_info
+from zernike.utils.npz import NPZ, extract_npz_info
 from zernike.utils._yaml import read
 
 
@@ -135,7 +135,7 @@ def kernel_from_npz(config: Path) -> None:
             _key: str | None = None
             index: list[str] | None = None
 
-            show_npz_info(npz_path)
+            extract_npz_info(npz_path)
 
             return
 

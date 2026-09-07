@@ -258,7 +258,7 @@ def read_npy_shape(file: BinaryIO) -> tuple[int, ...]:
     return tuple(metadata["shape"])
 
 
-def show_npz_info(path: Path) -> None:
+def extract_npz_info(path: Path) -> None:
     """
     """
     npz = NPZ(path)
