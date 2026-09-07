@@ -46,7 +46,7 @@ def main() -> int:
         # ----------------------------------------
         # 2. PIPELINE
         # ----------------------------------------
-        main_logger.info("Entering pipeline\n")
+        main_logger.info("entering pipeline\n")
 
         kernel_from_npz(Path(args.config))
 

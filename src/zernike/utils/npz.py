@@ -11,7 +11,11 @@ from typing import BinaryIO
 
 import numpy as np
 
+from zernike.utils.log_handler import create
 from zernike.utils.txt import dump_npz_info
+
+
+LOGGER = create("npz")
 
 
 class NPZ:
@@ -265,6 +269,8 @@ def extract_npz_info(
 ) -> None:
     """
     """
+    LOGGER.info("extracting header data")
+
     npz = NPZ(npz_path)
 
     info = [

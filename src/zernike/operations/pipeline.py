@@ -88,6 +88,10 @@ def kernel_from_npz(config: Path) -> None:
     config: pathlib.Path
         path to the configuration file.
     """
+    LOGGER.info(
+        "pipeline running"
+    )
+
     # ----------------------------------------
     # 1. GENERATE OUTPUTS' DIRECTORY
     # ----------------------------------------
@@ -148,7 +152,11 @@ def kernel_from_npz(config: Path) -> None:
 
             extract_npz_info(npz_path, save_as=save_as)
 
-            return
+            LOGGER.info(
+                f"completed `{key}`"
+            )
+
+            continue
 
         # `show_info` flag NOT raised
         else:
@@ -183,13 +191,15 @@ def kernel_from_npz(config: Path) -> None:
                 else:
                     index = None
 
-        npz = NPZ(npz_path)
+    LOGGER.info("all tasks completed\n")
+
+        #npz = NPZ(npz_path)
 
         # work on `show_info`
 
-        npz.dump(
-            save_as, key=_key, index=index 
-        )
+        #npz.dump(
+        #    save_as, key=_key, index=index 
+        #)
     
     
     
@@ -221,14 +231,14 @@ def kernel_from_npz(config: Path) -> None:
 
     #    return
 
-    if save_as is None:
-        raise ValueError(
-            "provide either `show_info=True` or `save_as` path"
-        )
+    #if save_as is None:
+    #    raise ValueError(
+    #        "provide either `show_info=True` or `save_as` path"
+    #    )
 
-    npz.dump(
-        save_as, key=key, index=index
-    )
+    #npz.dump(
+    #    save_as, key=key, index=index
+    #)
 
 
 def plot_aberration(config: Path) -> None:

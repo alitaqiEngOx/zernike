@@ -76,7 +76,7 @@ def customise_runtime_warnings(
     ) -> None:
         """
         """
-        logger.warning("▼▼▼ Runtime warning ▼▼▼\n")
+        logger.warning("▼▼▼ runtime warning ▼▼▼\n")
 
         warning_logger = create(
             "warning", header_footer=True
@@ -88,7 +88,7 @@ def customise_runtime_warnings(
 
         warning_logger.warning("────── WARNING LOC ──────\n")
         warning_logger.warning(
-            f'File "{filename}", line {lineno}\n'
+            f'file "{filename}", line {lineno}\n'
         )
 
         if line is not None:
@@ -108,12 +108,12 @@ def enter_pipeline(name: str) -> logging.Logger:
     header_logger = create("header", header_footer=True)
 
     header_logger.info(
-        "\n========= ZERNIKE =========\n"
+        "\n============== ZERNIKE ==============\n"
     )
 
     header_logger.info(
         " * Author: A. Taqi;"
-        " alitaqi94.developer@gmail.com\n"
+        " alitaqi94.developer@gmail.com"
     )
 
     header_logger.info(" * All Rights Reserved\n")
@@ -154,7 +154,7 @@ def exit_pipeline(
     # neutral exit (e.g., parser called with `--help` tag)
     if success is None and error is None:
         footer_logger.info(
-            "\n========= ZERNIKE =========\n"
+            "\n============== ZERNIKE ==============\n"
         )
 
         return
@@ -166,7 +166,7 @@ def exit_pipeline(
 
     # error repoted -> pipeline MUST fail
     if error is not None:
-        logger.error("▼▼▼ Exception occurred ▼▼▼\n")
+        logger.error("▼▼▼ exception occurred ▼▼▼\n")
 
         exception_logger = create(
             "exception", header_footer=True
@@ -190,15 +190,15 @@ def exit_pipeline(
 
         exception_logger.error("───── END TRACEBACK ─────\n")
 
-        logger.info("Pipeline run - ❌ FAILURE")
-        logger.info("Exiting pipeline")
+        logger.info("pipeline run - ❌ FAILURE")
+        logger.info("exiting pipeline")
         logger.info(
-            f"Full time = "
+            f"full time = "
             f"{round(time.time() - start_time, 3)} s"
         )
 
         footer_logger.info(
-            "\n========= ZERNIKE =========\n"
+            "\n============== ZERNIKE ==============\n"
         )
 
         if isinstance(error, SystemExit):
@@ -217,19 +217,19 @@ def exit_pipeline(
 
     # success/failure reported and no error given
     if success:
-        logger.info(f"Pipeline run - ✅ SUCCESS")
+        logger.info(f"pipeline run - ✅ SUCCESS")
 
     else:
-        logger.info("Pipeline run - ❌ FAILURE")
+        logger.info("pipeline run - ❌ FAILURE")
 
-    logger.info(f"Exiting pipeline")
+    logger.info(f"exiting pipeline")
     logger.info(
-        f"Full time ="
+        f"full time ="
         f" {round(time.time() - start_time, 3)} s"
     )
 
     footer_logger.info(
-        "\n========= ZERNIKE =========\n"
+        "\n============== ZERNIKE ==============\n"
     )
 
     if not success:
