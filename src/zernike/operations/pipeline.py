@@ -123,7 +123,7 @@ def kernel_from_npz(config: Path) -> None:
             npz_path: Path = Path(value["npz_path"])
 
         except:
-            LOGGER.error(f"failed to load `{npz_path}`")
+            LOGGER.error(f"failed to load `{npz_path}`\n")
 
             raise
 
@@ -181,7 +181,7 @@ def kernel_from_npz(config: Path) -> None:
                         except:
                             LOGGER.error(
                                 "bad `index` definition for "
-                                f"`{key}`"
+                                f"`{key}`\n"
                             )
 
                             raise
