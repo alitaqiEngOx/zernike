@@ -46,16 +46,30 @@ def dump_npz_info(
     )
 
     lines = [
-        "========= ZERNIKE =========\n\n",
+        "============== ZERNIKE ==============\n\n",
         (
             "* Author: A. Taqi; "
             "alitaqi94.developer@gmail.com\n"
         ),
         "* All Rights Reserved\n\n\n",
         f"### Header info for: `{npz_path.name}` ###\n",
-        f"### Date/time generated: {now} ###\n\n\n"
-        f"{'key':<{key_width}} : shape"
+        f"### Date/time generated: {now} ###\n\n\n",
+        f"{'KEY':<{key_width}}   SHAPE\n\n"
     ]
+
+    for key, shape in info:
+        lines.append(
+            f"{key:<{key_width}} : {shape}\n\n"
+
+        )
+
+    lines.append(
+        "──────────── END ────────────\n\n\n"
+    )
+
+    lines.append(
+        "============== ZERNIKE =============="
+    )
 
     with open(f"{outname}", 'w') as file:
         file.writelines(lines)
