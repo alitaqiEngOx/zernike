@@ -11,6 +11,8 @@ from typing import BinaryIO
 
 import numpy as np
 
+from zernike.utils.txt import dump_npz_info
+
 
 class NPZ:
     """"""
@@ -258,10 +260,12 @@ def read_npy_shape(file: BinaryIO) -> tuple[int, ...]:
     return tuple(metadata["shape"])
 
 
-def extract_npz_info(path: Path) -> None:
+def extract_npz_info(
+        npz_path: Path, *, save_as: Path
+) -> None:
     """
     """
-    npz = NPZ(path)
+    npz = NPZ(npz_path)
 
     info = [
         item.split(':', maxsplit=1)
@@ -276,3 +280,5 @@ def extract_npz_info(path: Path) -> None:
 
     for key, shape in info:
         print(f"{key:<{key_width}} : {shape}")
+
+    dump_npz_info(save_as, info)

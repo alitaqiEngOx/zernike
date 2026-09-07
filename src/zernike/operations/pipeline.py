@@ -122,6 +122,18 @@ def kernel_from_npz(config: Path) -> None:
 
             raise
 
+        # `save_as` path
+        if "save_as" not in value.keys():
+            LOGGER.error(
+                f"no saving path provided for `{key}`"
+            )
+
+            raise KeyError(
+                f"`save_as` not defined for {key}"
+            )
+
+        save_as: Path = Path(value["save_as"])
+
         # `show_info` flag
         show_info: bool = (
             value["show_info"] 
@@ -131,28 +143,15 @@ def kernel_from_npz(config: Path) -> None:
 
         # `show_info` flag raised
         if show_info:
-            save_as: Path | None = None
             _key: str | None = None
             index: list[str] | None = None
 
-            extract_npz_info(npz_path)
+            extract_npz_info(npz_path, save_as=save_as)
 
             return
 
         # `show_info` flag NOT raised
         else:
-            # `save_as` parameter
-            if "save_as" not in value.keys():
-                LOGGER.error(
-                    f"no saving path provided for `{key}`"
-                )
-
-                raise KeyError(
-                    f"`save_as` not defined for {key}"
-                )
-
-            save_as = Path(value["save_as"])
-
             # `_key` parameter
             _key = (
                 value["key"] if "key" in value.keys()
