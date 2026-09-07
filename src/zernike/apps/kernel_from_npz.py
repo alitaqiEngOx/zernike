@@ -50,12 +50,6 @@ def main() -> int:
 
         kernel_from_npz(Path(args.config))
 
-        #kernel_from_npz(
-        #    Path(args.path), show_info=args.show_info,
-        #    key=args.key, index=args.index,
-        #    save_as=Path(args.save_as)
-        #)
-
         # ----------------------------------------
         # 3. SUCCESSFUL EXIT
         # ----------------------------------------
@@ -104,35 +98,6 @@ def parse_args() -> argparse.Namespace:
         ),
         help="path to your `.yml` configuration file"
     )
-
-    #parser.add_argument(
-    #    "path",
-    #    type=str,
-    #    help="`.npz` path"
-    #)
-    #parser.add_argument(
-    #    "--key",
-    #    type=str,
-    #    default=None,
-    #    help="`.npz` array key to extract from"
-    #)
-    #parser.add_argument(
-    #    "--index",
-    #    nargs='+',
-    #    default=None,
-    #    help="position indices for the kernel to be extracted"
-    #)
-    #parser.add_argument(
-    #    "--save_as",
-    #    type=str,
-    #    default=None,
-    #    help="output filename & path"
-    #)
-    #parser.add_argument(
-    #    "--show_info",
-    #    action="store_true",
-    #    help="display keys & shapes of your `.npz`"
-    #)
 
     return parser.parse_args()
 
