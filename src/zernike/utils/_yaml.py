@@ -28,3 +28,18 @@ def read(
         )
 
         raise
+
+    yaml_command_str = yaml.dump(
+        yaml_command, sort_keys=False
+    )
+
+    yaml_command_str = yaml_command_str.replace(
+        "$INPUT_DATADIR", f"{dir.parent}"
+    )
+
+    yaml_command_str = yaml_command_str.replace(
+        "$GLOBAL_OUTDIR", 
+        f"{dir.parent / global_outdir_name}"
+    )
+
+    return yaml.safe_load(yaml_command_str)
