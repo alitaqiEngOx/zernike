@@ -135,7 +135,20 @@ def kernel_from_npz(config: Path) -> None:
         )
 
         if show_info:
-            pass
+            save_as: Path | None = None
+            _key: str | None
+            index: list[str] | None
+
+
+
+
+
+
+
+
+
+
+            
 
         # `show_info` flag NOT raised
         else:
@@ -149,17 +162,17 @@ def kernel_from_npz(config: Path) -> None:
                     f"`save_as` not defined for {key}"
                 )
 
-            save_as: Path = Path(value["save_as"])
+            save_as = Path(value["save_as"])
 
             # `_key` parameter
-            _key: str | None = (
+            _key = (
                 value["key"] if "key" in value.keys()
                 else None
             )
 
             # `_key` NOT defined
             if _key is None:
-                pass
+                index = None
 
             # `_key` defined
             else:
@@ -167,7 +180,7 @@ def kernel_from_npz(config: Path) -> None:
                 if "index" in value.keys():
                     if value["index"] is not None:
                         try:
-                            index: list[str] | None = (
+                            index = (
                                 shlex.split(value["index"])
                             )
 
@@ -180,7 +193,7 @@ def kernel_from_npz(config: Path) -> None:
                             raise
 
                 else:
-                    index: list[str] | None = None
+                    index = None
 
         npz = NPZ(npz_path)
 
