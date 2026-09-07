@@ -15,7 +15,7 @@ from zernike.utils.conversions import (
 )
 from zernike.utils.log_handler import create
 from zernike.utils.outtree import make_global_outdir
-from zernike.utils.npz import NPZ
+from zernike.utils.npz import NPZ, show_npz_info
 
 
 LOGGER = create("pipeline")
@@ -127,28 +127,22 @@ def kernel_from_npz(config: Path) -> None:
 
             raise
 
-        # `show_info` flag raised
+        # `show_info` flag
         show_info: bool = (
             value["show_info"] 
             if "show_info" in value.keys()
             else False
         )
 
+        # `show_info` flag raised
         if show_info:
             save_as: Path | None = None
             _key: str | None = None
             index: list[str] | None = None
 
+            show_npz_info(npz_path)
 
-
-
-
-
-
-
-
-
-
+            return
 
         # `show_info` flag NOT raised
         else:

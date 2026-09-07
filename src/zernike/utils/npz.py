@@ -256,3 +256,23 @@ def read_npy_shape(file: BinaryIO) -> tuple[int, ...]:
     metadata = ast.literal_eval(header)
 
     return tuple(metadata["shape"])
+
+
+def show_npz_info(path: Path) -> None:
+    """
+    """
+    npz = NPZ(path)
+
+    info = [
+        item.split(':', maxsplit=1)
+        for item in npz.keys_and_shapes
+    ]
+
+    key_width = max(
+        len(key) for key, _ in info
+    )
+
+    print(f"{'key':<{key_width}} : shape")
+
+    for key, shape in info:
+        print(f"{key:<{key_width}} : {shape}")
