@@ -2,7 +2,8 @@
 
 extract-0:
   npz_path: default
+  show_info: True
+  save_as: null
   key: null
   index: null
-  save_as: null
-  show_info: True
+ 

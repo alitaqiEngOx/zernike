@@ -127,36 +127,60 @@ def kernel_from_npz(config: Path) -> None:
 
             raise
 
-        # `_key` parameter
-        _key: str | None = (
-            value["key"] if "key" in value.keys()
-            else None
-        )
-
-        # `index` parameter
-        index: list[str] | None = (
-            shlex.split(value["index"])
-            if "index" in value.keys()
-            else None
-        )
-
-        # saving path
-        if "save_as" not in value.keys():
-            LOGGER.error(
-                f"no saving path provided for `{key}`"
-            )
-
-            raise KeyError(
-                f"`save_as` not defined for {key}"
-            )
-
-        save_as: Path = Path(value["save_as"])
-
+        # `show_info` flag raised
         show_info: bool = (
             value["show_info"] 
             if "show_info" in value.keys()
             else False
         )
+
+        if show_info:
+            pass
+
+        # `show_info` flag NOT raised
+        else:
+            # `save_as` parameter
+            if "save_as" not in value.keys():
+                LOGGER.error(
+                    f"no saving path provided for `{key}`"
+                )
+
+                raise KeyError(
+                    f"`save_as` not defined for {key}"
+                )
+
+            save_as: Path = Path(value["save_as"])
+
+            # `_key` parameter
+            _key: str | None = (
+                value["key"] if "key" in value.keys()
+                else None
+            )
+
+            # `_key` NOT defined
+            if _key is None:
+                pass
+
+            # `_key` defined
+            else:
+                # `index` parameter
+                if "index" in value.keys():
+                    if value["index"] is not None:
+                        try:
+                            index: list[str] | None = (
+                                shlex.split(value["index"])
+                            )
+
+                        except:
+                            LOGGER.error(
+                                "bad `index` definition for "
+                                f"`{key}`"
+                            )
+
+                            raise
+
+                else:
+                    index: list[str] | None = None
 
         npz = NPZ(npz_path)
 
