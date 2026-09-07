@@ -2,9 +2,7 @@
 licensing script of this repository. """
 
 import shlex
-import yaml
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 
@@ -16,6 +14,7 @@ from zernike.utils.conversions import (
 from zernike.utils.log_handler import create
 from zernike.utils.outtree import make_global_outdir
 from zernike.utils.npz import NPZ, show_npz_info
+from zernike.utils._yaml import read
 
 
 LOGGER = create("pipeline")
@@ -92,18 +91,14 @@ def kernel_from_npz(config: Path) -> None:
     # ----------------------------------------
     # 1. GENERATE OUTPUTS' DIRECTORY
     # ----------------------------------------
-    LOGGER.info("generating outputs' directory")
-
     outdir = make_global_outdir(
         config.parent, return_name=True
     )
 
-    LOGGER.info(f"generated directory `{outdir}/`")
-
     # ----------------------------------------
     # 2. READ `.yml` AND LOOP THROUGH ENTRIES
     # ----------------------------------------
-    config_dict = read_yaml(config)
+    config_dict = read(config, global_outdir_name=outdir)
 
     for key, value in config_dict.items():
         # ----------------------------------------
@@ -297,18 +292,14 @@ def plot_aberration(config: Path) -> None:
     # ----------------------------------------
     # 1. GENERATE OUTPUTS' DIRECTORY
     # ----------------------------------------
-    LOGGER.info("generating outputs' directory")
-
     outdir = make_global_outdir(
         config.parent, return_name=True
     )
 
-    LOGGER.info(f"generated directory `{outdir}/`")
-
     # ----------------------------------------
     # 2. READ `.yml` AND LOOP THROUGH ENTRIES
     # ----------------------------------------
-    config_dict = read_yaml(config)
+    config_dict = read(config, global_outdir_name=outdir)
 
     for key, value in config_dict.items():
         # ----------------------------------------
@@ -449,20 +440,3 @@ def plot_aberration(config: Path) -> None:
         )
 
     LOGGER.info("job completed\n")
-
-
-def read_yaml(dir: Path) -> dict[str, Any]:
-    """
-    """
-    LOGGER.info(f"reading `{dir.name}`")
-
-    try:
-        with open(f"{dir}", 'r') as file:
-            return yaml.safe_load(file)
-
-    except Exception:
-        LOGGER.error(
-            f"could not read file: {dir.name}\n"
-        )
-
-        raise

@@ -1,9 +1,8 @@
 # YAML file for input kernel extraction data
 
 extract-0:
-  npz_path: default
+  npz_path: $INPUT_DATADIR/MeerKAT_L_band_primary_beam.npz
   show_info: True
   save_as: null
   key: null
   index: null
- 
