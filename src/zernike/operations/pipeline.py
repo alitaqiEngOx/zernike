@@ -136,8 +136,8 @@ def kernel_from_npz(config: Path) -> None:
 
         if show_info:
             save_as: Path | None = None
-            _key: str | None
-            index: list[str] | None
+            _key: str | None = None
+            index: list[str] | None = None
 
 
 
@@ -148,7 +148,7 @@ def kernel_from_npz(config: Path) -> None:
 
 
 
-            
+
 
         # `show_info` flag NOT raised
         else:
