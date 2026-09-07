@@ -272,15 +272,6 @@ def extract_npz_info(
         for item in npz.keys_and_shapes
     ]
 
-    key_width = max(
-        len(key) for key, _ in info
-    )
-
-    print(f"{'key':<{key_width}} : shape")
-
-    for key, shape in info:
-        print(f"{key:<{key_width}} : {shape}")
-
     dump_npz_info(
         npz_path, outname=save_as, info=info
     )
