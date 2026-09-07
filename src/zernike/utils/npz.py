@@ -281,4 +281,6 @@ def extract_npz_info(
     for key, shape in info:
         print(f"{key:<{key_width}} : {shape}")
 
-    dump_npz_info(save_as, info)
+    dump_npz_info(
+        npz_path, outname=save_as, info=info
+    )

@@ -31,16 +31,21 @@ def read_data(dir: Path) -> NDArray:
 
 
 def dump_npz_info(
+        npz_path: Path, *,
         outname: Path, info: list[list[str]]
 ) -> None:
     """
     """
     lines = [
-        "========= ZERNIKE =========\n",
+        "========= ZERNIKE =========\n\n",
         (
             "* Author: A. Taqi; "
             "alitaqi94.developer@gmail.com\n"
         ),
         "* All Rights Reserved\n\n",
-        "### Header info for ``",
+        f"### Header info for: `{npz_path.name}`\n",
+        "### "
     ]
+
+    with open(f"{outname}", 'w') as file:
+        file.writelines(lines)
