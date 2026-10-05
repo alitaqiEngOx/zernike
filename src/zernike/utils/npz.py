@@ -24,6 +24,10 @@ class NPZ:
     def __init__(self, path: Path) -> None:
         """
         """
+        LOGGER.info(
+            f"loading `{path.name}` into memory"
+        )
+
         self.path = path
         self._keys: list[str] | None=None
         self._keys_and_shapes: list[str] | None=None
@@ -77,6 +81,11 @@ class NPZ:
     ) -> None:
         """
         """
+        LOGGER.info(
+            "dumping extracted data to "
+            f"`{outname.name}`"
+        )
+
         outname.parent.mkdir(
             parents=True, exist_ok=True
         )
@@ -99,6 +108,7 @@ class NPZ:
                 outname = Path(f"{outname}.npz")
 
             shutil.copy2(self.path, outname)
+
             return
 
         # validate key
@@ -269,7 +279,10 @@ def extract_npz_info(
 ) -> None:
     """
     """
-    LOGGER.info("extracting header data")
+    LOGGER.info(
+        "extracting header data for "
+        f"{npz_path.name}"
+    )
 
     npz = NPZ(npz_path)
 

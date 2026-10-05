@@ -3,6 +3,6 @@
 extract-0:
   npz_path: $INPUT_DATADIR/MeerKAT_L_band_primary_beam.npz
   save_as: $GLOBAL_OUTDIR/info.txt
-  show_info: True
+  show_info: False
   key: null
   index: null

@@ -88,9 +88,7 @@ def kernel_from_npz(config: Path) -> None:
     config: pathlib.Path
         path to the configuration file.
     """
-    LOGGER.info(
-        "pipeline running"
-    )
+    LOGGER.info("pipeline running")
 
     # ----------------------------------------
     # 1. GENERATE OUTPUTS' DIRECTORY
@@ -152,9 +150,7 @@ def kernel_from_npz(config: Path) -> None:
 
             extract_npz_info(npz_path, save_as=save_as)
 
-            LOGGER.info(
-                f"completed `{key}`"
-            )
+            LOGGER.info(f"completed `{key}`")
 
             continue
 
@@ -191,7 +187,22 @@ def kernel_from_npz(config: Path) -> None:
                 else:
                     index = None
 
+        # load `npz` object and dump extracted data
+        npz = NPZ(npz_path)
+
+        npz.dump(
+            save_as, key=_key, index=index
+        )
+
+        LOGGER.info(f"completed `{key}`")
+
     LOGGER.info("all tasks completed\n")
+
+
+
+
+
+
 
         #npz = NPZ(npz_path)
 
@@ -200,18 +211,7 @@ def kernel_from_npz(config: Path) -> None:
         #npz.dump(
         #    save_as, key=_key, index=index 
         #)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     #npz = NPZ(npz_path)
 
     #if show_info:
