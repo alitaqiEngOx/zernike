@@ -2,7 +2,7 @@
 
 extract-0:
   npz_path: $INPUT_DATADIR/MeerKAT_L_band_primary_beam.npz
-  save_as: $GLOBAL_OUTDIR/info.txt
+  save_as: $GLOBAL_OUTDIR/xx.npy
   show_info: False
-  key: null
-  index: null
+  key: beam
+  index: 0 0 0
