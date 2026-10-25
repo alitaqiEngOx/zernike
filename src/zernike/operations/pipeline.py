@@ -67,7 +67,17 @@ def convert(config: Path) -> None:
             raise ValueError(
                 "provide either `j` or `mn`"
             )
-        
+
+        if mn is None:
+            try:
+                m, n = j_to_mn(j)
+
+            except:
+                LOGGER.error(
+                    "bad `j` definition for `{key}`"
+                )
+
+                raise
         
 
     
