@@ -22,9 +22,6 @@ LOGGER = create("pipeline")
 
 
 def convert(config: Path) -> None:
-        #*, j: int | None=None,
-        #mn: list[int] | None=None
-#) -> None:
     """
     """
     LOGGER.info("pipeline running")
