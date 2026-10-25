@@ -14,6 +14,7 @@ from zernike.utils.conversions import (
 from zernike.utils.log_handler import create
 from zernike.utils.outtree import make_global_outdir
 from zernike.utils.npz import NPZ, extract_npz_info
+from zernike.utils.txt import dump_jmn
 from zernike.utils._yaml import read
 
 
@@ -40,12 +41,14 @@ def convert(config: Path) -> None:
     # ----------------------------------------
     config_dict = read(config, global_outdir_name=outdir)
 
+    output = {}
     for key, value in config_dict.items():
         # ----------------------------------------
         # 3. DEFINE PARAMETERS/COORDINATES
         # ----------------------------------------
         LOGGER.info(f"fetching data for `{key}`")
 
+        # define `j` and `mn`; check run integrity
         j: int = (
             value["j"] if "j" in value.keys()
             else None
@@ -61,13 +64,14 @@ def convert(config: Path) -> None:
             (j is not None and mn is not None)
         ):
             LOGGER.error(
-                "failed to fetch data for `{key}`"
+                f"failed to fetch data for `{key}`"
             )
 
             raise ValueError(
                 "provide either `j` or `mn`"
             )
 
+        # j -> mn conversion
         if mn is None:
             try:
                 m, n = j_to_mn(j)
@@ -79,14 +83,15 @@ def convert(config: Path) -> None:
 
                 raise
 
+        # mn -> conversion
         else:
             try:
-                mn = [
+                m, n = [
                     int(item)
                     for item in shlex.split(mn)
                 ]
 
-                j = mn_to_j(mn[0], mn[1])
+                j = mn_to_j(m, n)
 
             except:
                 LOGGER.error(
@@ -95,11 +100,16 @@ def convert(config: Path) -> None:
 
                 raise
 
+        # record output instance
+        output[key] = {
+            'j': j, 'm': m, 'n': n 
+        }
 
-    
-    
-    
-    
+    # dump outputs
+    dump_jmn(
+        outname=(config.parent / outdir), info=output
+    )
+
     # filter out incorrect entries
     #if (
     #    (j is None and mn is None) or
