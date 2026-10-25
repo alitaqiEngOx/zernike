@@ -4,6 +4,7 @@ licensing script of this repository. """
 import argparse
 import sys
 import time
+from pathlib import Path
 
 from zernike.operations.pipeline import convert
 from zernike.utils import log_handler
@@ -47,7 +48,7 @@ def main() -> int:
         # ----------------------------------------
         main_logger.info("Entering pipeline\n")
 
-        convert(j=args.j, mn=args.mn)
+        convert(Path(args.config))
 
         # ----------------------------------------
         # 3. SUCCESSFUL EXIT
@@ -75,11 +76,8 @@ def parse_args() -> argparse.Namespace:
 
     cmd Arguments
     -------------
-    --j (optional): int
-        order of the Zernike polynomial via `j`.
-
-    --mn (optional): int
-        order of the Zernike polynomial via `m` & `n`.
+    --config (optional): str
+        path to your `.yml` configuration file.
 
     Returns
     -------
@@ -92,18 +90,28 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--j",
-        type=int,
-        default=None,
-        help="`j` (Noll indexing scheme)",
+        "--config",
+        type=str,
+        default=str(
+            Path(__file__).parents[3] /
+            "data" / "convert_default.yml"
+        ),
+        help="path to your `.yml` configuration file"
     )
-    parser.add_argument(
-        "--mn",
-        type=int,
-        default=None,
-        nargs=2,
-        help="`m` & `n` (Noll indexing scheme)",
-    )
+
+    #parser.add_argument(
+    #    "--j",
+    #    type=int,
+    #    default=None,
+    #    help="`j` (Noll indexing scheme)",
+    #)
+    #parser.add_argument(
+    #    "--mn",
+    #    type=int,
+    #    default=None,
+    #    nargs=2,
+    #    help="`m` & `n` (Noll indexing scheme)",
+    #)
 
     return parser.parse_args()
 
