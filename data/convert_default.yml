@@ -1,0 +1,9 @@
+# YAML file for input j <-> mn conversion
+
+convert-0:
+  j: 5
+  mn: null
+
+convert-1:
+  j: null
+  mn: 3 4
