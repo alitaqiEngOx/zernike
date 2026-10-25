@@ -110,23 +110,6 @@ def convert(config: Path) -> None:
         outname=(config.parent / outdir), info=output
     )
 
-    # filter out incorrect entries
-    #if (
-    #    (j is None and mn is None) or
-    #    (j is not None and mn is not None)
-    #):
-    #    raise ValueError(
-    #        "provide either `j` or `mn`"
-    #    )
-
-    #if j is None:
-    #    j = mn_to_j(mn[0], mn[1])
-    #    print(f"j = {j}")
-    #    return
-
-    #m, n = j_to_mn(j)
-    #print(f"m = {m}; n = {n}")
-
 
 def estimate_beam(
         kernel_path: Path, *,
