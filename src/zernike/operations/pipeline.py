@@ -20,28 +20,76 @@ from zernike.utils._yaml import read
 LOGGER = create("pipeline")
 
 
-def convert(
-        *, j: int | None=None,
-        mn: list[int] | None=None
-) -> None:
+def convert(config: Path) -> None:
+        #*, j: int | None=None,
+        #mn: list[int] | None=None
+#) -> None:
     """
     """
-    # filter out incorrect entries
-    if (
-        (j is None and mn is None) or
-        (j is not None and mn is not None)
-    ):
-        raise ValueError(
-            "provide either `j` or `mn`"
+    LOGGER.info("pipeline running")
+
+    # ----------------------------------------
+    # 1. GENERATE OUTPUTS' DIRECTORY
+    # ----------------------------------------
+    outdir = make_global_outdir(
+        config.parent, return_name=True
+    )
+
+    # ----------------------------------------
+    # 2. READ `.yml` AND LOOP THROUGH ENTRIES
+    # ----------------------------------------
+    config_dict = read(config, global_outdir_name=outdir)
+
+    for key, value in config_dict.items():
+        # ----------------------------------------
+        # 3. DEFINE PARAMETERS/COORDINATES
+        # ----------------------------------------
+        LOGGER.info(f"fetching data for `{key}`")
+
+        j: int = (
+            value["j"] if "j" in value.keys()
+            else None
         )
 
-    if j is None:
-        j = mn_to_j(mn[0], mn[1])
-        print(f"j = {j}")
-        return
+        mn: list[str] = (
+            value["mn"] if "mn" in value.keys()
+            else None
+        )
 
-    m, n = j_to_mn(j)
-    print(f"m = {m}; n = {n}")
+        if (
+            (j in None and mn is None) or
+            (j is not None and mn is not None)
+        ):
+            LOGGER.error(
+                "failed to fetch data for `{key}`"
+            )
+
+            raise ValueError(
+                "provide either `j` or `mn`"
+            )
+        
+        
+
+    
+    
+    
+    
+    # filter out incorrect entries
+    #if (
+    #    (j is None and mn is None) or
+    #    (j is not None and mn is not None)
+    #):
+    #    raise ValueError(
+    #        "provide either `j` or `mn`"
+    #    )
+
+    #if j is None:
+    #    j = mn_to_j(mn[0], mn[1])
+    #    print(f"j = {j}")
+    #    return
+
+    #m, n = j_to_mn(j)
+    #print(f"m = {m}; n = {n}")
 
 
 def estimate_beam(
