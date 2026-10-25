@@ -74,11 +74,27 @@ def convert(config: Path) -> None:
 
             except:
                 LOGGER.error(
-                    "bad `j` definition for `{key}`"
+                    f"bad `j` definition for `{key}`"
                 )
 
                 raise
-        
+
+        else:
+            try:
+                mn = [
+                    int(item)
+                    for item in shlex.split(mn)
+                ]
+
+                j = mn_to_j(mn[0], mn[1])
+
+            except:
+                LOGGER.error(
+                    f"bad `mn` definition for `{key}`"
+                )
+
+                raise
+
 
     
     
