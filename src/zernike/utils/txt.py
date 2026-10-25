@@ -31,6 +31,35 @@ def read_data(dir: Path) -> NDArray:
     return np.asarray(data)
 
 
+def dump_jmn(
+        *, outname: Path, info: dict[str, dict[str, int]]
+) -> None:
+    """
+    """
+    now = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    key_width = max(
+        len(key) for key, _ in info
+    )
+
+    lines = [
+        "============== ZERNIKE ==============\n\n",
+        (
+            "* Author: A. Taqi; "
+            "alitaqi94.developer@gmail.com\n"
+        ),
+        "* All Rights Reserved\n\n\n",
+        f"### j <--> mn conversion output ###\n",
+        f"### Date/time generated: {now} ###\n\n\n",
+        f"{'KEY':<{key_width}}   j    m    n\n\n"
+    ]
+
+    for key, value in info.items():
+        pass
+
+
 def dump_npz_info(
         npz_path: Path, *,
         outname: Path, info: list[list[str]]
