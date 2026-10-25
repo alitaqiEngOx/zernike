@@ -99,19 +99,6 @@ def parse_args() -> argparse.Namespace:
         help="path to your `.yml` configuration file"
     )
 
-    #parser.add_argument(
-    #    "--j",
-    #    type=int,
-    #    default=None,
-    #    help="`j` (Noll indexing scheme)",
-    #)
-    #parser.add_argument(
-    #    "--mn",
-    #    type=int,
-    #    default=None,
-    #    nargs=2,
-    #    help="`m` & `n` (Noll indexing scheme)",
-    #)
 
     return parser.parse_args()
 
